@@ -48,24 +48,6 @@ while (true)
             player.Position = DirectionTransformer.GetPositionDelta(Direction.Right) + player.Position;
             break;
     }
-    /*
-    if (input.Key == ConsoleKey.W || input.Key == ConsoleKey.UpArrow)
-    {
-        player.Position = new Position(oldPosition.XPos, oldPosition.YPos-1);
-    }
-    if (input.Key == ConsoleKey.S || input.Key == ConsoleKey.DownArrow)
-    {
-        player.Position = new Position(oldPosition.XPos, oldPosition.YPos+1);
-    }
-    if (input.Key == ConsoleKey.A || input.Key == ConsoleKey.LeftArrow)
-    {        
-        player.Position = new Position(oldPosition.XPos-1, oldPosition.YPos);
-    }
-    if (input.Key == ConsoleKey.D || input.Key == ConsoleKey.RightArrow)
-    {
-        player.Position = new Position(oldPosition.XPos+1, oldPosition.YPos);
-    }
-    */
     // TODO: Create a gameloop..
     player.Draw();
 }
