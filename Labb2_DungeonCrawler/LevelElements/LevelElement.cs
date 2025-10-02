@@ -14,7 +14,7 @@
             RepresentationAsChar = representation;
             Color = color;
         }
-
+        
         public void Draw()
         {
             Console.SetCursorPosition(this.Position.XPos, this.Position.YPos);
