@@ -21,33 +21,63 @@ while (true)
     Console.SetCursorPosition(oldPosition.XPos, oldPosition.YPos);
     Console.Write(' ');
 
-    switch (input.Key)
+    Position attempt = player.MovementHandler(input);
+    if (player.AttemptMove(attempt, gameState))
+    {
+        player.MoveTo(attempt);
+    }
+    /*
+    switch (attempt)
     {
         case ConsoleKey.W:
-            player.Position = DirectionTransformer.GetPositionDelta(Direction.Up) + player.Position;
+            if (player.AttemptMove(DirectionTransformer.GetPositionDelta(Direction.Up) + player.Position, gameState))
+            {
+                player.MoveTo((DirectionTransformer.GetPositionDelta(Direction.Up) + player.Position));
+            }
             break;
         case ConsoleKey.S:
-            player.Position = DirectionTransformer.GetPositionDelta(Direction.Down) + player.Position;
+            if (player.AttemptMove(DirectionTransformer.GetPositionDelta(Direction.Down) + player.Position, gameState))
+            {
+                player.MoveTo((DirectionTransformer.GetPositionDelta(Direction.Down) + player.Position));
+            }
             break;
         case ConsoleKey.A:
-            player.Position = DirectionTransformer.GetPositionDelta(Direction.Left) + player.Position;
+            if (player.AttemptMove(DirectionTransformer.GetPositionDelta(Direction.Left) + player.Position, gameState))
+            {
+                player.MoveTo((DirectionTransformer.GetPositionDelta(Direction.Left) + player.Position));
+            }
             break;
         case ConsoleKey.D:
-            player.Position = DirectionTransformer.GetPositionDelta(Direction.Right) + player.Position;
+            if (player.AttemptMove(DirectionTransformer.GetPositionDelta(Direction.Right) + player.Position, gameState))
+            {
+                player.MoveTo((DirectionTransformer.GetPositionDelta(Direction.Right) + player.Position));
+            }
             break;
         case ConsoleKey.UpArrow:
-            player.Position = DirectionTransformer.GetPositionDelta(Direction.Up) + player.Position;
+            if (player.AttemptMove(DirectionTransformer.GetPositionDelta(Direction.Up) + player.Position, gameState))
+            {
+                player.MoveTo(DirectionTransformer.GetPositionDelta(Direction.Up) + player.Position);
+            }
             break;
         case ConsoleKey.DownArrow:
-            player.Position = DirectionTransformer.GetPositionDelta(Direction.Down) + player.Position;
+            if (player.AttemptMove(DirectionTransformer.GetPositionDelta(Direction.Down) + player.Position, gameState))            
+            {
+                player.MoveTo(DirectionTransformer.GetPositionDelta(Direction.Down) + player.Position);
+            }
             break;
         case ConsoleKey.LeftArrow:
-            player.Position = DirectionTransformer.GetPositionDelta(Direction.Left) + player.Position;
+            if (player.AttemptMove(DirectionTransformer.GetPositionDelta(Direction.Left) + player.Position, gameState))
+            {
+                player.MoveTo((DirectionTransformer.GetPositionDelta(Direction.Left) + player.Position));
+            }
             break;
         case ConsoleKey.RightArrow:
-            player.Position = DirectionTransformer.GetPositionDelta(Direction.Right) + player.Position;
+            if (player.AttemptMove(DirectionTransformer.GetPositionDelta(Direction.Right) + player.Position, gameState))
+            {
+                player.MoveTo((DirectionTransformer.GetPositionDelta(Direction.Right) + player.Position));
+            }
             break;
-    }
+    }*/
     // TODO: Create a gameloop..
     player.Draw();
 }

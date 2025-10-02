@@ -3,7 +3,7 @@ using Labb2_DungeonCrawler.LevelHandling;
 
 namespace Labb2_DungeonCrawler.Core;
 
-internal class GameState
+public class GameState
 {
 
     public LevelData LevelData = new LevelData();
@@ -21,6 +21,18 @@ internal class GameState
                 Player = player;
             }
         }
+    }
+
+    public bool IsPositionWalkable(Position destination)
+    {
+        foreach (var element in LevelData.LevelElementsList)
+        {
+            if (element.Position.XPos == destination.XPos && element.Position.YPos == destination.YPos)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

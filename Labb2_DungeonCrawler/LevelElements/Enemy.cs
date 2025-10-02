@@ -1,4 +1,5 @@
-﻿using Labb2_DungeonCrawler.Features;
+﻿using Labb2_DungeonCrawler.Core;
+using Labb2_DungeonCrawler.Features;
 
 namespace Labb2_DungeonCrawler.LevelElements;
 
@@ -14,9 +15,9 @@ public abstract class Enemy : LevelElement, IMovable
     public Dice AttackDice { get; }
     public Dice DefenceDice { get; }
 
-    public bool AttemptMove()
+    public bool AttemptMove(Position attempt, GameState gameState)
     {
-        return false;
+        return gameState.IsPositionWalkable(attempt) ? true : false;
     }
     public Enemy(Position pos, char representation, ConsoleColor color) : base(pos, representation, color)
     {
