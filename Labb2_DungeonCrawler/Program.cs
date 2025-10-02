@@ -7,7 +7,6 @@ string path = @"C:\Users\robin\source\repos\Labb2_DungeonCrawler\Labb2_DungeonCr
 
 levelData.LoadElementsFromFile(path);
 
-//var elements = levelData.LevelElementsList;
 Player player = null;
 foreach (var element in levelData.LevelElementsList)
 {
@@ -15,47 +14,36 @@ foreach (var element in levelData.LevelElementsList)
     {
         player = (Player)element;   
     }
+    element.Draw();
 }
+
+Console.CursorVisible = false;
 while (true)
 {
-
-    foreach (var element in levelData.LevelElementsList)
-    {
-        element.Draw();
-    }
     
     ConsoleKeyInfo input = Console.ReadKey();
+    Position oldPosition = player.Position;
+    Console.SetCursorPosition(oldPosition.XPos, oldPosition.YPos);
+    Console.Write(' ');
 
     if (input.Key == ConsoleKey.W || input.Key == ConsoleKey.UpArrow)
     {
-        Position oldPosition = player.Position;
-        Console.SetCursorPosition(oldPosition.XPos, oldPosition.YPos);
-        Console.Write(' ');
         player.Position = new Position(oldPosition.XPos, oldPosition.YPos-1);
     }
     if (input.Key == ConsoleKey.S || input.Key == ConsoleKey.DownArrow)
     {
-        Position oldPosition = player.Position;
-        Console.SetCursorPosition(oldPosition.XPos, oldPosition.YPos);
-        Console.Write(' ');
         player.Position = new Position(oldPosition.XPos, oldPosition.YPos+1);
     }
     if (input.Key == ConsoleKey.A || input.Key == ConsoleKey.LeftArrow)
-    {
-        Position oldPosition = player.Position;
-        Console.SetCursorPosition(oldPosition.XPos, oldPosition.YPos);
-        Console.Write(' ');
+    {        
         player.Position = new Position(oldPosition.XPos-1, oldPosition.YPos);
     }
     if (input.Key == ConsoleKey.D || input.Key == ConsoleKey.RightArrow)
     {
-        Position oldPosition = player.Position;
-        Console.SetCursorPosition(oldPosition.XPos, oldPosition.YPos);
-        Console.Write(' ');
         player.Position = new Position(oldPosition.XPos+1, oldPosition.YPos);
     }
 
     // TODO: Create a gameloop..
-    player.Update();
+    player.Draw();
 }
 
