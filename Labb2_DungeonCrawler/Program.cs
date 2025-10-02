@@ -1,19 +1,13 @@
 ﻿using Labb2_DungeonCrawler.LevelElements;
-using Labb2_DungeonCrawler.LevelHandling;
-using System.Linq.Expressions;
+using Labb2_DungeonCrawler.Core;
 
-var levelData = new LevelData();
-string path = @"C:\Users\robin\source\repos\Labb2_DungeonCrawler\Labb2_DungeonCrawler\Levels\Level1.txt";
 
-levelData.LoadElementsFromFile(path);
 
-Player player = null;
-foreach (var element in levelData.LevelElementsList)
+GameState gameState = new GameState();
+Player player = gameState.Player;
+Console.CursorVisible = false;
+foreach (var element in gameState.LevelData.LevelElementsList)
 {
-    if (element.RepresentationAsChar == '@')
-    {
-        player = (Player)element;   
-    }
     element.Draw();
 }
 
