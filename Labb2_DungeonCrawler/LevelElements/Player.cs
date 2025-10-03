@@ -30,6 +30,10 @@ namespace Labb2_DungeonCrawler.LevelElements
             this.Position = position;
 
         }
+        public void MoveMe(Direction direction)
+        {
+
+        }
         public Position MovementHandler(ConsoleKeyInfo input)
         {
             switch (input.Key)

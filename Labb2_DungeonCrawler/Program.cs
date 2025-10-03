@@ -28,5 +28,18 @@ while (true)
     }
         // TODO: Create a gameloop..
     player.Draw();
+
+    foreach (var element in gameState.LevelData.LevelElementsList)
+    {
+        if (element is Rat enemyRat)
+        {
+            oldPosition = enemyRat.Position;
+            Console.SetCursorPosition(oldPosition.XPos, oldPosition.YPos);
+            Console.Write(' ');
+            enemyRat.Update();
+            enemyRat.Draw();
+        }
+    }
+
 }
 

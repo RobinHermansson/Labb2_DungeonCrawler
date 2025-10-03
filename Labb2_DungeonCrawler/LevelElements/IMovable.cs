@@ -6,4 +6,5 @@ public interface IMovable
 {
     public bool AttemptMove(Position position, GameState gameState);
     public void MoveTo(Position position);
+    public void MoveMe(Direction direction);
 }

@@ -1,4 +1,5 @@
-﻿namespace Labb2_DungeonCrawler.LevelElements;
+﻿using Labb2_DungeonCrawler.Core;
+namespace Labb2_DungeonCrawler.LevelElements;
 
 public class Rat : Enemy 
 {
@@ -9,6 +10,12 @@ public class Rat : Enemy
 
     public override void Update()
     {
-        throw new NotImplementedException();
+        Random ratRandom = new Random();
+
+        int stepInCardinalDirection = ratRandom.Next(0, 4);
+
+        MoveMe((Direction)stepInCardinalDirection);
+
+        
     }
 }
