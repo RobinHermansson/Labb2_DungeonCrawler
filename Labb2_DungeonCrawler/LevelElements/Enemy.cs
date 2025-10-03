@@ -19,6 +19,10 @@ public abstract class Enemy : LevelElement, IMovable
     {
         return gameState.IsPositionWalkable(attempt) ? true : false;
     }
+    public void MoveTo(Position position)
+        {
+            this.Position = position;
+        }
     public Enemy(Position pos, char representation, ConsoleColor color) : base(pos, representation, color)
     {
          
