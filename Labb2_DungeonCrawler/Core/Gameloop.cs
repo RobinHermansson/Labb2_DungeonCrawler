@@ -40,11 +40,7 @@ namespace Labb2_DungeonCrawler.Core
                 {
                     if (element is Rat enemyRat)
                     {
-                        oldPosition = enemyRat.Position;
-                        Console.SetCursorPosition(oldPosition.XPos, oldPosition.YPos);
-                        Console.Write(' ');
                         enemyRat.Update();
-                        enemyRat.Draw();
                     }
                 }
 

@@ -11,10 +11,11 @@ public class Rat : Enemy
     public override void Update()
     {
         Random ratRandom = new Random();
-
         int stepInCardinalDirection = ratRandom.Next(0, 4);
-
+        Console.SetCursorPosition(Position.XPos, Position.YPos);
+        Console.Write(' ');
         MoveMe((Direction)stepInCardinalDirection);
+        Draw();
 
         
     }
