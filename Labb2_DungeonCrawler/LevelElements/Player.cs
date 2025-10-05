@@ -15,6 +15,7 @@ namespace Labb2_DungeonCrawler.LevelElements
 
         public Dice AttackDice { get; }
         public Dice DefenceDice { get; }
+        public GameState GameState { get; set; }
 
         public void Update()
         {

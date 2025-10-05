@@ -15,6 +15,7 @@ public abstract class Enemy : LevelElement, IMovable
 
     public Dice AttackDice { get; }
     public Dice DefenceDice { get; }
+    public GameState GameState { get; set; }
 
     public bool AttemptMove(Position attempt, GameState gameState)
     {
@@ -42,7 +43,7 @@ public abstract class Enemy : LevelElement, IMovable
                 break;
         }
     }
-    public Enemy(Position pos, char representation, ConsoleColor color) : base(pos, representation, color)
+    public Enemy(Position pos, char representation, ConsoleColor color)  : base(pos, representation, color)
     {
          
     }

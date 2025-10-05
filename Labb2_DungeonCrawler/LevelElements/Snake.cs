@@ -1,4 +1,6 @@
-﻿namespace Labb2_DungeonCrawler.LevelElements;
+﻿using Labb2_DungeonCrawler.Core;
+
+namespace Labb2_DungeonCrawler.LevelElements;
 
 public class Snake: Enemy, IMovable
 {
@@ -14,6 +16,6 @@ public class Snake: Enemy, IMovable
 
     public override void Update()
     {
-        throw new NotImplementedException();
+        AttemptMove(Position, GameState);
     }
 }

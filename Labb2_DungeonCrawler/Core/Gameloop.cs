@@ -17,6 +17,10 @@ namespace Labb2_DungeonCrawler.Core
         {
             foreach (var element in GameState.LevelData.LevelElementsList)
             {
+                if (element is Enemy enemy)
+                {
+                    enemy.GameState = this.GameState; // TODO: Hope to fix this later on and now set the entire GameState on each character...
+                }
                 element.Draw();
             }
 
@@ -29,20 +33,22 @@ namespace Labb2_DungeonCrawler.Core
                 Console.SetCursorPosition(oldPosition.XPos, oldPosition.YPos);
                 Console.Write(' ');
 
+                
+                
+
+                foreach (var element in GameState.LevelData.LevelElementsList)
+                {
+                    if (element is Enemy enemyObject)
+                    {
+                        enemyObject.Update();
+                    }
+                }
                 Position attempt = Player.MovementHandler(input);
                 if (Player.AttemptMove(attempt, GameState))
                 {
                     Player.MoveTo(attempt);
                 }
                 Player.Draw();
-
-                foreach (var element in GameState.LevelData.LevelElementsList)
-                {
-                    if (element is Rat enemyRat)
-                    {
-                        enemyRat.Update();
-                    }
-                }
 
             }
         }
