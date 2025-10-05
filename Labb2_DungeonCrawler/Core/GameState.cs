@@ -10,6 +10,8 @@ public class GameState
 
     public Player Player = null;
 
+    public bool FightIsHappening = false;
+
     public GameState()
     {
         string path = @"C:\Users\robin\source\repos\Labb2_DungeonCrawler\Labb2_DungeonCrawler\Levels\Level1.txt";
