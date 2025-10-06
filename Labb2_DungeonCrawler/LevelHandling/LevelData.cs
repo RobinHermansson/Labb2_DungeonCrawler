@@ -29,7 +29,7 @@ public class LevelData
                 {
                     if (character == '#')
                     {
-                        _elements.Add(new Wall(new Position(xpos, ypos), character, ConsoleColor.White));
+                        _elements.Add(new Wall(new Position(xpos, ypos), character, ConsoleColor.DarkYellow));
                     }
                     if (character == 'r')
                     {

@@ -10,16 +10,16 @@ namespace Labb2_DungeonCrawler.Core
 
             GameState = gameState;
             Player = gameState.Player;
+            Player.CheckSurrounding(GameState.LevelData.LevelElementsList);
+
 
         }
 
         public void PlayGame()
         {
             
-
             Console.CursorVisible = false;
-            Player.CheckSurrounding(GameState.LevelData.LevelElementsList);
-            foreach (var element in GameState.LevelData.LevelElementsList)
+                        foreach (var element in GameState.LevelData.LevelElementsList)
             {
                 if (element is Enemy enemy)
                 {
@@ -39,7 +39,18 @@ namespace Labb2_DungeonCrawler.Core
                 Console.Write(' ');
 
                 Position attempt = Player.MovementHandler(input);
-                if (Player.AttemptMove(attempt, GameState))
+                Enemy enemyAtPosition = GameState.LevelData.LevelElementsList
+                    .OfType<Enemy>() // Filter to only Enemy types
+                    .FirstOrDefault(enemy => enemy.Position.XPos == attempt.XPos && 
+                                            enemy.Position.YPos == attempt.YPos);
+                
+                if (enemyAtPosition != null)
+                {
+                    // Found an enemy at this position - initiate combat!
+                    Combat combat = new Combat(aggressor: Player, defender: enemyAtPosition);
+                    combat.StartCombat();
+                }
+                else if (Player.AttemptMove(attempt, GameState))
                 {
                     Player.MoveTo(attempt);
                     Player.CheckSurrounding(GameState.LevelData.LevelElementsList);
@@ -61,8 +72,6 @@ namespace Labb2_DungeonCrawler.Core
                         }
                     }
                 }
-                //if (enemyWhoDied is not null)
-                //{
                 GameState.LevelData.LevelElementsList.Remove(enemyWhoDied);
                 foreach (var elementRedraw in GameState.LevelData.LevelElementsList)
                 {
@@ -71,17 +80,21 @@ namespace Labb2_DungeonCrawler.Core
                         elementRedraw.Draw();
                     }
                 }  
-                //}
                 foreach (var element in GameState.LevelData.LevelElementsList)
                 {
-                    if (element.isVisible)
+                    if (element.isVisible && element is not Wall)
                     {
                         element.Draw();
                     }
-                    else if (element is Wall && element.hasBeenSeen)
+                    else if (element is Wall && element.isVisible)
                     {
-                        Console.SetCursorPosition(element.Position.XPos, element.Position.YPos);
-                        element.Color = ConsoleColor.Gray;
+                        element.Color = ConsoleColor.DarkYellow;
+                        element.Draw();
+                    }
+                    else if (element is Wall && element.hasBeenSeen && !element.isVisible)
+                    {
+                        element.Color = ConsoleColor.DarkGray;
+                        element.Draw();
                     }
                 }
 
