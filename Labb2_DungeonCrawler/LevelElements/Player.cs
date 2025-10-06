@@ -48,6 +48,15 @@ namespace Labb2_DungeonCrawler.LevelElements
         {
 
         }
+
+        public void CheckSurrounding(List<LevelElement> surroundingElements)
+        {
+            
+            foreach (LevelElement element in surroundingElements)
+            {
+                this.Position.XPos
+            }
+        }
         public Position MovementHandler(ConsoleKeyInfo input)
         {
             switch (input.Key)
