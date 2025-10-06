@@ -5,6 +5,8 @@ namespace Labb2_DungeonCrawler.LevelElements
     {
         string Name { get; set; }
         int HitPoints { get; set; }
+        int AttackDiceCount { get; set; }
+        int DefenceDiceCount { get; set; }
         List<Dice> AttackDice { get; }
         List<Dice> DefenceDice { get; }
         int AttackModifier {get;}

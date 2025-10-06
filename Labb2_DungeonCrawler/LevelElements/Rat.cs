@@ -8,19 +8,34 @@ public class Rat : Enemy
     public Rat(Position pos, char representation, ConsoleColor color) : base(pos, representation, color)
     {
         Name = "Ratty";
+        HitPoints = 20;
         AttackDiceCount = 1;
         DefenceDiceCount = 1;
         AttackModifier = 1;
         DefenceModifier = 0;
         AttackDice = new List<Dice>();
         DefenceDice = new List<Dice>();
-        for (int i = 1; i < AttackDiceCount; i++)
+        if (AttackDiceCount == 1)
         {
             AttackDice.Add(new Dice());
         }
-        for (int i = 1; i < DefenceDiceCount; i++)
-        { 
+        else
+        {
+            for (int i = 1; i < AttackDiceCount; i++)
+            {
+                AttackDice.Add(new Dice());
+            }
+        }
+        if (DefenceDiceCount == 1)
+        {
             DefenceDice.Add(new Dice());
+        }
+        else
+        {
+            for (int i = 1; i < DefenceDiceCount; i++)
+            { 
+                DefenceDice.Add(new Dice());
+            }
         }
     }
 
@@ -44,7 +59,7 @@ public class Rat : Enemy
             else if (attempt == GameState.Player.Position)
             {
                 Combat combat = new Combat(this, GameState.Player);
-                combat.StartCombat(this, GameState.Player);
+                combat.StartCombat();
             }
         }       
     }

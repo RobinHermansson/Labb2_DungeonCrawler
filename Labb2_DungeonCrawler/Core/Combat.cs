@@ -18,9 +18,28 @@ namespace Labb2_DungeonCrawler.Core
         public bool StartCombat()
         {
             Console.Clear();
-            Console.WriteLine($"A COMBAT HAS STARTED BETWEEN {Aggressor} & {Defender}");
-            Console.WriteLine($"{Aggressor.Name} attacks {Defender.Name}");
-            Aggressor.Attack(Defender);
+            Console.WriteLine($"A COMBAT HAS STARTED BETWEEN {Aggressor.Name} & {Defender.Name}");
+            while (true)
+            {
+                Console.WriteLine("Press any key to continue.");
+                Console.ReadKey();
+                if (!Aggressor.IsAlive())
+                {
+                    Console.WriteLine($"{Aggressor.Name} has died!");
+                    break;
+                }
+                Console.WriteLine($"{Aggressor.Name} attacks {Defender.Name}. {Defender.Name} before the attack has {Defender.HitPoints} left!");
+                Aggressor.Attack(Defender);
+                if (!Defender.IsAlive())
+                {
+                    Console.WriteLine($"{Defender.Name} has died!");
+                    break;
+                }
+                Console.WriteLine($"{Defender.Name} attacks {Aggressor.Name}. {Aggressor.Name} before the attack has {Aggressor.HitPoints}");
+                Defender.Attack(Aggressor);
+                
+
+            }
             return true;
         }
 

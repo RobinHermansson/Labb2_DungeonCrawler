@@ -9,8 +9,8 @@ namespace Labb2_DungeonCrawler.LevelElements
     {
         public string Name { get; set; } = "Player";
         public int HitPoints { get; set; } = 100;
-        public int AttackDiceCount { get; } = 2;
-        public int DefenceDiceCount { get; } = 2;
+        public int AttackDiceCount { get; set; } = 2;
+        public int DefenceDiceCount { get; set; } = 2;
         public int AttackModifier { get; } = 3;
         public int DefenceModifier { get; } = 3;
 
@@ -21,11 +21,11 @@ namespace Labb2_DungeonCrawler.LevelElements
         public Player(string name, Position pos, char representation, ConsoleColor color) : base(pos, representation, color)
         {
             Name = name;
-            for (int i = 1; i < AttackDiceCount; i++)
+            for (int i = 0; i < AttackDiceCount; i++)
             {
                 AttackDice.Add(new Dice());
             }
-            for (int i = 1; i < DefenceDiceCount; i++)
+            for (int i = 0; i < DefenceDiceCount; i++)
             {
                 DefenceDice.Add(new Dice());
             }
@@ -73,36 +73,37 @@ namespace Labb2_DungeonCrawler.LevelElements
             }
 
         }
-
         public bool Attack(IFighter target)
         {
             int attackRollTotal = 0;
             int defenceRollTotal = 0;
-            foreach(Dice dice in AttackDice)
+            foreach(Dice dice in this.AttackDice)
             {
-                attackRollTotal += dice.Roll();
-                Console.WriteLine($"{Name} rolls, and the attacktotal is: {attackRollTotal}");
+                int roll = dice.Roll();
+                attackRollTotal += roll;
+                
             }
+            Console.WriteLine($"{this.Name} rolled his {this.AttackDiceCount}d6+{this.AttackModifier}. {this.Name}'s Attacktotal is: {attackRollTotal}+{this.AttackModifier} ({attackRollTotal + this.AttackModifier})");
+
             foreach(Dice dice in target.DefenceDice)
             {
-                defenceRollTotal += dice.Roll();
-                Console.WriteLine($"{target.Name} rolls, and the defencetotal is: {defenceRollTotal}");
+                int roll = dice.Roll();
+                defenceRollTotal += roll;
             }
+            Console.WriteLine($"{target.Name} rolled his {this.DefenceDiceCount }d6+{target.DefenceModifier}. {target.Name}'s Defence total is: {defenceRollTotal}+{target.DefenceModifier} ({defenceRollTotal + target.DefenceModifier})");
             if ((attackRollTotal + AttackModifier) > (defenceRollTotal + target.DefenceModifier))
             {
-                int totalDamageTaken = (attackRollTotal + AttackModifier) - (defenceRollTotal + target.DefenceModifier);
+                int totalDamageTaken = (attackRollTotal + this.AttackModifier) - (defenceRollTotal + target.DefenceModifier); 
                 Console.WriteLine($"{target.Name} is about to take {totalDamageTaken}!");
                 target.TakeDamage(totalDamageTaken);
                 return true;
             }
             else
             {
+                Console.WriteLine($"{this.Name} misses {target.Name}");
                 return false;
-            }
-                
-            
+            }               
         }
-
         public void TakeDamage(int damage)
         {
             HitPoints -= damage;
