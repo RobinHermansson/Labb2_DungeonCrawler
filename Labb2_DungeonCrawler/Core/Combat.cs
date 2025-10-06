@@ -26,6 +26,9 @@ namespace Labb2_DungeonCrawler.Core
                 if (!Aggressor.IsAlive())
                 {
                     Console.WriteLine($"{Aggressor.Name} has died!");
+                    Console.WriteLine("Press ENTER key to continue.");
+                    Console.ReadLine();
+                    Console.Clear();
                     break;
                 }
                 Console.WriteLine($"{Aggressor.Name} attacks {Defender.Name}. {Defender.Name} before the attack has {Defender.HitPoints} left!");
@@ -33,6 +36,10 @@ namespace Labb2_DungeonCrawler.Core
                 if (!Defender.IsAlive())
                 {
                     Console.WriteLine($"{Defender.Name} has died!");
+                    Console.WriteLine("Press ENTER key to continue.");
+                    Console.ReadLine();
+                    Console.Clear();
+                    
                     break;
                 }
                 Console.WriteLine($"{Defender.Name} attacks {Aggressor.Name}. {Aggressor.Name} before the attack has {Aggressor.HitPoints}");

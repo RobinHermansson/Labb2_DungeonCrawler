@@ -6,6 +6,7 @@ public class Snake: Enemy, IMovable
 {
     public Snake(Position pos, char representation, ConsoleColor color) : base(pos, representation, color)
     {
+        HitPoints = 30;
          
     }
 

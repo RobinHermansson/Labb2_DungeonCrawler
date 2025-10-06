@@ -44,7 +44,7 @@ public class Rat : Enemy
         Random ratRandom = new Random();
         
         
-        while (true)
+        while (true && IsAlive())
         {
             int stepInCardinalDirection = ratRandom.Next(0, 4);
             Position attempt = DirectionTransformer.GetPositionDelta((Direction)stepInCardinalDirection) + Position;
