@@ -4,23 +4,20 @@ using Labb2_DungeonCrawler.Utilities;
 namespace Labb2_DungeonCrawler.LevelElements;
 
 
-public class Player : LevelElement, IMovable, IFighter
-{
-    public string Name { get; set; } = "Player";
-    public int HitPoints { get; set; } = 100;
-    public int AttackDiceCount { get; set; } = 2;
-    public int DefenceDiceCount { get; set; } = 2;
-    public int AttackModifier { get; } = 3;
-    public int DefenceModifier { get; } = 3;
-
-    public List<Dice> AttackDice { get; } = new List<Dice>();
-    public List<Dice> DefenceDice { get; } = new List<Dice>();
-    public GameState GameState { get; set; }
-    
+public class Player : Character
+{    
     public Player(string name, Position pos, char representation, ConsoleColor color) : base(pos, representation, color)
     {
         Name = name;
         VisionRange = 5;
+        HitPoints = 100;
+        AttackDiceCount = 2;
+        DefenceDiceCount = 2;
+        AttackModifier = 3;
+        DefenceModifier = 3;
+        AttackDice = new List<Dice>();
+        DefenceDice = new List<Dice>();
+
         for (int i = 0; i < AttackDiceCount; i++)
         {
             AttackDice.Add(new Dice());
@@ -94,7 +91,7 @@ public class Player : LevelElement, IMovable, IFighter
         }
 
     }
-    public bool Attack(IFighter target)
+    public bool Attack(Character target)
     {
         int attackRollTotal = 0;
         int defenceRollTotal = 0;

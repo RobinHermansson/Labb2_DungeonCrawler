@@ -5,11 +5,11 @@ namespace Labb2_DungeonCrawler.Core;
 
 public class Combat
 {
-    public IFighter Aggressor { get; set; }
-    public IFighter Defender { get; set; }
+    public Character Aggressor { get; set; }
+    public Character Defender { get; set; }
 
 
-    public Combat(IFighter aggressor, IFighter defender)
+    public Combat(Character aggressor, Character defender)
     {
         Aggressor = aggressor;
         Defender = defender;

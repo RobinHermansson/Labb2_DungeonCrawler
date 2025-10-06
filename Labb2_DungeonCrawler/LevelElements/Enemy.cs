@@ -1,55 +1,16 @@
-﻿using Labb2_DungeonCrawler.Core;
-using Labb2_DungeonCrawler.Features;
-using Labb2_DungeonCrawler.Utilities;
+﻿using Labb2_DungeonCrawler.Features;
 
 namespace Labb2_DungeonCrawler.LevelElements;
 
-public abstract class Enemy : LevelElement, IMovable, IFighter
+public abstract class Enemy : Character
 {
-    public string Name { get; set; }
-    public int HitPoints { get; set; }
-    public int AttackDiceCount { get; set; }
-    public int DefenceDiceCount { get; set; }
-    public int AttackModifier { get; set; }
-    public int DefenceModifier { get; set; }
-
-    public List<Dice> AttackDice { get; set; }
-    public List<Dice> DefenceDice { get; set; }
-    public GameState GameState { get; set; }
-
-    public bool AttemptMove(Position attempt, GameState gameState)
-    {
-        return gameState.IsPositionWalkable(attempt) ? true : false;
-    }
-    public void MoveTo(Position position)
-        {
-            this.Position = position;
-        }
-    public void MoveMe(Direction direction)
-    {
-        switch (direction)
-        {
-            case Direction.Up:
-                Position = DirectionTransformer.GetPositionDelta(Direction.Up) + Position;
-                break;
-            case Direction.Down:
-                Position = DirectionTransformer.GetPositionDelta(Direction.Down) + Position;
-                break;
-            case Direction.Left:
-                Position = DirectionTransformer.GetPositionDelta(Direction.Left) + Position;
-                break;
-            case Direction.Right:
-                Position = DirectionTransformer.GetPositionDelta(Direction.Right) + Position;
-                break;
-        }
-    }
     public Enemy(Position pos, char representation, ConsoleColor color)  : base(pos, representation, color)
     {
          
     }
 
     public abstract void Update();
-    public bool Attack(IFighter target)
+    public bool Attack(Character target)
     {
         int attackRollTotal = 0;
         int defenceRollTotal = 0;
@@ -81,14 +42,5 @@ public abstract class Enemy : LevelElement, IMovable, IFighter
         }               
     }
     
-    public void TakeDamage(int damage)
-    {
-        HitPoints -= damage;
-    }
+   }
 
-
-    public bool IsAlive()
-    {
-        return HitPoints > 0;
-    }
-}

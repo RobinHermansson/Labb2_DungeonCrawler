@@ -39,7 +39,7 @@ public class Gameloop
             Console.Write(' ');
 
             Position attempt = Player.MovementHandler(input);
-            Enemy enemyAtPosition = GameState.LevelData.LevelElementsList
+            Enemy? enemyAtPosition = GameState.LevelData.LevelElementsList
                 .OfType<Enemy>() // Filter to only Enemy types
                 .FirstOrDefault(enemy => enemy.Position.XPos == attempt.XPos && 
                                         enemy.Position.YPos == attempt.YPos);

@@ -4,7 +4,7 @@ using Labb2_DungeonCrawler.Features;
 
 namespace Labb2_DungeonCrawler.LevelElements;
 
-public class Snake: Enemy, IMovable
+public class Snake: Enemy
 {
     public bool IsScared { get; set; } = false;
 
