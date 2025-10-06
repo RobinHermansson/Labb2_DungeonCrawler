@@ -1,5 +1,4 @@
 ﻿using Labb2_DungeonCrawler.LevelElements;
-using System.Reflection.PortableExecutable;
 
 namespace Labb2_DungeonCrawler.LevelHandling;
 

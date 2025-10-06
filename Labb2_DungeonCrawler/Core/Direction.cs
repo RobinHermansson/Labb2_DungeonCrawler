@@ -1,10 +1,9 @@
-﻿namespace Labb2_DungeonCrawler.Core
+﻿namespace Labb2_DungeonCrawler.Core;
+
+public enum Direction
 {
-    public enum Direction
-    {
-        Up,
-        Down,
-        Left,
-        Right
-    }
+    Up,
+    Down,
+    Left,
+    Right
 }

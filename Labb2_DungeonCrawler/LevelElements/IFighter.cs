@@ -1,22 +1,21 @@
 ﻿using Labb2_DungeonCrawler.Features;
-namespace Labb2_DungeonCrawler.LevelElements
+namespace Labb2_DungeonCrawler.LevelElements;
+
+public interface IFighter
 {
-    public interface IFighter
-    {
-        string Name { get; set; }
-        int HitPoints { get; set; }
-        int AttackDiceCount { get; set; }
-        int DefenceDiceCount { get; set; }
-        List<Dice> AttackDice { get; }
-        List<Dice> DefenceDice { get; }
-        int AttackModifier {get;}
-        int DefenceModifier { get; }
+    string Name { get; set; }
+    int HitPoints { get; set; }
+    int AttackDiceCount { get; set; }
+    int DefenceDiceCount { get; set; }
+    List<Dice> AttackDice { get; }
+    List<Dice> DefenceDice { get; }
+    int AttackModifier {get;}
+    int DefenceModifier { get; }
 
 
-        bool Attack(IFighter target);
-        void TakeDamage(int damage);
-        bool IsAlive();
+    bool Attack(IFighter target);
+    void TakeDamage(int damage);
+    bool IsAlive();
 
 
-    }
 }
