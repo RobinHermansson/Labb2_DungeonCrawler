@@ -15,16 +15,21 @@ namespace Labb2_DungeonCrawler.Core
 
         public void PlayGame()
         {
+            
+
+            Console.CursorVisible = false;
+            Player.CheckSurrounding(GameState.LevelData.LevelElementsList);
             foreach (var element in GameState.LevelData.LevelElementsList)
             {
                 if (element is Enemy enemy)
                 {
                     enemy.GameState = this.GameState; // TODO: Hope to fix this later on and now set the entire GameState on each character...
                 }
-                element.Draw();
+                if (element.isVisible)
+                {
+                    element.Draw();
+                }
             }
-
-            Console.CursorVisible = false;
             while (true)
             {
                 
@@ -37,6 +42,7 @@ namespace Labb2_DungeonCrawler.Core
                 if (Player.AttemptMove(attempt, GameState))
                 {
                     Player.MoveTo(attempt);
+                    Player.CheckSurrounding(GameState.LevelData.LevelElementsList);
                 }
                 Player.Draw();
 
@@ -55,14 +61,28 @@ namespace Labb2_DungeonCrawler.Core
                         }
                     }
                 }
-                if (enemyWhoDied is not null)
+                //if (enemyWhoDied is not null)
+                //{
+                GameState.LevelData.LevelElementsList.Remove(enemyWhoDied);
+                foreach (var elementRedraw in GameState.LevelData.LevelElementsList)
                 {
-                    GameState.LevelData.LevelElementsList.Remove(enemyWhoDied);
-                    foreach (var elementRedraw in GameState.LevelData.LevelElementsList)
+                    if (elementRedraw.isVisible)
                     {
                         elementRedraw.Draw();
                     }
-                    
+                }  
+                //}
+                foreach (var element in GameState.LevelData.LevelElementsList)
+                {
+                    if (element.isVisible)
+                    {
+                        element.Draw();
+                    }
+                    else if (element is Wall && element.hasBeenSeen)
+                    {
+                        Console.SetCursorPosition(element.Position.XPos, element.Position.YPos);
+                        element.Color = ConsoleColor.Gray;
+                    }
                 }
 
             }

@@ -16,6 +16,7 @@ public class Snake: Enemy, IMovable
         DefenceModifier = 3;
         AttackDice = new List<Dice>();
         DefenceDice = new List<Dice>();
+        VisionRange = 2;
         if (AttackDiceCount == 1)
         {
             AttackDice.Add(new Dice());

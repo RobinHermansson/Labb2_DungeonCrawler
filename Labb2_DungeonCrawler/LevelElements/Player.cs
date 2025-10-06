@@ -21,6 +21,7 @@ namespace Labb2_DungeonCrawler.LevelElements
         public Player(string name, Position pos, char representation, ConsoleColor color) : base(pos, representation, color)
         {
             Name = name;
+            VisionRange = 5;
             for (int i = 0; i < AttackDiceCount; i++)
             {
                 AttackDice.Add(new Dice());
@@ -54,7 +55,19 @@ namespace Labb2_DungeonCrawler.LevelElements
             
             foreach (LevelElement element in surroundingElements)
             {
-                this.Position.XPos
+                var distance = CalculateDistance.Between(this.Position, element.Position);
+                if (distance < this.VisionRange)
+                {
+                    if (element is Wall)
+                    {
+                        element.hasBeenSeen = true;
+                    }
+                    element.isVisible = true;
+                }
+                else
+                {
+                    element.isVisible = false;
+                }
             }
         }
         public Position MovementHandler(ConsoleKeyInfo input)

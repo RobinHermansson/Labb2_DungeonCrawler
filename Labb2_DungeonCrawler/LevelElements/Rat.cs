@@ -53,7 +53,7 @@ public class Rat : Enemy
                 Console.SetCursorPosition(Position.XPos, Position.YPos);
                 Console.Write(' ');
                 MoveMe((Direction)stepInCardinalDirection);
-                Draw();
+                //Draw();
                 break;
             }
             else if (attempt == GameState.Player.Position)

@@ -8,7 +8,7 @@
         public int VisionRange { get; set; }
         public bool isVisible { get; set; } = false;
 
-        public bool hasBeenSeen { get; set } = false;
+        public bool hasBeenSeen { get; set; } = false;
         public ConsoleColor Color { get; set; }
 
         public LevelElement(Position pos, char representation, ConsoleColor color)
