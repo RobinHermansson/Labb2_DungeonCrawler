@@ -11,7 +11,7 @@ public class Snake: Enemy
     public Snake(Position pos, char representation, ConsoleColor color) : base(pos, representation, color)
     {
         
-        Name = "Snakk";
+        Name = "Snekk";
         HitPoints = 20;
         AttackDiceCount = 3;
         DefenceDiceCount = 1;
@@ -65,11 +65,6 @@ public class Snake: Enemy
     }
 
 
-    public bool AttemptMove()
-    {
-        return false;
-    }
-
     public override void Update()
     {
         CheckSurrounding(GameState.LevelData.LevelElementsList);
@@ -103,6 +98,5 @@ public class Snake: Enemy
                 MoveTo(newPosition);
             }
         }
-
     }
 }
