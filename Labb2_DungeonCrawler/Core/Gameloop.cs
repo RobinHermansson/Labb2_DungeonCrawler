@@ -13,24 +13,30 @@ public class Gameloop
         Player = gameState.Player;
         Player.CheckSurrounding(GameState.LevelData.LevelElementsList);
         Renderer = new Renderer();
+
+        InitializeGame();
+
+
+    }
+
+        private void InitializeGame()
+    {
+        Console.CursorVisible = false;
+        
+        // Set game state references for enemies
+        foreach (var enemy in GameState.LevelData.LevelElementsList.OfType<Enemy>())
+        {
+            enemy.GameState = GameState; // TODO: Improve this later
+        }
+        
+        Player.CheckSurrounding(GameState.LevelData.LevelElementsList);
+        Renderer.RenderLevel(GameState.LevelData.LevelElementsList);
     }
 
 
     public void PlayGame()
     {
-        
-        Console.CursorVisible = false;
-        foreach (var element in GameState.LevelData.LevelElementsList)
-        {
-            if (element is Enemy enemy)
-            {
-                enemy.GameState = this.GameState; // TODO: Hope to fix this later on and now set the entire GameState on each character...
-            }
-            if (element.isVisible)
-            {
-                element.Draw();
-            }
-        }
+
         while (true)
         {
             
