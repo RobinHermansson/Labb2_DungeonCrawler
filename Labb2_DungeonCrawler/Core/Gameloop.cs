@@ -43,9 +43,7 @@ public class Gameloop
         {
 
             ConsoleKeyInfo input = Console.ReadKey();
-            Position oldPosition = Player.Position;
-            Console.SetCursorPosition(oldPosition.XPos, oldPosition.YPos);
-            Console.Write(' ');
+            Renderer.ClearPosition(Player.Position);
 
             Position attempt = Player.MovementHandler(input);
             Enemy? enemyAtPosition = GameState.LevelData.LevelElementsList
@@ -82,30 +80,8 @@ public class Gameloop
                 }
             }
             GameState.LevelData.LevelElementsList.Remove(enemyWhoDied);
-            foreach (var elementRedraw in GameState.LevelData.LevelElementsList)
-            {
-                if (elementRedraw.isVisible)
-                {
-                    elementRedraw.Draw();
-                }
-            }
-            foreach (var element in GameState.LevelData.LevelElementsList)
-            {
-                if (element.isVisible && element is not Wall)
-                {
-                    element.Draw();
-                }
-                else if (element is Wall && element.isVisible)
-                {
-                    element.Color = ConsoleColor.DarkYellow;
-                    element.Draw();
-                }
-                else if (element is Wall && element.hasBeenSeen && !element.isVisible)
-                {
-                    element.Color = ConsoleColor.DarkGray;
-                    element.Draw();
-                }
-            }
+
+            Renderer.RenderLevel(GameState.LevelData.LevelElementsList);
             if (!Player.IsAlive())
             {
                 isGameRunning = false;
