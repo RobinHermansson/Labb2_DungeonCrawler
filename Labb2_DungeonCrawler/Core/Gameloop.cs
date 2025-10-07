@@ -31,6 +31,32 @@ public class Gameloop
         Renderer.RenderLevel(GameState.LevelData.LevelElementsList);
     }
 
+    private void ProcessPlayerMovement()
+    {
+        ConsoleKeyInfo input = Console.ReadKey();
+            
+        Position attempt = Player.MovementHandler(input);
+        Enemy? enemyAtPosition = GameState.LevelData.LevelElementsList
+            .OfType<Enemy>() // Filter to only Enemy types
+            .FirstOrDefault(enemy => enemy.Position.XPos == attempt.XPos &&
+                                    enemy.Position.YPos == attempt.YPos);
+
+        if (enemyAtPosition != null)
+        {
+            // Found an enemy at this position - initiate combat!
+            Combat combat = new Combat(aggressor: Player, defender: enemyAtPosition);
+            combat.StartCombat();
+        }
+        else if (Player.AttemptMove(attempt, GameState))
+        {
+            Renderer.ClearPosition(Player.Position);
+            Player.MoveTo(attempt);
+            Player.CheckSurrounding(GameState.LevelData.LevelElementsList);
+        }
+
+
+    }
+
 
     public void PlayGame()
     {
@@ -40,27 +66,8 @@ public class Gameloop
         while (isGameRunning)
         {
 
-            ConsoleKeyInfo input = Console.ReadKey();
-            
-            Position attempt = Player.MovementHandler(input);
-            Enemy? enemyAtPosition = GameState.LevelData.LevelElementsList
-                .OfType<Enemy>() // Filter to only Enemy types
-                .FirstOrDefault(enemy => enemy.Position.XPos == attempt.XPos &&
-                                        enemy.Position.YPos == attempt.YPos);
-
-            if (enemyAtPosition != null)
-            {
-                // Found an enemy at this position - initiate combat!
-                Combat combat = new Combat(aggressor: Player, defender: enemyAtPosition);
-                combat.StartCombat();
-            }
-            else if (Player.AttemptMove(attempt, GameState))
-            {
-                Renderer.ClearPosition(Player.Position);
-                Player.MoveTo(attempt);
-                Player.CheckSurrounding(GameState.LevelData.LevelElementsList);
-            }
-            
+            ProcessPlayerMovement();
+                        
             Enemy enemyWhoDied = null;
             foreach (var element in GameState.LevelData.LevelElementsList)
             {
