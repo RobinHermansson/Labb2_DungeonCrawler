@@ -77,7 +77,7 @@ public class Renderer
         int startX = 0;
         int startY = 0;
 
-        string titleText = "ABANDONED CELLAR";
+        string titleText = "THE DEPTHS";
         string startSelectionText = "Start game";
         string quitGameText = "Run away";
 
