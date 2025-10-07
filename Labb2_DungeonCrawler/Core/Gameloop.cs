@@ -15,8 +15,6 @@ public class Gameloop
         Renderer = new Renderer();
 
         InitializeGame();
-
-
     }
 
     private void InitializeGame()
@@ -43,8 +41,7 @@ public class Gameloop
         {
 
             ConsoleKeyInfo input = Console.ReadKey();
-            Renderer.ClearPosition(Player.Position);
-
+            
             Position attempt = Player.MovementHandler(input);
             Enemy? enemyAtPosition = GameState.LevelData.LevelElementsList
                 .OfType<Enemy>() // Filter to only Enemy types
@@ -59,12 +56,11 @@ public class Gameloop
             }
             else if (Player.AttemptMove(attempt, GameState))
             {
+                Renderer.ClearPosition(Player.Position);
                 Player.MoveTo(attempt);
                 Player.CheckSurrounding(GameState.LevelData.LevelElementsList);
             }
-            Player.Draw();
-
-
+            
             Enemy enemyWhoDied = null;
             foreach (var element in GameState.LevelData.LevelElementsList)
             {
