@@ -33,4 +33,9 @@ public struct Position
         }
         return true;
     }
+
+    public override bool Equals(object obj)
+    {
+        throw new NotImplementedException();
+    }
 }

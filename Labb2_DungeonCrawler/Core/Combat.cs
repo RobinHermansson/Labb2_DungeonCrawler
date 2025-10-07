@@ -39,25 +39,25 @@ public class Combat
                 Console.WriteLine("Press ENTER key to continue.");
                 Console.ReadLine();
                 Console.Clear();
-                
+
                 break;
             }
             Console.WriteLine($"{Defender.Name} attacks {Aggressor.Name}. {Aggressor.Name} before the attack has {Aggressor.HitPoints}");
             Defender.Attack(Aggressor);
-            
+
 
         }
         return true;
     }
 
     public int RollDice(List<Dice> diceToRoll)
-{
-    int sum = 0;
-    foreach (Dice dice in diceToRoll)
     {
-        Random rand = new Random();
-        rand.Next(1, 7);
+        int sum = 0;
+        foreach (Dice dice in diceToRoll)
+        {
+            Random rand = new Random();
+            rand.Next(1, 7);
+        }
+        return sum;
     }
-    return sum;
-}
 }

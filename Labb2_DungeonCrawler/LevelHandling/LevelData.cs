@@ -7,7 +7,7 @@ public class LevelData
     private List<LevelElement> _elements = new List<LevelElement>();
 
     public List<LevelElement> LevelElementsList
-    { 
+    {
         get
         {
             return _elements;
@@ -24,7 +24,7 @@ public class LevelData
             while (!reader.EndOfStream)
             {
                 string line = reader.ReadLine();
-                foreach (char character in line) 
+                foreach (char character in line)
                 {
                     if (character == '#')
                     {
@@ -48,7 +48,7 @@ public class LevelData
                 xpos = 0;
                 ypos++;
             }
-           
+
         }
 
     }

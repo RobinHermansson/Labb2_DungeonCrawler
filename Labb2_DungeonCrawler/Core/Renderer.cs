@@ -6,22 +6,22 @@ public class Renderer
     public void RenderLevel(List<LevelElement> elements)
     {
         foreach (var element in elements)
+        {
+            if (element.isVisible && element is not Wall)
             {
-                if (element.isVisible && element is not Wall)
-                {
-                    element.Draw();
-                }
-                else if (element is Wall && element.isVisible)
-                {
-                    element.Color = ConsoleColor.DarkYellow;
-                    element.Draw();
-                }
-                else if (element is Wall && element.hasBeenSeen && !element.isVisible)
-                {
-                    element.Color = ConsoleColor.DarkGray;
-                    element.Draw();
-                }
+                element.Draw();
             }
+            else if (element is Wall && element.isVisible)
+            {
+                element.Color = ConsoleColor.DarkYellow;
+                element.Draw();
+            }
+            else if (element is Wall && element.hasBeenSeen && !element.isVisible)
+            {
+                element.Color = ConsoleColor.DarkGray;
+                element.Draw();
+            }
+        }
     }
     public void ClearPosition(Position position)
     {

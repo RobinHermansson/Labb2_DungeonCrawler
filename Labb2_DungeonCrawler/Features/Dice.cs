@@ -4,9 +4,9 @@ public class Dice
 {
     public int Count { get; set; }
     public int Sides { get; set; } = 6;
-    
+
     public int Roll()
     {
-        return new Random().Next(1, Sides+1);
+        return new Random().Next(1, Sides + 1);
     }
 }

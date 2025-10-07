@@ -3,7 +3,7 @@ using Labb2_DungeonCrawler.Utilities;
 using Labb2_DungeonCrawler.Features;
 namespace Labb2_DungeonCrawler.LevelElements;
 
-public class Rat : Enemy 
+public class Rat : Enemy
 {
     public Rat(Position pos, char representation, ConsoleColor color) : base(pos, representation, color)
     {
@@ -33,7 +33,7 @@ public class Rat : Enemy
         else
         {
             for (int i = 1; i < DefenceDiceCount; i++)
-            { 
+            {
                 DefenceDice.Add(new Dice());
             }
         }
@@ -42,8 +42,8 @@ public class Rat : Enemy
     public override void Update()
     {
         Random ratRandom = new Random();
-        
-        
+
+
         while (true && IsAlive())
         {
             int stepInCardinalDirection = ratRandom.Next(0, 4);
@@ -61,9 +61,9 @@ public class Rat : Enemy
                 Combat combat = new Combat(this, GameState.Player);
                 combat.StartCombat();
             }
-        }       
+        }
     }
-    
 
-    
+
+
 }

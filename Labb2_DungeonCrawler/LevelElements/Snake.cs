@@ -4,13 +4,13 @@ using Labb2_DungeonCrawler.Features;
 
 namespace Labb2_DungeonCrawler.LevelElements;
 
-public class Snake: Enemy
+public class Snake : Enemy
 {
     public bool IsScared { get; set; } = false;
 
     public Snake(Position pos, char representation, ConsoleColor color) : base(pos, representation, color)
     {
-        
+
         Name = "Snekk";
         HitPoints = 20;
         AttackDiceCount = 3;
@@ -38,11 +38,11 @@ public class Snake: Enemy
         else
         {
             for (int i = 1; i < DefenceDiceCount; i++)
-            { 
+            {
                 DefenceDice.Add(new Dice());
             }
         }
-         
+
     }
     public void CheckSurrounding(List<LevelElement> surroundingElements)
     {
