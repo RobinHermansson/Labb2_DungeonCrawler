@@ -55,6 +55,38 @@ public class Gameloop
         }
     }
 
+    private void ProcessEnemyMovement()
+    {
+        foreach (var element in GameState.LevelData.LevelElementsList)
+        {
+            if (element is Enemy enemyObject)
+            {
+                enemyObject.Update();
+            }
+        }
+    }
+
+    private void ProcessEnemyDeath() 
+    {
+        List<Enemy> enemyDeaths = new List<Enemy>();
+        foreach (var element in GameState.LevelData.LevelElementsList)
+        {
+            if (element is Enemy enemyObject)
+            {
+                if (!enemyObject.IsAlive())
+                {
+                    enemyDeaths.Add(enemyObject);
+
+                }
+            }
+        }
+        foreach (var enemy in enemyDeaths)
+        {
+            GameState.LevelData.LevelElementsList.Remove(enemy);
+        }
+    }
+
+
 
     public void PlayGame()
     {
@@ -66,23 +98,12 @@ public class Gameloop
 
             ProcessPlayerMovement();
 
-            Enemy enemyWhoDied = null;
-            foreach (var element in GameState.LevelData.LevelElementsList)
-            {
-                if (element is Enemy enemyObject)
-                {
-                    enemyObject.Update();
-                    // After a combat, attempt to remove the enemy. Need to redraw everything as the Combat clears the screen and also the enemy is gone. FIX THIS IN A MORE PROPER WAY!
-                    if (!enemyObject.IsAlive())
-                    {
-                        enemyWhoDied = enemyObject;
+            ProcessEnemyMovement();
 
-                    }
-                }
-            }
-            GameState.LevelData.LevelElementsList.Remove(enemyWhoDied);
+            ProcessEnemyDeath();
 
             Renderer.RenderLevel(GameState.LevelData.LevelElementsList);
+
             if (!Player.IsAlive())
             {
                 isGameRunning = false;
