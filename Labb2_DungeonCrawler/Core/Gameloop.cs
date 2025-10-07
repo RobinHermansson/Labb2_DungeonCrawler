@@ -106,6 +106,11 @@ public class Gameloop
                     element.Draw();
                 }
             }
+            if (!Player.IsAlive())
+            {
+                isGameRunning = false;
+                //Show a game over screen later.
+            }
         }
     }
 }
