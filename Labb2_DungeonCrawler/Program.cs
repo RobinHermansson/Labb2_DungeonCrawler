@@ -18,12 +18,12 @@ while (true)
             if (selectedOption == Renderer.StartScreenOption.Quit)
                 selectedOption = Renderer.StartScreenOption.Start;
             break;
-            
+
         case ConsoleKey.DownArrow:
             if (selectedOption == Renderer.StartScreenOption.Start)
                 selectedOption = Renderer.StartScreenOption.Quit;
             break;
-            
+
         case ConsoleKey.Enter:
             if (selectedOption == Renderer.StartScreenOption.Start)
             {

@@ -34,7 +34,7 @@ public class Gameloop
     private void ProcessPlayerMovement()
     {
         ConsoleKeyInfo input = Console.ReadKey();
-            
+
         Position attempt = Player.MovementHandler(input);
         Enemy? enemyAtPosition = GameState.LevelData.LevelElementsList
             .OfType<Enemy>() // Filter to only Enemy types
@@ -53,8 +53,6 @@ public class Gameloop
             Player.MoveTo(attempt);
             Player.CheckSurrounding(GameState.LevelData.LevelElementsList);
         }
-
-
     }
 
 
@@ -67,7 +65,7 @@ public class Gameloop
         {
 
             ProcessPlayerMovement();
-                        
+
             Enemy enemyWhoDied = null;
             foreach (var element in GameState.LevelData.LevelElementsList)
             {
