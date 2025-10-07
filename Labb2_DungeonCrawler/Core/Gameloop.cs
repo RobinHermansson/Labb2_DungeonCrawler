@@ -61,6 +61,7 @@ public class Gameloop
         {
             if (element is Enemy enemyObject)
             {
+                Renderer.ClearPosition(enemyObject.Position);
                 enemyObject.Update();
             }
         }

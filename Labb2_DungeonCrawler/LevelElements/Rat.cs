@@ -50,10 +50,7 @@ public class Rat : Enemy
             Position attempt = DirectionTransformer.GetPositionDelta((Direction)stepInCardinalDirection) + Position;
             if (AttemptMove(attempt, GameState))
             {
-                Console.SetCursorPosition(Position.XPos, Position.YPos);
-                Console.Write(' ');
                 MoveMe((Direction)stepInCardinalDirection);
-                //Draw();
                 break;
             }
             else if (attempt == GameState.Player.Position)
