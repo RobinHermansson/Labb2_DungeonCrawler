@@ -160,6 +160,48 @@ public class Renderer
         Console.SetCursorPosition(0, height);
         Console.WriteLine();
     }
+
+    public void RenderUIStats(Character character, int height, int width, int startX, int startY)
+    {
+        DrawUIBox(height, width, startX, startY);
+        string UITitle = "STATS";
+        Console.SetCursorPosition(startX+1, startY+1);
+        Console.Write(UITitle);
+        Console.SetCursorPosition(startX+1, startY+2);
+        Console.Write($"HP: {character.HitPoints}/100");
+        Console.SetCursorPosition(startX+1, startY+3);
+        Console.Write($"Turn: NOT YET IMPL.");
+
+    }
+
+    public void DrawUIBox(int height, int width, int startX, int startY)
+    {
+        // TOP
+        Console.SetCursorPosition(startX, startY);
+        Console.Write("+");
+        for (int i = 1; i < width - 1; i++)
+            Console.Write("-");
+        Console.Write("+");
+
+        // BOTH SIDES
+        for (int i = 1; i < height - 1; i++)
+        {
+            Console.SetCursorPosition(startX, startY + i);
+            Console.Write("|");
+            Console.SetCursorPosition(startX + width - 1, startY + i);
+            Console.Write("|");
+        }
+
+        // BOTTOM
+        Console.SetCursorPosition(startX, startY + height - 1);
+        Console.Write("+");
+        for (int i = 1; i < width - 1; i++)
+            Console.Write("-");
+        Console.Write("+");
+
+        
+
+    }
     public enum StartScreenOption
     {
         Start,

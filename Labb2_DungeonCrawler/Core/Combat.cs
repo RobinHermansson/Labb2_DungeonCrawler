@@ -57,8 +57,8 @@ public class Combat
                 Console.Clear();
                 return true;
             }
-            
-            Thread.Sleep(2000);
+
+            key = Console.ReadKey(true); //Thread.Sleep(2000);
             
             PerformAttack(Defender, Aggressor);
             _renderer.RenderCombatScreen(Aggressor, Defender);
