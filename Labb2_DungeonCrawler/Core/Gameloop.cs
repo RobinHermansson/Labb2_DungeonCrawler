@@ -5,21 +5,22 @@ public class Gameloop
 {
     public GameState GameState{ get; set; }
     public Player Player { get; set; }
+    public Renderer Renderer { get; private set; }
     public Gameloop(GameState gameState)
     {
 
         GameState = gameState;
         Player = gameState.Player;
         Player.CheckSurrounding(GameState.LevelData.LevelElementsList);
-
-
+        Renderer = new Renderer();
     }
+
 
     public void PlayGame()
     {
         
         Console.CursorVisible = false;
-                    foreach (var element in GameState.LevelData.LevelElementsList)
+        foreach (var element in GameState.LevelData.LevelElementsList)
         {
             if (element is Enemy enemy)
             {
