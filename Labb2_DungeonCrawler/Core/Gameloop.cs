@@ -109,7 +109,7 @@ public class Gameloop
             if (!Player.IsAlive())
             {
                 isGameRunning = false;
-                //Show a game over screen later.
+                Renderer.DisplayGameOver();
             }
         }
     }

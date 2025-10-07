@@ -28,4 +28,46 @@ public class Renderer
         Console.SetCursorPosition(position.XPos, position.YPos);
         Console.Write(' ');
     }
+    public void DisplayGameOver()
+    {
+        int height = 10;
+        int width = 20;
+        int startX = 0;     
+        int startY = 0;    
+        Console.Clear();
+        
+        // Draw the top border
+        Console.SetCursorPosition(startX, startY);
+        Console.Write("╔");
+        for (int i = 1; i < width - 1; i++)
+            Console.Write("═");
+        Console.Write("╗");
+        
+        // Draw the sides
+        for (int i = 1; i < height - 1; i++)
+        {
+            Console.SetCursorPosition(startX, startY + i);
+            Console.Write("║");
+            Console.SetCursorPosition(startX + width - 1, startY + i);
+            Console.Write("║");
+        }
+        
+        // Draw the bottom border
+        Console.SetCursorPosition(startX, startY + height - 1);
+        Console.Write("╚");
+        for (int i = 1; i < width - 1; i++)
+            Console.Write("═");
+        Console.Write("╝");
+        
+        // Write the centered text
+        string gameOverText = "Game Over!";
+        int textX = startX + (width - gameOverText.Length) / 2;
+        int textY = startY + height / 2;
+        Console.SetCursorPosition(textX, textY);
+        Console.BackgroundColor = ConsoleColor.DarkRed;
+        Console.Write(gameOverText);
+        Console.ResetColor();
+        Console.SetCursorPosition(0, 10);
+        Console.WriteLine(); 
+    }
 }
