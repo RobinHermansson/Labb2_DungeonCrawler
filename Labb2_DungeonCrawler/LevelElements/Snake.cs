@@ -94,7 +94,17 @@ public class Snake : Enemy
 
             if (AttemptMove(bestMove, GameState))
             {
-                MoveTo(bestMove);
+                // Sometimes this must fail, because otherwise the snakes can NOT be caught.
+                var failChance = new Random().Next(0, 4);
+                if (failChance == 3)
+                {
+                    return;                 
+                }
+                else
+                {
+                    MoveTo(bestMove);
+
+                }
             }
         }
     }
