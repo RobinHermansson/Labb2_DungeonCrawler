@@ -70,30 +70,31 @@ public class Snake : Enemy
         CheckSurrounding(GameState.LevelData.LevelElementsList);
         if (IsScared)
         {
-            // Calculate direction vector away from player
-            int xDirection = this.Position.XPos - GameState.Player.Position.XPos;
-            int yDirection = this.Position.YPos - GameState.Player.Position.YPos;
+            Position[] possibleMoves = new Position[4] {
+                (DirectionTransformer.GetPositionDelta(Direction.Up) + Position ),
+                (DirectionTransformer.GetPositionDelta(Direction.Left) + Position ),
+                (DirectionTransformer.GetPositionDelta(Direction.Right) + Position ),
+                (DirectionTransformer.GetPositionDelta(Direction.Down) + Position )
+            };
 
-            // Determine best move to flee
-            Position newPosition = new Position(this.Position.XPos, this.Position.YPos);
-
-            // If player is more to the right, try to move left
-            if (xDirection < 0)
-                newPosition.XPos -= 1;
-            // If player is more to the left, try to move right
-            else if (xDirection > 0)
-                newPosition.XPos += 1;
-
-            // If player is more below, try to move up
-            if (yDirection < 0)
-                newPosition.YPos -= 1;
-            // If player is more above, try to move down
-            else if (yDirection > 0)
-                newPosition.YPos += 1;
-
-            if (AttemptMove(newPosition, GameState))
+            Position bestMove = new Position();
+            double highestDistance = 0;
+            foreach (var possibleMove in possibleMoves)
             {
-                MoveTo(newPosition);
+                double currentCheck = CalculateDistance.Between(possibleMove, GameState.Player.Position);
+                if ( currentCheck > highestDistance )
+                {
+                    if (AttemptMove(possibleMove, GameState))
+                    {
+                        highestDistance = currentCheck;
+                        bestMove = possibleMove;
+                    }
+                }
+            }
+
+            if (AttemptMove(bestMove, GameState))
+            {
+                MoveTo(bestMove);
             }
         }
     }
