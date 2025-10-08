@@ -14,7 +14,8 @@ public class GameState
 
     public GameState()
     {
-        string path = @"C:\Users\robin\source\repos\Labb2_DungeonCrawler\Labb2_DungeonCrawler\Levels\Level1.txt";
+        string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        string path = Path.Combine(baseDirectory, "Levels", "Level1.txt");
         LevelData.LoadElementsFromFile(path);
         foreach (var element in LevelData.LevelElementsList)
         {
