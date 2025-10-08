@@ -5,6 +5,8 @@ namespace Labb2_DungeonCrawler.LevelElements;
 
 public class Rat : Enemy
 {
+    private static Random _random = new Random();
+    private int _maxMoveAttempts = 10;
     public Rat(Position pos, char representation, ConsoleColor color) : base(pos, representation, color)
     {
         Name = "Ratty";
@@ -15,6 +17,7 @@ public class Rat : Enemy
         DefenceModifier = 0;
         AttackDice = new List<Dice>();
         DefenceDice = new List<Dice>();
+
         if (AttackDiceCount == 1)
         {
             AttackDice.Add(new Dice());
@@ -43,29 +46,26 @@ public class Rat : Enemy
     {
         Random ratRandom = new Random();
 
-
-        while (true && IsAlive())
+        for (int attempts = 0; attempts < _maxMoveAttempts; attempts++)
         {
-            int stepInCardinalDirection = ratRandom.Next(0, 4);
+            int stepInCardinalDirection = _random.Next(0, 4);
             Position attempt = DirectionTransformer.GetPositionDelta((Direction)stepInCardinalDirection) + Position;
-            if (AttemptMove(attempt, GameState))
-            {
-                MoveMe((Direction)stepInCardinalDirection);
-                break;
-            }
-            else if (attempt == GameState.Player.Position)
+            
+            if (attempt.XPos == GameState.Player.Position.XPos && 
+                attempt.YPos == GameState.Player.Position.YPos)
             {
                 Combat combat = new Combat(this, GameState.Player);
                 combat.StartCombat();
+                return;             
             }
-            else
+            else if (AttemptMove(attempt, GameState))
             {
-                // They have no other way to go... so just, wait in place.
-                break;
+                MoveMe((Direction)stepInCardinalDirection);
+                return;            
             }
         }
+        // Rat stays in place if none of the above were possible.
+
     }
-
-
 
 }
