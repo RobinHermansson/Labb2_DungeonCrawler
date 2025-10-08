@@ -9,6 +9,7 @@ public class Player : Character
     public Player(string name, Position pos, char representation, ConsoleColor color) : base(pos, representation, color)
     {
         Name = name;
+        IsPlayer = true;
         VisionRange = 5;
         HitPoints = 100;
         AttackDiceCount = 2;

@@ -41,7 +41,7 @@ public class Gameloop
 
     private void ProcessPlayerMovement()
     {
-        ConsoleKeyInfo input = Console.ReadKey();
+        ConsoleKeyInfo input = Console.ReadKey(true);
 
         Position attempt = Player.MovementHandler(input);
         Enemy? enemyAtPosition = GameState.LevelData.LevelElementsList
