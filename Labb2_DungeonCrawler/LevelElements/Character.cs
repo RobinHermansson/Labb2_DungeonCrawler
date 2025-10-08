@@ -6,7 +6,7 @@ namespace Labb2_DungeonCrawler.LevelElements;
 public abstract class Character : LevelElement
 {
     public string Name { get; set; }
-    public bool IsPlayer { get; set } = false;
+    public bool IsPlayer { get; set; } = false;
     public int HitPoints { get; set; }
     public int AttackDiceCount { get; set; }
     public int DefenceDiceCount { get; set; }
