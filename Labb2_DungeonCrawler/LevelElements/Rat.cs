@@ -58,6 +58,11 @@ public class Rat : Enemy
                 Combat combat = new Combat(this, GameState.Player);
                 combat.StartCombat();
             }
+            else
+            {
+                // They have no other way to go... so just, wait in place.
+                break;
+            }
         }
     }
 
