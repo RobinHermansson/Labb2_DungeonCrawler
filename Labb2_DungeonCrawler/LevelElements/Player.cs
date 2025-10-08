@@ -28,16 +28,7 @@ public class Player : Character
             DefenceDice.Add(new Dice());
         }
     }
-    public bool AttemptMove(Position attempt, GameState gameState)
-    {
-        return gameState.IsPositionWalkable(attempt) ? true : false;
-    }
 
-    public void MoveTo(Position position)
-    {
-        this.Position = position;
-
-    }
 
     public void CheckSurrounding(List<LevelElement> surroundingElements)
     {
@@ -84,15 +75,4 @@ public class Player : Character
         }
 
     }
-    public void TakeDamage(int damage)
-    {
-        HitPoints -= damage;
-    }
-
-    public bool IsAlive()
-    {
-        return HitPoints > 0;
-    }
-
-
 }
