@@ -9,19 +9,25 @@ public class Renderer
         {
             if (element.isVisible && element is not Wall)
             {
-                element.Draw();
+                Draw(element, element.Color);
             }
             else if (element is Wall && element.isVisible)
             {
-                element.Color = ConsoleColor.DarkYellow;
-                element.Draw();
+                Draw(element, ConsoleColor.DarkYellow);
             }
             else if (element is Wall && element.hasBeenSeen && !element.isVisible)
             {
-                element.Color = ConsoleColor.DarkGray;
-                element.Draw();
+                Draw(element, ConsoleColor.DarkGray);
             }
+
         }
+    }
+    private void Draw(LevelElement element, ConsoleColor color)
+    {
+        Console.ForegroundColor = color;
+        Console.SetCursorPosition(element.Position.XPos, element.Position.YPos);
+        Console.Write(element.RepresentationAsChar);
+        Console.ResetColor();
     }
     public void ClearPosition(Position position)
     {

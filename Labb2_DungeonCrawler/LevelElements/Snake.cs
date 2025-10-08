@@ -93,8 +93,6 @@ public class Snake : Enemy
 
             if (AttemptMove(newPosition, GameState))
             {
-                Console.SetCursorPosition(Position.XPos, Position.YPos);
-                Console.Write(' ');
                 MoveTo(newPosition);
             }
         }
