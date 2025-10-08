@@ -119,6 +119,7 @@ public class CombatRenderer
     }
     private void DrawBox(int x, int y, int width, int height)
     {
+        Console.ForegroundColor = ConsoleColor.DarkRed;
         // Draw top border
         Console.SetCursorPosition(x, y);
         Console.Write("┌");
@@ -139,6 +140,7 @@ public class CombatRenderer
         Console.Write("└");
         for (int i = 1; i < width - 1; i++) Console.Write("─");
         Console.Write("┘");
+        Console.ResetColor();
     }
 
     private void DrawBorder(int x, int y, int width, int height)
