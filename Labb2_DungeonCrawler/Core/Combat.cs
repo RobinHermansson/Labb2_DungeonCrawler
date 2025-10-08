@@ -29,12 +29,12 @@ public class Combat
             if (key.Key == ConsoleKey.Escape)
             {
                 _renderer.AddLogEntry($"{Aggressor.Name} tries to escape...");
-                _renderer.RenderCombatScreen(Aggressor, Defender);
+                _renderer.UpdateStatsAndLog(Aggressor, Defender);
                 
                 if (new Random().Next(2) == 0)
                 {
                     _renderer.AddLogEntry("Escape successful!");
-                    _renderer.RenderCombatScreen(Aggressor, Defender);
+                    _renderer.UpdateStatsAndLog(Aggressor, Defender);
                     Console.ReadKey(true);
                     Console.Clear();
                     return false;
@@ -42,17 +42,17 @@ public class Combat
                 else
                 {
                     _renderer.AddLogEntry("Escape failed!");
-                    _renderer.RenderCombatScreen(Aggressor, Defender);
+                    _renderer.UpdateStatsAndLog(Aggressor, Defender);
                 }
             }
             
             PerformAttack(Aggressor, Defender);
-            _renderer.RenderCombatScreen(Aggressor, Defender);
+            _renderer.UpdateStatsAndLog(Aggressor, Defender);
             
             if (!Defender.IsAlive())
             {
                 _renderer.AddLogEntry($"{Defender.Name} has been defeated!");
-                _renderer.RenderCombatScreen(Aggressor, Defender);
+                _renderer.UpdateStatsAndLog(Aggressor, Defender);
                 Console.ReadKey(true);
                 Console.Clear();
                 return true;
@@ -61,12 +61,12 @@ public class Combat
             key = Console.ReadKey(true); //Thread.Sleep(2000);
             
             PerformAttack(Defender, Aggressor);
-            _renderer.RenderCombatScreen(Aggressor, Defender);
+            _renderer.UpdateStatsAndLog(Aggressor, Defender);
             
             if (!Aggressor.IsAlive())
             {
                 _renderer.AddLogEntry($"{Aggressor.Name} has been defeated!");
-                _renderer.RenderCombatScreen(Aggressor, Defender);
+                _renderer.UpdateStatsAndLog(Aggressor, Defender);
                 Console.ReadKey(true);
                 Console.Clear();
                 return false;

@@ -100,18 +100,18 @@ public class CombatRenderer
             if (_combatLog[startIndex + i].Contains('✓'))
             {
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write(_combatLog[startIndex + i]);
+                Console.Write(_combatLog[startIndex + i]+"           ");
                 Console.ResetColor();
             }
             else if (_combatLog[startIndex + i].Contains("X "))
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Write(_combatLog[startIndex + i]);
+                Console.Write(_combatLog[startIndex + i] + "           ");
                 Console.ResetColor();
             }
             else
             {
-                Console.Write(_combatLog[startIndex + i]);
+                Console.Write(_combatLog[startIndex + i] + "           ");
             }
 
                 
@@ -146,6 +146,14 @@ public class CombatRenderer
     private void DrawBorder(int x, int y, int width, int height)
     {
         DrawBox(x, y, width, height);
+    }
+
+    public void UpdateStatsAndLog(Character aggressor, Character defender)
+    {
+        RenderStats(aggressor, 2, 2, "ATTACKER");
+        RenderStats(defender, Console.WindowWidth / 2 + 2, 2, "DEFENDER");
+        RenderCombatLog();
+        
     }
 
 
