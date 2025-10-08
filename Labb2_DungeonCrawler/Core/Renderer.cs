@@ -161,7 +161,7 @@ public class Renderer
         Console.WriteLine();
     }
 
-    public void RenderUIStats(Character character, int height, int width, int startX, int startY)
+    public void RenderUIStats(Character character, int turn, int height, int width, int startX, int startY)
     {
         DrawUIBox(height, width, startX, startY);
         string UITitle = "STATS";
@@ -170,7 +170,7 @@ public class Renderer
         Console.SetCursorPosition(startX+1, startY+2);
         Console.Write($"HP: {character.HitPoints}/100");
         Console.SetCursorPosition(startX+1, startY+3);
-        Console.Write($"Turn: NOT YET IMPL.");
+        Console.Write($"Turn: {turn}");
 
     }
 

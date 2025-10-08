@@ -7,6 +7,7 @@ public class Gameloop
     public Player Player { get; set; }
     public Renderer Renderer { get; private set; }
 
+    public int Turn { get; set; }
     public int UIXStartPos { get; set; } = 53;
     public int UIYStartPos { get; set; } = 0;
     public int UIHeight { get; set; } = 12;
@@ -14,6 +15,7 @@ public class Gameloop
     public Gameloop(GameState gameState)
     {
 
+        Turn = 0;
         GameState = gameState;
         Player = gameState.Player;
         Player.CheckSurrounding(GameState.LevelData.LevelElementsList);
@@ -34,7 +36,7 @@ public class Gameloop
 
         Player.CheckSurrounding(GameState.LevelData.LevelElementsList);
         Renderer.RenderLevel(GameState.LevelData.LevelElementsList);
-        Renderer.RenderUIStats(character: Player, height: UIHeight, width: UIWidth, startX: UIXStartPos, startY: UIYStartPos);
+        Renderer.RenderUIStats(character: Player, turn: Turn, height: UIHeight, width: UIWidth, startX: UIXStartPos, startY: UIYStartPos);
     }
 
     private void ProcessPlayerMovement()
@@ -103,21 +105,22 @@ public class Gameloop
         while (isGameRunning)
         {
 
+            Turn++;
             ProcessPlayerMovement();
-            Renderer.RenderUIStats(character: Player, height: UIHeight, width: UIWidth, startX: UIXStartPos, startY: UIYStartPos);
+            Renderer.RenderUIStats(character: Player, turn: Turn, height: UIHeight, width: UIWidth, startX: UIXStartPos, startY: UIYStartPos);
 
             ProcessEnemyMovement();
-            Renderer.RenderUIStats(character: Player, height: UIHeight, width: UIWidth, startX: UIXStartPos, startY: UIYStartPos);
+            Renderer.RenderUIStats(character: Player, turn: Turn, height: UIHeight, width: UIWidth, startX: UIXStartPos, startY: UIYStartPos);
 
             ProcessEnemyDeath();
 
             Renderer.RenderLevel(GameState.LevelData.LevelElementsList);
-
             if (!Player.IsAlive())
             {
                 isGameRunning = false;
                 Renderer.DisplayGameOver();
             }
+
         }
     }
 }
