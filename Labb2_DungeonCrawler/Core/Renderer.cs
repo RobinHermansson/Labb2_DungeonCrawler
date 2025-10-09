@@ -19,16 +19,15 @@ public class Renderer
             {
                 Draw(element, ConsoleColor.DarkGray);
             }
-
         }
+        Console.ResetColor();
     }
     private void Draw(LevelElement element, ConsoleColor color)
     {
         Console.ForegroundColor = color;
         Console.SetCursorPosition(element.Position.XPos, element.Position.YPos);
         Console.Write(element.RepresentationAsChar);
-        Console.ResetColor();
-    }
+            }
     public void ClearPosition(Position position)
     {
         Console.SetCursorPosition(position.XPos, position.YPos);
@@ -120,14 +119,12 @@ public class Renderer
         Console.SetCursorPosition(titleX, titleY);
         Console.ForegroundColor = ConsoleColor.DarkRed;
         Console.Write(titleText);
-        Console.ResetColor();
 
         int startGameX = startX + (width - startSelectionText.Length) / 2;
         int startGameY = startY + height / 2;
         Console.SetCursorPosition(startGameX, startGameY);
         Console.ForegroundColor = ConsoleColor.White;
         Console.Write(startSelectionText);
-        Console.ResetColor();
 
         int quitGameYOffset = 1;
         int quitGameXOffset = 1;
