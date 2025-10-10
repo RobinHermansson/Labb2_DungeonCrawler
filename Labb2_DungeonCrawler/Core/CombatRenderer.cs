@@ -31,6 +31,7 @@ public class CombatRenderer
     {
         int width = Console.WindowWidth / 2 - 4;
         int height = 7;
+        int padding = 3;
         
         // Draw stats box
         DrawBox(x, y, width, height);
@@ -48,8 +49,12 @@ public class CombatRenderer
         Console.SetCursorPosition(x + 2, y + 2);
         Console.Write($"HP: ");
         Console.Write($"{character.HitPoints}");
-        
-        Console.SetCursorPosition(x + 2, y + 3);
+        for (int i = 0; i < padding; i++)
+        {
+            Console.Write(' ');
+        }
+
+            Console.SetCursorPosition(x + 2, y + 3);
         Console.Write($"Attack: {character.AttackDiceCount}d6+{character.AttackModifier}");
         
         Console.SetCursorPosition(x + 2, y + 4);
