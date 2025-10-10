@@ -55,6 +55,34 @@ public abstract class Character : LevelElement
     {
         return HitPoints > 0;
     }
+
+    public virtual void CheckSurrounding(List<LevelElement> surroundingElements)
+    {
+        int maxRange = (int)Math.Ceiling((Decimal)VisionRange); // Round up to ensure we don't miss anything
+    
+        var nearbyElements = surroundingElements.Where(element => 
+            Math.Abs(element.Position.XPos - this.Position.XPos) <= maxRange &&
+            Math.Abs(element.Position.YPos - this.Position.YPos) <= maxRange
+        ).ToList();
+
+        foreach (LevelElement element in nearbyElements)
+        {
+            var distance = CalculateDistance.Between(this.Position, element.Position);
+            if (distance < this.VisionRange)
+            {
+                if (element is Wall)
+                {
+                    element.hasBeenSeen = true;
+                }
+                element.isVisible = true;
+            }
+            else
+            {
+                element.isVisible = false;
+            }
+        }
+    }
+
     public bool Attack(Character target)
     {
         int attackRollTotal = 0;

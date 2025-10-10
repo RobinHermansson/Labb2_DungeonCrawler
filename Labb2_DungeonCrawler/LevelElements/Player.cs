@@ -30,26 +30,6 @@ public class Player : Character
     }
 
 
-    public void CheckSurrounding(List<LevelElement> surroundingElements)
-    {
-
-        foreach (LevelElement element in surroundingElements)
-        {
-            var distance = CalculateDistance.Between(this.Position, element.Position);
-            if (distance < this.VisionRange)
-            {
-                if (element is Wall)
-                {
-                    element.hasBeenSeen = true;
-                }
-                element.isVisible = true;
-            }
-            else
-            {
-                element.isVisible = false;
-            }
-        }
-    }
     public Position MovementHandler(ConsoleKeyInfo input)
     {
         switch (input.Key)
