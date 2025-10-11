@@ -12,6 +12,8 @@ public class Gameloop
     public int UIYStartPos { get; set; } = 0;
     public int UIHeight { get; set; } = 12;
     public int UIWidth { get; set; } = 18;
+    public int InstructionsXPos { get; private set; } = 0;
+    public int InstructionsYPos { get; private set; } = 20;
     public Gameloop(GameState gameState)
     {
 
@@ -37,6 +39,7 @@ public class Gameloop
         Player.CheckSurrounding(GameState.LevelData.LevelElementsList);
         Renderer.RenderLevel(GameState.LevelData.LevelElementsList);
         Renderer.RenderUIStats(character: Player, turn: Turn, height: UIHeight, width: UIWidth, startX: UIXStartPos, startY: UIYStartPos);
+        Renderer.DrawInstructions(InstructionsXPos, InstructionsYPos);
     }
 
     private void ProcessPlayerMovement()
@@ -111,9 +114,13 @@ public class Gameloop
             Turn++;
             ProcessPlayerMovement();
             Renderer.RenderUIStats(character: Player, turn: Turn, height: UIHeight, width: UIWidth, startX: UIXStartPos, startY: UIYStartPos);
+            Renderer.DrawInstructions(InstructionsXPos, InstructionsYPos);
+
 
             ProcessEnemyMovement();
             Renderer.RenderUIStats(character: Player, turn: Turn, height: UIHeight, width: UIWidth, startX: UIXStartPos, startY: UIYStartPos);
+            Renderer.DrawInstructions(InstructionsXPos, InstructionsYPos);
+
 
             ProcessEnemyDeath();
 

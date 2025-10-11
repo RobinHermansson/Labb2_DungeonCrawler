@@ -177,6 +177,12 @@ public class Renderer
 
     }
 
+    public void DrawInstructions(int xCoord, int yCoord)
+    {
+        Console.SetCursorPosition(xCoord, yCoord);
+        Console.WriteLine("Use ASDW or the Arrow keys to move. Any other input will skip your turn.");
+    }
+
     public void DrawUIBox(int height, int width, int startX, int startY)
     {
         // TOP
