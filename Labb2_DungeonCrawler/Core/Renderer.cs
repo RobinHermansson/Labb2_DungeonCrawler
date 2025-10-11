@@ -27,7 +27,7 @@ public class Renderer
         Console.ForegroundColor = color;
         Console.SetCursorPosition(element.Position.XPos, element.Position.YPos);
         Console.Write(element.RepresentationAsChar);
-            }
+    }
     public void ClearPosition(Position position)
     {
         Console.SetCursorPosition(position.XPos, position.YPos);
