@@ -34,7 +34,7 @@ public class Gameloop
         Console.CursorVisible = false;
 
         // Set game state references for enemies
-        foreach (var enemy in GameState.LevelData.LevelElementsList.OfType<Enemy>())
+        foreach (var enemy in GameState.Enemies)
         {
             enemy.GameState = GameState; // TODO: Improve this later
         }
@@ -53,8 +53,7 @@ public class Gameloop
         if (selectedMove is Position attempt)
         {
 
-            Enemy? enemyAtPosition = GameState.LevelData.LevelElementsList
-                .OfType<Enemy>() // Filter to only Enemy types
+            Enemy? enemyAtPosition = GameState.Enemies
                 .FirstOrDefault(enemy => enemy.Position.XPos == attempt.XPos &&
                                         enemy.Position.YPos == attempt.YPos);
             if (enemyAtPosition != null)
@@ -73,32 +72,27 @@ public class Gameloop
 
     private void ProcessEnemyMovement()
     {
-        foreach (var element in GameState.LevelData.LevelElementsList)
+        foreach (var enemy in GameState.Enemies)
         {
-            if (element is Enemy enemyObject)
-            {
-                enemyObject.Update();
-            }
+            enemy.Update();
         }
     }
 
     private void ProcessEnemyDeath() 
     {
         List<Enemy> enemyDeaths = new List<Enemy>();
-        foreach (var element in GameState.LevelData.LevelElementsList)
+        foreach (var enemy in GameState.Enemies)
         {
-            if (element is Enemy enemyObject)
+            if (!enemy.IsAlive())
             {
-                if (!enemyObject.IsAlive())
-                {
-                    enemyDeaths.Add(enemyObject);
+                enemyDeaths.Add(enemy);
 
-                }
             }
-        }
-        foreach (var enemy in enemyDeaths)
+        }    
+        foreach (var deadEnemy in enemyDeaths)
         {
-            GameState.LevelData.LevelElementsList.Remove(enemy);
+            GameState.LevelData.LevelElementsList.Remove(deadEnemy);
+            GameState.Enemies.Remove(deadEnemy);
         }
     }
 

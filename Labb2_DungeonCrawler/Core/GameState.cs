@@ -8,6 +8,8 @@ public class GameState
     public bool Debug { get; private set; } = true;
 
     public LevelData LevelData = new LevelData();
+    public List<Enemy> Enemies = new List<Enemy>();
+    public List<Wall> Walls = new List<Wall>();
 
     public Player Player = null;
 
@@ -23,6 +25,13 @@ public class GameState
             if (element is Player player)
             {
                 Player = player;
+            }
+            if (element is Enemy enemy)
+            {
+                Enemies.Add(enemy);
+            }
+            if (element is Wall wall) {
+                Walls.Add(wall);
             }
         }
     }
