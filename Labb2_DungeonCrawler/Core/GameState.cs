@@ -5,6 +5,7 @@ namespace Labb2_DungeonCrawler.Core;
 
 public class GameState
 {
+    public bool Debug { get; private set; } = true;
 
     public LevelData LevelData = new LevelData();
 

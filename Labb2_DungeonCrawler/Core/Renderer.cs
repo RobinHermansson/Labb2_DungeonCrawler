@@ -187,6 +187,15 @@ public class Renderer
         Console.WriteLine("Use ASDW or the Arrow keys to move. Any other input will skip your turn.");
     }
 
+    public void DrawDebugValues(bool debug, int xCoord, int yCoord, object Object)
+    {
+        if (debug)
+        {
+            Console.SetCursorPosition(xCoord, yCoord);
+            Console.WriteLine($"{Object}");
+        }
+    }
+
     public void DrawUIBox(int height, int width, int startX, int startY)
     {
         // TOP
@@ -211,9 +220,6 @@ public class Renderer
         for (int i = 1; i < width - 1; i++)
             Console.Write("-");
         Console.Write("+");
-
-        
-
     }
     public enum StartScreenOption
     {

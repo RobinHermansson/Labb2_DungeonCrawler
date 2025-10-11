@@ -26,4 +26,9 @@ public abstract class LevelElement
         Console.Write(this.RepresentationAsChar);
         Console.ResetColor();
     }
+
+    public override string ToString()
+    {
+        return $"PreviousPosition: X:{this.PreviousPosition.XPos}, Y:{this.PreviousPosition.YPos}\nPosition: X:{this.Position.XPos},Y:{this.Position.YPos}";
+    }
 }

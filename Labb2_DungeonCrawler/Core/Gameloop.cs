@@ -14,6 +14,9 @@ public class Gameloop
     public int UIWidth { get; set; } = 18;
     public int InstructionsXPos { get; private set; } = 0;
     public int InstructionsYPos { get; private set; } = 20;
+    public int DebugXPos { get; private set; } = 0;
+    public int DebugYPos { get; private set; } = 21;
+
     public Gameloop(GameState gameState)
     {
 
@@ -110,6 +113,7 @@ public class Gameloop
         {
 
             Turn++;
+            Renderer.DrawDebugValues(GameState.Debug, DebugXPos, DebugYPos, Player);
             ProcessPlayerMovement();
             Renderer.RenderUIStats(character: Player, turn: Turn, height: UIHeight, width: UIWidth, startX: UIXStartPos, startY: UIYStartPos);
             Renderer.DrawInstructions(InstructionsXPos, InstructionsYPos);
