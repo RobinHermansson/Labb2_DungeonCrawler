@@ -7,9 +7,13 @@ public class Renderer
     {
         foreach (var element in elements)
         {
-            if (element.isVisible && element is not Wall)
+            if (element.isVisible && element is Character characterElement)
             {
-                Draw(element, element.Color);
+                ClearPosition(characterElement.PreviousPosition);
+                Draw(characterElement, characterElement.Color);
+                if (characterElement.PreviousPosition != characterElement.Position)
+                {
+                }
             }
             else if (element is Wall && element.isVisible)
             {

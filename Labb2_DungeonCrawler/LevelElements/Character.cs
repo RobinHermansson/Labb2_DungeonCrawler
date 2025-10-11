@@ -12,8 +12,6 @@ public abstract class Character : LevelElement
     public int DefenceDiceCount { get; set; }
     public int AttackModifier { get; set; }
     public int DefenceModifier { get; set; }
-    public Position PreviousPosition { get; set; }
-
     public List<Dice> AttackDice { get; set; }
     public List<Dice> DefenceDice { get; set; }
     public GameState GameState { get; set; }

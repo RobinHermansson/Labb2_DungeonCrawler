@@ -62,7 +62,6 @@ public class Gameloop
             }
             else if (Player.AttemptMove(attempt, GameState))
             {
-                Renderer.ClearPosition(Player.Position);
                 Player.MoveTo(attempt);
                 Player.CheckSurrounding(GameState.LevelData.LevelElementsList);
             }
@@ -75,7 +74,6 @@ public class Gameloop
         {
             if (element is Enemy enemyObject)
             {
-                Renderer.ClearPosition(enemyObject.Position);
                 enemyObject.Update();
             }
         }

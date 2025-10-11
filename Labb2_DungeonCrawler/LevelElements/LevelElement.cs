@@ -4,6 +4,7 @@ public abstract class LevelElement
 {
 
     public Position Position { get; set; }
+    public Position PreviousPosition { get; set; }
     public char RepresentationAsChar { get; set; }
     public int VisionRange { get; set; }
     public bool isVisible { get; set; } = false;

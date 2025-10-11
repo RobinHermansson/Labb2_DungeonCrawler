@@ -60,7 +60,7 @@ public class Rat : Enemy
             }
             else if (AttemptMove(attempt, GameState))
             {
-                MoveMe((Direction)stepInCardinalDirection);
+                MoveTo(attempt);
                 return;            
             }
         }
