@@ -54,7 +54,7 @@ public class CombatRenderer
             Console.Write(' ');
         }
 
-            Console.SetCursorPosition(x + 2, y + 3);
+        Console.SetCursorPosition(x + 2, y + 3);
         Console.Write($"Attack: {character.AttackDiceCount}d6+{character.AttackModifier}");
         
         Console.SetCursorPosition(x + 2, y + 4);
@@ -104,8 +104,15 @@ public class CombatRenderer
             Console.SetCursorPosition(logX + 2, logY + i + 1);
             if (_combatLog[startIndex + i].Contains('✓'))
             {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write(_combatLog[startIndex + i]+"           ");
+                if (_combatLog[startIndex + i].Contains("Player")){
+
+                    Console.ForegroundColor = ConsoleColor.Green;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                }
+                Console.Write(_combatLog[startIndex + i] + "           ");
                 Console.ResetColor();
             }
             else if (_combatLog[startIndex + i].Contains("X "))

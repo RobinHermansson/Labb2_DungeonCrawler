@@ -13,7 +13,7 @@ public class Snake : Enemy
 
         Name = "Snekk";
         HitPoints = 20;
-        AttackDiceCount = 4;
+        AttackDiceCount = 3;
         DefenceDiceCount = 1;
         AttackModifier = 1;
         DefenceModifier = 2;
@@ -26,7 +26,7 @@ public class Snake : Enemy
         }
         else
         {
-            for (int i = 1; i < AttackDiceCount; i++)
+            for (int i = 0; i < AttackDiceCount; i++)
             {
                 AttackDice.Add(new Dice());
             }
@@ -37,7 +37,7 @@ public class Snake : Enemy
         }
         else
         {
-            for (int i = 1; i < DefenceDiceCount; i++)
+            for (int i = 0; i < DefenceDiceCount; i++)
             {
                 DefenceDice.Add(new Dice());
             }

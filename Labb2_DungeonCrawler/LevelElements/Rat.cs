@@ -24,7 +24,7 @@ public class Rat : Enemy
         }
         else
         {
-            for (int i = 1; i < AttackDiceCount; i++)
+            for (int i = 0; i < AttackDiceCount; i++)
             {
                 AttackDice.Add(new Dice());
             }
@@ -35,7 +35,7 @@ public class Rat : Enemy
         }
         else
         {
-            for (int i = 1; i < DefenceDiceCount; i++)
+            for (int i = 0; i < DefenceDiceCount; i++)
             {
                 DefenceDice.Add(new Dice());
             }
