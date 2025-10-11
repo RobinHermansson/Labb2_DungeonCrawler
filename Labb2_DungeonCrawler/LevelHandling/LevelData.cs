@@ -40,7 +40,7 @@ public class LevelData
                     }
                     if (character == '@')
                     {
-                        _elements.Add(new Player("Robin", new Position(xpos, ypos), character, ConsoleColor.Yellow));
+                        _elements.Add(new Player("Player", new Position(xpos, ypos), character, ConsoleColor.Yellow));
                     }
                     xpos++;
 

@@ -11,8 +11,8 @@ public class Rat : Enemy
     {
         Name = "Ratty";
         HitPoints = 20;
-        AttackDiceCount = 1;
-        DefenceDiceCount = 1;
+        AttackDiceCount = 2;
+        DefenceDiceCount = 2;
         AttackModifier = 1;
         DefenceModifier = 0;
         AttackDice = new List<Dice>();

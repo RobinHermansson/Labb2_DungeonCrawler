@@ -13,7 +13,7 @@ public class Snake : Enemy
 
         Name = "Snekk";
         HitPoints = 20;
-        AttackDiceCount = 3;
+        AttackDiceCount = 4;
         DefenceDiceCount = 1;
         AttackModifier = 1;
         DefenceModifier = 2;
