@@ -31,6 +31,10 @@ public class Gameloop
 
     private void InitializeGame()
     {
+        Player player = Renderer.DisplaySelectClassScreen();
+        player.Position = Player.Position;
+        GameState.Player = player;
+        Player = GameState.Player;
         Console.CursorVisible = false;
 
         // Set game state references for enemies

@@ -16,7 +16,7 @@ public class MageClass : ICharacterClass
 
     public string GetClassDescription()
     {
-        return "Mages wield powerful magic, dealing consistent damage but having less health. Also comes with a nifty Magic Shield, protecting their health";
+        return "Mages wield powerful magic, dealing consistent damage but having less health. Has a Magic shield.";
     }
 
     public bool UseSpecialAbility(Character user, Character target)

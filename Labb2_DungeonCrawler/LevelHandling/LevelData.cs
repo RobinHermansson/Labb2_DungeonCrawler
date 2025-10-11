@@ -1,4 +1,5 @@
-﻿using Labb2_DungeonCrawler.LevelElements;
+﻿using Labb2_DungeonCrawler.CharacterClasses;
+using Labb2_DungeonCrawler.LevelElements;
 
 namespace Labb2_DungeonCrawler.LevelHandling;
 
@@ -40,7 +41,7 @@ public class LevelData
                     }
                     if (character == '@')
                     {
-                        _elements.Add(new Player("Player", new Position(xpos, ypos), character, ConsoleColor.Yellow));
+                        _elements.Add(new Player("Player", new Position(xpos, ypos), character, ConsoleColor.Yellow, new WarriorClass()));
                     }
                     xpos++;
 

@@ -1,4 +1,5 @@
 ﻿using Labb2_DungeonCrawler.LevelElements;
+using Labb2_DungeonCrawler.CharacterClasses;
 namespace Labb2_DungeonCrawler.Core;
 
 public class Renderer
@@ -222,6 +223,75 @@ public class Renderer
         for (int i = 1; i < width - 1; i++)
             Console.Write("-");
         Console.Write("+");
+    }
+    public Player DisplaySelectClassScreen()
+    {
+        int selectedIndex = 0;
+        string[] classes = { "Warrior", "Mage"};
+        
+        while (true)
+        {
+            Console.Clear();
+            
+            Console.SetCursorPosition(10, 5);
+            Console.WriteLine("Select Your Class:");
+            
+            for (int i = 0; i < classes.Length; i++)
+            {
+                Console.SetCursorPosition(15, 7 + i);
+                if (i == selectedIndex)
+                {
+                    Console.Write("=> " + classes[i]);
+                }
+                else
+                {
+                    Console.Write("   " + classes[i]);
+                }
+            }
+            
+            // Display class description
+            ICharacterClass selectedClass = null;
+            switch (selectedIndex)
+            {
+                case 0: selectedClass = new WarriorClass(); break;
+                case 1: selectedClass = new MageClass(); break;
+                //case 2: selectedClass = new RogueClass(); break;
+            }
+            
+            Console.SetCursorPosition(10, 12);
+            Console.WriteLine(selectedClass.GetClassDescription());
+            
+            // Handle input
+            var key = Console.ReadKey(true);
+            
+            if (key.Key == ConsoleKey.UpArrow && selectedIndex > 0)
+            {
+                selectedIndex--;
+            }
+            else if (key.Key == ConsoleKey.DownArrow && selectedIndex < classes.Length - 1)
+            {
+                selectedIndex++;
+            }
+            else if (key.Key == ConsoleKey.Enter)
+            {
+                return CreatePlayerFromClass(selectedIndex);
+            }
+        }
+    }
+
+    private Player CreatePlayerFromClass(int classIndex)
+    {
+        ICharacterClass characterClass;
+        
+        switch (classIndex)
+        {
+            case 0: characterClass = new WarriorClass(); break;
+            case 1: characterClass = new MageClass(); break;
+            //case 2: characterClass = new RogueClass(); break;
+            default: characterClass = new WarriorClass(); break;
+        }
+        
+        return new Player("Player", new Position(10, 10), '@', ConsoleColor.White, characterClass);
     }
     public enum StartScreenOption
     {
