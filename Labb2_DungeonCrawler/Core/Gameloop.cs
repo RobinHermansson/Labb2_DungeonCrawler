@@ -66,9 +66,9 @@ public class Gameloop
             else if (Player.AttemptMove(attempt, GameState))
             {
                 Player.MoveTo(attempt);
-                Player.CheckSurrounding(GameState.LevelData.LevelElementsList);
             }
         }
+        Player.CheckSurrounding(GameState.LevelData.LevelElementsList);
     }
 
     private void ProcessEnemyMovement()

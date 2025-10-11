@@ -11,9 +11,11 @@ public class Renderer
             {
                 ClearPosition(characterElement.PreviousPosition);
                 Draw(characterElement, characterElement.Color);
-                if (characterElement.PreviousPosition != characterElement.Position)
-                {
-                }
+            }
+            else if (!element.isVisible && element is Character nonVisibleCharacter)
+            {
+                ClearPosition(nonVisibleCharacter.Position);
+                ClearPosition(nonVisibleCharacter.PreviousPosition);
             }
             else if (element is Wall && element.isVisible)
             {
