@@ -43,23 +43,26 @@ public class Gameloop
     {
         ConsoleKeyInfo input = Console.ReadKey(true);
 
-        Position attempt = Player.MovementHandler(input);
-        Enemy? enemyAtPosition = GameState.LevelData.LevelElementsList
-            .OfType<Enemy>() // Filter to only Enemy types
-            .FirstOrDefault(enemy => enemy.Position.XPos == attempt.XPos &&
-                                    enemy.Position.YPos == attempt.YPos);
+        Position? selectedMove = Player.MovementHandler(input);
+        if (selectedMove is Position attempt)
+        {
 
-        if (enemyAtPosition != null)
-        {
-            // Found an enemy at this position - initiate combat!
-            Combat combat = new Combat(aggressor: Player, defender: enemyAtPosition);
-            combat.StartCombat();
-        }
-        else if (Player.AttemptMove(attempt, GameState))
-        {
-            Renderer.ClearPosition(Player.Position);
-            Player.MoveTo(attempt);
-            Player.CheckSurrounding(GameState.LevelData.LevelElementsList);
+            Enemy? enemyAtPosition = GameState.LevelData.LevelElementsList
+                .OfType<Enemy>() // Filter to only Enemy types
+                .FirstOrDefault(enemy => enemy.Position.XPos == attempt.XPos &&
+                                        enemy.Position.YPos == attempt.YPos);
+            if (enemyAtPosition != null)
+            {
+                // Found an enemy at this position - initiate combat!
+                Combat combat = new Combat(aggressor: Player, defender: enemyAtPosition);
+                combat.StartCombat();
+            }
+            else if (Player.AttemptMove(attempt, GameState))
+            {
+                Renderer.ClearPosition(Player.Position);
+                Player.MoveTo(attempt);
+                Player.CheckSurrounding(GameState.LevelData.LevelElementsList);
+            }
         }
     }
 

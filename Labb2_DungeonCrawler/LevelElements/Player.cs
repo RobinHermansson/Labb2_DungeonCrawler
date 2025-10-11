@@ -30,7 +30,7 @@ public class Player : Character
     }
 
 
-    public Position MovementHandler(ConsoleKeyInfo input)
+    public Position? MovementHandler(ConsoleKeyInfo input)
     {
         switch (input.Key)
         {
@@ -51,7 +51,7 @@ public class Player : Character
             case ConsoleKey.RightArrow:
                 return DirectionTransformer.GetPositionDelta(Direction.Right) + this.Position;
             default:
-                throw new ArgumentException("Could not handle the input key.");
+                return null;
         }
 
     }
