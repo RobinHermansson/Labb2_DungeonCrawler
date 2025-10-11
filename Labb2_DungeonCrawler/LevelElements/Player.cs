@@ -1,4 +1,5 @@
-﻿using Labb2_DungeonCrawler.Core;
+﻿using Labb2_DungeonCrawler.CharacterClasses;
+using Labb2_DungeonCrawler.Core;
 using Labb2_DungeonCrawler.Features;
 using Labb2_DungeonCrawler.Utilities;
 namespace Labb2_DungeonCrawler.LevelElements;
@@ -6,16 +7,23 @@ namespace Labb2_DungeonCrawler.LevelElements;
 
 public class Player : Character
 {
-    public Player(string name, Position pos, char representation, ConsoleColor color) : base(pos, representation, color)
+    public Player(string name, Position pos, char representation, ConsoleColor color, ICharacterClass characterClass) : base(pos, representation, color)
     {
         Name = name;
+        Class = characterClass;
         IsPlayer = true;
         VisionRange = 5;
-        HitPoints = 100;
+
+        BaseHitPoints = 80; 
+        HitPoints = TotalHitPoints;
+
+        BaseAttackModifier = 1;
+        BaseDefenseModifier = 1;
+        AttackModifier = TotalAttackModifier;
+        DefenceModifier = TotalDefenseModifier;
+        
         AttackDiceCount = 2;
         DefenceDiceCount = 2;
-        AttackModifier = 3;
-        DefenceModifier = 3;
         AttackDice = new List<Dice>();
         DefenceDice = new List<Dice>();
 

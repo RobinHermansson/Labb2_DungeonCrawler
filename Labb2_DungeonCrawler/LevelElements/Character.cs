@@ -1,10 +1,19 @@
-﻿using Labb2_DungeonCrawler.Core;
+﻿using Labb2_DungeonCrawler.CharacterClasses;
+using Labb2_DungeonCrawler.Core;
 using Labb2_DungeonCrawler.Features;
 using Labb2_DungeonCrawler.Utilities;
 namespace Labb2_DungeonCrawler.LevelElements;
 
 public abstract class Character : LevelElement
 {
+
+    public ICharacterClass Class { get; protected set; }
+    public int TotalHitPoints => BaseHitPoints + (Class?.BonusHealth ?? 0);
+    public int TotalAttackModifier => BaseAttackModifier + (Class?.AttackBonus ?? 0);
+    public int TotalDefenseModifier => BaseDefenseModifier + (Class?.DefenseBonus ?? 0);
+    protected int BaseHitPoints { get; set; }
+    protected int BaseAttackModifier { get; set; }
+    protected int BaseDefenseModifier { get; set; }
     public string Name { get; set; }
     public bool IsPlayer { get; set; } = false;
     public int HitPoints { get; set; }
