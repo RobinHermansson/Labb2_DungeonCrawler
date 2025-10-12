@@ -26,8 +26,16 @@ public abstract class Character : LevelElement
     }
     public void MoveTo(Position position)
     {
+        if (GameState.ElementsDict.ContainsKey(this.Position))
+        {
+            GameState.ElementsDict.Remove(this.Position);
+        }
+        
         this.PreviousPosition = new Position(Position.XPos, Position.YPos);
+        
         this.Position = position;
+        
+        GameState.ElementsDict[Position] = this;
     }
     public void MoveMe(Direction direction)
     {

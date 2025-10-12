@@ -33,14 +33,8 @@ public class Gameloop
     {
         Console.CursorVisible = false;
 
-        // Set game state references for enemies
-        foreach (var enemy in GameState.Enemies)
-        {
-            enemy.GameState = GameState; // TODO: Improve this later
-        }
-
         Player.CheckSurrounding(GameState.LevelData.LevelElementsList);
-        Renderer.RenderLevel(GameState.LevelData.LevelElementsList);
+        Renderer.RenderLevel(GameState.ElementsDict);
         Renderer.RenderUIStats(character: Player, turn: Turn, height: UIHeight, width: UIWidth, startX: UIXStartPos, startY: UIYStartPos);
         Renderer.DrawInstructions(InstructionsXPos, InstructionsYPos);
     }
@@ -93,6 +87,7 @@ public class Gameloop
         {
             GameState.LevelData.LevelElementsList.Remove(deadEnemy);
             GameState.Enemies.Remove(deadEnemy);
+            GameState.ElementsDict.Remove(deadEnemy.Position);
         }
     }
 
@@ -120,7 +115,7 @@ public class Gameloop
 
             ProcessEnemyDeath();
 
-            Renderer.RenderLevel(GameState.LevelData.LevelElementsList);
+            Renderer.RenderLevel(GameState.ElementsDict);
             if (!Player.IsAlive())
             {
                 isGameRunning = false;

@@ -5,11 +5,12 @@ namespace Labb2_DungeonCrawler.Core;
 
 public class GameState
 {
-    public bool Debug { get; private set; } = true;
+    public bool Debug { get; private set; } = false;
 
     public LevelData LevelData = new LevelData();
     public List<Enemy> Enemies = new List<Enemy>();
     public List<Wall> Walls = new List<Wall>();
+    public Dictionary<Position, LevelElement> ElementsDict = new Dictionary<Position, LevelElement>();
 
     public Player Player = null;
 
@@ -22,6 +23,11 @@ public class GameState
         LevelData.LoadElementsFromFile(path);
         foreach (var element in LevelData.LevelElementsList)
         {
+            ElementsDict.Add(element.Position, element);
+            if (element is Character character)
+            {
+                character.GameState = this;
+            }
             if (element is Player player)
             {
                 Player = player;

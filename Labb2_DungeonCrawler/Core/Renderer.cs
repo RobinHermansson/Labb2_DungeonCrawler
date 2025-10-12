@@ -3,27 +3,39 @@ namespace Labb2_DungeonCrawler.Core;
 
 public class Renderer
 {
-    public void RenderLevel(List<LevelElement> elements)
+    public void RenderLevel(Dictionary<Position, LevelElement> elements)
     {
         foreach (var element in elements)
         {
-            if (element.isVisible && element is Character characterElement)
+            if (element.Value.isVisible && element.Value is Character characterElement)
             {
-                ClearPosition(characterElement.PreviousPosition);
+                // This is to check the character that just moved and if the player moved into that position, the player's position should not be overwritten and leave a blank.
+                if (elements.ContainsKey(characterElement.PreviousPosition))
+                {
+                    LevelElement elementOnPreviousPos = elements[characterElement.PreviousPosition];
+                    if (!(elementOnPreviousPos is Player))
+                    {
+                        ClearPosition(characterElement.PreviousPosition);
+                    }
+                }
+                else
+                {
+                    ClearPosition(characterElement.PreviousPosition);
+                }
                 Draw(characterElement, characterElement.Color);
             }
-            else if (!element.isVisible && element is Character nonVisibleCharacter)
+            else if (!element.Value.isVisible && element.Value is Character nonVisibleCharacter)
             {
                 ClearPosition(nonVisibleCharacter.Position);
                 ClearPosition(nonVisibleCharacter.PreviousPosition);
             }
-            else if (element is Wall && element.isVisible)
+            else if (element.Value is Wall && element.Value.isVisible)
             {
-                Draw(element, ConsoleColor.DarkYellow);
+                Draw(element.Value, ConsoleColor.DarkYellow);
             }
-            else if (element is Wall && element.hasBeenSeen && !element.isVisible)
+            else if (element.Value is Wall && element.Value.hasBeenSeen && !element.Value.isVisible)
             {
-                Draw(element, ConsoleColor.DarkGray);
+                Draw(element.Value, ConsoleColor.DarkGray);
             }
         }
         Console.ResetColor();
