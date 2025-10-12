@@ -58,6 +58,12 @@ public abstract class Character : LevelElement
 
     public virtual void CheckSurrounding(List<LevelElement> surroundingElements)
     {
+
+        // needed to reset all object's visibility...
+        foreach (var element in surroundingElements)
+        {
+            element.isVisible = false;   
+        }
         int maxRange = (int)Math.Ceiling((Decimal)VisionRange); // Round up to ensure we don't miss anything
     
         var nearbyElements = surroundingElements.Where(element => 
