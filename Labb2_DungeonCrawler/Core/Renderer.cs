@@ -9,7 +9,13 @@ public class Renderer
         {
             if (element.isVisible && element is Character characterElement)
             {
-                ClearPosition(characterElement.PreviousPosition);
+                LevelElement? playerOnPosition = elements.FirstOrDefault(player => player is Player && player.Position == characterElement.PreviousPosition);
+                {
+                    if (playerOnPosition is null)
+                    {
+                        ClearPosition(characterElement.PreviousPosition);
+                    }
+                }
                 Draw(characterElement, characterElement.Color);
             }
             else if (!element.isVisible && element is Character nonVisibleCharacter)
