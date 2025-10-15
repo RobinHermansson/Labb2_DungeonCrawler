@@ -5,33 +5,8 @@ public class Renderer
 {
     public void RenderLevel(List<LevelElement> elements)
     {
-        foreach (var element in elements)
-        {
-            if (element.isVisible && element is Character characterElement)
-            {
-                LevelElement? charOnPosition = elements.FirstOrDefault(element => element is Character && element.Position == characterElement.PreviousPosition);
-                {
-                    if (charOnPosition is null)
-                    {
-                        ClearPosition(characterElement.PreviousPosition);
-                    }
-                }
-                Draw(characterElement, characterElement.Color);
-            }
-            else if (!element.isVisible && element is Character nonVisibleCharacter)
-            {
-                ClearPosition(nonVisibleCharacter.Position);
-                ClearPosition(nonVisibleCharacter.PreviousPosition);
-            }
-            else if (element is Wall && element.isVisible)
-            {
-                Draw(element, ConsoleColor.DarkYellow);
-            }
-            else if (element is Wall && element.hasBeenSeen && !element.isVisible)
-            {
-                Draw(element, ConsoleColor.DarkGray);
-            }
-        }
+        ProcessCharacterRendering(elements);
+        ProcessWallRendering(elements);
         Console.ResetColor();
     }
     private void Draw(LevelElement element, ConsoleColor color)
@@ -44,6 +19,44 @@ public class Renderer
     {
         Console.SetCursorPosition(position.XPos, position.YPos);
         Console.Write(' ');
+    } 
+    
+    private void ProcessCharacterRendering(List<LevelElement> element)
+    {
+        foreach (var character in element.OfType<Character>())
+        {
+            if (character.isVisible)
+            {
+                LevelElement? charOnPosition = element.FirstOrDefault(element => element.Position == character.PreviousPosition);
+                {
+                    if (charOnPosition is null)
+                    {
+                        ClearPosition(character.PreviousPosition);
+                    }
+                }
+                Draw(character, character.Color);
+            }
+            else if (!character.isVisible)
+            {
+                ClearPosition(character.Position);
+                ClearPosition(character.PreviousPosition);
+            }
+        }
+    }
+    private void ProcessWallRendering(List<LevelElement> elements)
+    {
+        foreach (var wall in elements.OfType<Wall>())
+        {
+
+            if (wall.isVisible)
+            {
+                Draw(wall, ConsoleColor.DarkYellow);
+            }
+            else if(wall.hasBeenSeen && !wall.isVisible)
+            {
+                Draw(wall, ConsoleColor.DarkGray);
+            }
+        }
     }
     public void DisplayGameOver()
     {
