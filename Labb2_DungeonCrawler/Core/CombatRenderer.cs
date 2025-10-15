@@ -4,7 +4,6 @@ namespace Labb2_DungeonCrawler.Core;
 
 public class CombatRenderer
 {
-    private readonly int _logSize = 10;
     private readonly List<string> _combatLog = new List<string>();
     
     public void RenderCombatScreen(Character aggressor, Character defender)
@@ -27,7 +26,7 @@ public class CombatRenderer
         Console.Write("Press Any key to continue combat. If you are the Attacker/Aggressor and its your turn, press ESC to attempt escape");
 
     }
-    public void RenderStats(Character character, int x, int y, string title )
+    private void RenderStats(Character character, int x, int y, string title )
     {
         int width = Console.WindowWidth / 2 - 4;
         int height = 7;

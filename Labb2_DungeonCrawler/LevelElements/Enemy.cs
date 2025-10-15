@@ -1,6 +1,4 @@
-﻿using Labb2_DungeonCrawler.Features;
-
-namespace Labb2_DungeonCrawler.LevelElements;
+﻿namespace Labb2_DungeonCrawler.LevelElements;
 
 public abstract class Enemy : Character
 {
