@@ -9,9 +9,9 @@ public class Renderer
         {
             if (element.isVisible && element is Character characterElement)
             {
-                LevelElement? playerOnPosition = elements.FirstOrDefault(player => player is Player && player.Position == characterElement.PreviousPosition);
+                LevelElement? charOnPosition = elements.FirstOrDefault(element => element is Character && element.Position == characterElement.PreviousPosition);
                 {
-                    if (playerOnPosition is null)
+                    if (charOnPosition is null)
                     {
                         ClearPosition(characterElement.PreviousPosition);
                     }

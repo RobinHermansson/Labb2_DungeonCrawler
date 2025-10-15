@@ -24,7 +24,7 @@ public class CombatRenderer
         
         // Draw instructions
         Console.SetCursorPosition(2, Console.WindowHeight - 2);
-        Console.Write("Press Any key to continue combat, ESC to attempt escape");
+        Console.Write("Press Any key to continue combat. If you are the Attacker/Aggressor and its your turn, press ESC to attempt escape");
 
     }
     public void RenderStats(Character character, int x, int y, string title )

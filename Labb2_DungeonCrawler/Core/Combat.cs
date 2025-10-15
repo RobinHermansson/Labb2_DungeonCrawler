@@ -26,7 +26,7 @@ public class Combat
         while (combatActive && Aggressor.IsAlive() && Defender.IsAlive())
         {
             var key = Console.ReadKey(true);
-            if (key.Key == ConsoleKey.Escape)
+            if (key.Key == ConsoleKey.Escape && Aggressor.IsPlayer)
             {
                 _renderer.AddLogEntry($"{Aggressor.Name} tries to escape...");
                 _renderer.UpdateStatsAndLog(Aggressor, Defender);
