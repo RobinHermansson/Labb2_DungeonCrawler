@@ -46,12 +46,10 @@ public class Snake : Enemy
     }
     public override void CheckSurrounding(List<LevelElement> surroundingElements)
     {
-        int maxRange = (int)Math.Ceiling((Decimal)VisionRange); // Round up to ensure we don't miss anything
-    
         var nearbyElements = surroundingElements.Where(element => 
-            Math.Abs(element.Position.XPos - this.Position.XPos) <= maxRange &&
-            Math.Abs(element.Position.YPos - this.Position.YPos) <= maxRange
-        ).ToList();
+            Math.Abs(element.Position.XPos - this.Position.XPos) <= VisionRange &&
+            Math.Abs(element.Position.YPos - this.Position.YPos) <= VisionRange
+        );
 
         foreach (LevelElement element in nearbyElements)
         {
