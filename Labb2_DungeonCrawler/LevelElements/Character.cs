@@ -65,7 +65,8 @@ public abstract class Character : LevelElement
 
         foreach (var element in surroundingElements)
         {
-            element.isVisible = false;   
+            if (!nearbyElements.Contains(element))
+                element.isVisible = false;   
         }
 
         foreach (LevelElement element in nearbyElements)
