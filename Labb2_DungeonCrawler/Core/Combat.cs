@@ -28,12 +28,12 @@ public class Combat
             var key = Console.ReadKey(true);
             if (key.Key == ConsoleKey.Escape && Aggressor.IsPlayer)
             {
-                _renderer.AddLogEntry($"{Aggressor.Name} tries to escape...");
+                _renderer.AddLogEntry($"{Aggressor.Name} tries to escape...                      ");
                 _renderer.UpdateStatsAndLog(Aggressor, Defender);
                 
                 if (new Random().Next(2) == 0)
                 {
-                    _renderer.AddLogEntry("Escape successful!");
+                    _renderer.AddLogEntry("Escape successful!                      ");
                     _renderer.UpdateStatsAndLog(Aggressor, Defender);
                     Console.ReadKey(true);
                     Console.Clear();
@@ -41,7 +41,7 @@ public class Combat
                 }
                 else
                 {
-                    _renderer.AddLogEntry("Escape failed!");
+                    _renderer.AddLogEntry("Escape failed!                      ");
                     _renderer.UpdateStatsAndLog(Aggressor, Defender);
                 }
             }
@@ -66,7 +66,7 @@ public class Combat
                 
                 if (new Random().Next(2) == 0)
                 {
-                    _renderer.AddLogEntry("Escape successful!");
+                    _renderer.AddLogEntry("Escape successful!                      ");
                     _renderer.UpdateStatsAndLog(Aggressor, Defender);
                     Console.ReadKey(true);
                     Console.Clear();
@@ -74,7 +74,7 @@ public class Combat
                 }
                 else
                 {
-                    _renderer.AddLogEntry("Escape failed!");
+                    _renderer.AddLogEntry("Escape failed!                     ");
                     _renderer.UpdateStatsAndLog(Aggressor, Defender);
                 }
             }
@@ -85,7 +85,7 @@ public class Combat
             
             if (!Aggressor.IsAlive())
             {
-                _renderer.AddLogEntry($"{Aggressor.Name} has been defeated!");
+                _renderer.AddLogEntry($"{Aggressor.Name} has been defeated!                      ");
                 _renderer.UpdateStatsAndLog(Aggressor, Defender);
                 Console.ReadKey(true);
                 Console.Clear();
@@ -136,16 +136,5 @@ public class Combat
         {
             _renderer.AddLogEntry($"{attacker.Name}'s attack missed!", isMiss: true);
         }
-    }
-
-    public int RollDice(List<Dice> diceToRoll)
-    {
-        int sum = 0;
-        foreach (Dice dice in diceToRoll)
-        {
-            Random rand = new Random();
-            rand.Next(1, 7);
-        }
-        return sum;
     }
 }
