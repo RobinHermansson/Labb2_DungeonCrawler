@@ -9,8 +9,6 @@ public static class CalculateDistance
         double ypos = Math.Pow((pos2.YPos - pos1.YPos), 2);
         double xpos = Math.Pow((pos2.XPos - pos1.XPos), 2);
 
-        double sum = xpos + ypos;
-        double result = Math.Sqrt(sum);
-        return result;
+        return Math.Sqrt(xpos + ypos);
     }
 }
