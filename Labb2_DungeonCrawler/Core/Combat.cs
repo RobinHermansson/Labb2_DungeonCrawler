@@ -59,6 +59,26 @@ public class Combat
             }
 
             key = Console.ReadKey(true); //Thread.Sleep(2000);
+            if (key.Key == ConsoleKey.Escape && Defender.IsPlayer)
+            {
+                _renderer.AddLogEntry($"{Defender.Name} tries to escape...");
+                _renderer.UpdateStatsAndLog(Aggressor, Defender);
+                
+                if (new Random().Next(2) == 0)
+                {
+                    _renderer.AddLogEntry("Escape successful!");
+                    _renderer.UpdateStatsAndLog(Aggressor, Defender);
+                    Console.ReadKey(true);
+                    Console.Clear();
+                    return false;
+                }
+                else
+                {
+                    _renderer.AddLogEntry("Escape failed!");
+                    _renderer.UpdateStatsAndLog(Aggressor, Defender);
+                }
+            }
+
             
             PerformAttack(Defender, Aggressor);
             _renderer.UpdateStatsAndLog(Aggressor, Defender);
