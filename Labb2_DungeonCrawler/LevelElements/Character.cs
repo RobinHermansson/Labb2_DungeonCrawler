@@ -56,19 +56,18 @@ public abstract class Character : LevelElement
         return HitPoints > 0;
     }
 
-    public virtual void CheckSurrounding(List<LevelElement> surroundingElements)
+    public virtual void CheckSurrounding(List<LevelElement> allElements)
     {
-        var nearbyElements = surroundingElements.Where(element => 
+        var nearbyElements = allElements.Where(element => 
             Math.Abs(element.Position.XPos - this.Position.XPos) <= VisionRange &&
             Math.Abs(element.Position.YPos - this.Position.YPos) <= VisionRange
         );
 
-        foreach (var element in surroundingElements)
+        foreach (var element in allElements)
         {
-            if (!nearbyElements.Contains(element))
-                element.isVisible = false;   
+            element.isVisible = false;   
         }
-
+  
         foreach (LevelElement element in nearbyElements)
         {
             var distance = CalculateDistance.Between(this.Position, element.Position);
