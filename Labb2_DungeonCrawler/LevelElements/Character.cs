@@ -58,17 +58,15 @@ public abstract class Character : LevelElement
 
     public virtual void CheckSurrounding(List<LevelElement> surroundingElements)
     {
-
-        // needed to reset all object's visibility...
-        foreach (var element in surroundingElements)
-        {
-            element.isVisible = false;   
-        }
-    
         var nearbyElements = surroundingElements.Where(element => 
             Math.Abs(element.Position.XPos - this.Position.XPos) <= VisionRange &&
             Math.Abs(element.Position.YPos - this.Position.YPos) <= VisionRange
         );
+
+        foreach (var element in surroundingElements)
+        {
+            element.isVisible = false;   
+        }
 
         foreach (LevelElement element in nearbyElements)
         {
@@ -80,10 +78,6 @@ public abstract class Character : LevelElement
                     element.hasBeenSeen = true;
                 }
                 element.isVisible = true;
-            }
-            else
-            {
-                element.isVisible = false;
             }
         }
     }
