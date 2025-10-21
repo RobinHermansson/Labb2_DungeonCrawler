@@ -3,17 +3,54 @@ namespace Labb2_DungeonCrawler.Core;
 
 public class Renderer
 {
+    public void RegisterElement(LevelElement element)
+    {
+        element.PositionChanged += HandlePositionChanged;
+
+        // Make the initial draw of the element upon registration.
+        Draw(element);
+    }
+
+    public void HandlePositionChanged(object sender, Position position)
+    {
+        LevelElement element = (LevelElement)sender;
+
+        Draw(element);
+    }
     public void RenderLevel(List<LevelElement> elements)
     {
-        ProcessCharacterRendering(elements);
-        ProcessWallRendering(elements);
+        foreach (LevelElement element in elements)
+        {
+            RegisterElement(element);
+        }
         Console.ResetColor();
     }
-    private void Draw(LevelElement element, ConsoleColor color)
+    private void Draw(LevelElement element)
     {
-        Console.ForegroundColor = color;
+       
+      
+        if (!element.hasBeenSeen && !element.isVisible) 
+        {
+            return;
+        }
+
+     
+        Console.ForegroundColor = element.Color;
         Console.SetCursorPosition(element.Position.XPos, element.Position.YPos);
         Console.Write(element.RepresentationAsChar);
+        ClearPosition(element.PreviousPosition);
+        Console.ResetColor();
+        /*if (element is Player player)
+        {
+
+        }
+
+        else if (element is Enemy enemy)
+        {
+
+        }
+        */
+        
     }
     public void ClearPosition(Position position)
     {
@@ -21,7 +58,7 @@ public class Renderer
         Console.Write(' ');
     } 
     
-    private void ProcessCharacterRendering(List<LevelElement> element)
+    /*private void ProcessCharacterRendering(List<LevelElement> element)
     {
         foreach (var character in element.OfType<Character>())
         {
@@ -57,7 +94,7 @@ public class Renderer
                 Draw(wall, ConsoleColor.DarkGray);
             }
         }
-    }
+    }*/
     public void DisplayGameOver()
     {
         int height = 10;
@@ -191,6 +228,7 @@ public class Renderer
 
     public void RenderUIStats(Character character, int turn, int height, int width, int startX, int startY)
     {
+        Console.ForegroundColor = ConsoleColor.DarkRed;
         DrawUIBox(height, width, startX, startY);
         string UITitle = "STATS";
         Console.SetCursorPosition(startX+1, startY+1);
@@ -204,6 +242,7 @@ public class Renderer
 
     public void DrawInstructions(int xCoord, int yCoord)
     {
+        Console.ForegroundColor = ConsoleColor.DarkRed;
         Console.SetCursorPosition(xCoord, yCoord);
         Console.WriteLine("Use ASDW or the Arrow keys to move. Any other input will skip your turn.");
     }
@@ -219,6 +258,8 @@ public class Renderer
 
     public void DrawUIBox(int height, int width, int startX, int startY)
     {
+        Console.ForegroundColor = ConsoleColor.DarkRed;
+
         // TOP
         Console.SetCursorPosition(startX, startY);
         Console.Write("+");

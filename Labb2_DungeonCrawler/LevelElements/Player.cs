@@ -10,6 +10,8 @@ public class Player : Character
     {
         Name = name;
         IsPlayer = true;
+        isVisible = true;
+        hasBeenSeen = true;
         VisionRange = 5;
         HitPoints = 100;
         AttackDiceCount = 2;

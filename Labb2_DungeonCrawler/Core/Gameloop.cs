@@ -120,7 +120,7 @@ public class Gameloop
 
             ProcessEnemyDeath();
 
-            Renderer.RenderLevel(GameState.LevelData.LevelElementsList);
+            //Renderer.RenderLevel(GameState.LevelData.LevelElementsList);
             if (!Player.IsAlive())
             {
                 isGameRunning = false;
