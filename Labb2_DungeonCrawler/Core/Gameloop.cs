@@ -93,6 +93,7 @@ public class Gameloop
         {
             GameState.LevelData.LevelElementsList.Remove(deadEnemy);
             GameState.Enemies.Remove(deadEnemy);
+            Renderer.UnsubscribeElement(deadEnemy);
         }
     }
 

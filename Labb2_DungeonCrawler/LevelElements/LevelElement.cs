@@ -18,13 +18,48 @@ public abstract class LevelElement
     public Position PreviousPosition { get; set; } 
     public char RepresentationAsChar { get; set; }
     public int VisionRange { get; set; }
-    public bool isVisible { get; set; }
 
-    public bool hasBeenSeen { get; set; }
+    private bool _isVisible = false;
+    public bool IsVisible
+    {
+        get => _isVisible;
+        set
+        {
+            _isVisible = value;
+            OnVisibilityChange(_isVisible);
+        }
+    }
+
+
+    private bool _hasBeenSeen = false;
+    public bool HasBeenSeen
+    {
+        get => _hasBeenSeen;
+        set 
+        {
+            _hasBeenSeen = value;
+            OnHasBeenSeenChange(_hasBeenSeen);
+        }
+    }
     public ConsoleColor Color { get; set; }
 
     public EventHandler<Position> PositionChanged;
+    public EventHandler<bool> VisibilityChanged;
+    public EventHandler<bool> HasBeenSeenChanged;
+    
+    public virtual void OnVisibilityChange(bool newState)
+    {
 
+        VisibilityChanged?.Invoke(this, newState);
+        UpdateColor();
+    }
+
+    public virtual void OnHasBeenSeenChange(bool newState)
+    {
+
+        HasBeenSeenChanged?.Invoke(this, newState);
+        UpdateColor();
+    }
     public virtual void OnPositionChange(Position newPosition)
     {
         PositionChanged?.Invoke(this, newPosition);
@@ -35,6 +70,23 @@ public abstract class LevelElement
         Position = pos;
         RepresentationAsChar = representation;
         Color = color;
+    }
+
+    public virtual void UpdateColor()
+    {
+        if (IsVisible)
+        {
+            this.Color = ConsoleColor.DarkYellow;
+        }
+        else if (HasBeenSeen && !IsVisible)
+        {
+            this.Color = ConsoleColor.DarkGray;
+        }
+        else
+        {
+            this.Color = ConsoleColor.Black; 
+        }
+
     }
 
     public override string ToString()

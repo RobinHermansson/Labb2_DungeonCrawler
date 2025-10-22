@@ -69,6 +69,22 @@ public class Snake : Enemy
         }
     }
 
+    public override void UpdateColor()
+    {
+        if (this.IsVisible)
+        {
+            this.Color = ConsoleColor.Green;
+        }
+        else if (this.HasBeenSeen && !this.IsVisible)
+        {
+            this.Color = ConsoleColor.Black;
+        }
+        else
+        {
+            this.Color = ConsoleColor.Black; 
+        }
+    }
+
 
     public override void Update()
     {

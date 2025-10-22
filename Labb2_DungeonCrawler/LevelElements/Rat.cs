@@ -67,5 +67,21 @@ public class Rat : Enemy
         // Rat stays in place if none of the above were possible.
 
     }
+    public override void UpdateColor()
+    {
+        if (this.IsVisible)
+        {
+            this.Color = ConsoleColor.Magenta;
+        }
+        else if (this.HasBeenSeen && !this.IsVisible)
+        {
+            this.Color = ConsoleColor.Black;
+        }
+        else
+        {
+            this.Color = ConsoleColor.Black;
+        }
+    }
+
 
 }

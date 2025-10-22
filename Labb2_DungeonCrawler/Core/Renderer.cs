@@ -6,50 +6,49 @@ public class Renderer
     public void RegisterElement(LevelElement element)
     {
         element.PositionChanged += HandlePositionChanged;
-
+        element.VisibilityChanged += HandleVisiblityChanged;
         // Make the initial draw of the element upon registration.
         Draw(element);
     }
 
+    public void UnsubscribeElement(LevelElement element)
+    {
+        element.PositionChanged -= HandlePositionChanged;
+        element.VisibilityChanged -= HandleVisiblityChanged;
+        ClearPosition(element.Position);
+    }
+    
     public void HandlePositionChanged(object sender, Position position)
     {
         LevelElement element = (LevelElement)sender;
 
         Draw(element);
     }
+    
+    public void HandleVisiblityChanged(object sender, bool newState)
+    {
+        LevelElement element = (LevelElement)sender;
+        if (newState == false) 
+        {
+            ClearPosition(element.Position);
+        }
+        Draw(element);
+    }
+    
     public void RenderLevel(List<LevelElement> elements)
     {
         foreach (LevelElement element in elements)
         {
             RegisterElement(element);
         }
-        Console.ResetColor();
     }
     private void Draw(LevelElement element)
     {
        
-      
-        if (!element.hasBeenSeen && !element.isVisible) 
-        {
-            return;
-        }
-
-     
         Console.ForegroundColor = element.Color;
         Console.SetCursorPosition(element.Position.XPos, element.Position.YPos);
         Console.Write(element.RepresentationAsChar);
         ClearPosition(element.PreviousPosition);
-        Console.ResetColor();
-        /*if (element is Player player)
-        {
-
-        }
-
-        else if (element is Enemy enemy)
-        {
-
-        }
-        */
         
     }
     public void ClearPosition(Position position)

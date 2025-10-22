@@ -62,12 +62,13 @@ public abstract class Character : LevelElement
             Math.Abs(element.Position.XPos - this.Position.XPos) <= VisionRange &&
             Math.Abs(element.Position.YPos - this.Position.YPos) <= VisionRange
         );
-
+        /*
         foreach (var element in allElements)
         {
-            element.isVisible = false;   
+            element.IsVisible = false;   
         }
-  
+        */
+        List<LevelElement> visibleElements = new List<LevelElement>();
         foreach (LevelElement element in nearbyElements)
         {
             var distance = CalculateDistance.Between(this.Position, element.Position);
@@ -75,10 +76,41 @@ public abstract class Character : LevelElement
             {
                 if (element is Wall)
                 {
-                    element.hasBeenSeen = true;
+                    element.HasBeenSeen = true;
                 }
-                element.isVisible = true;
+                element.IsVisible = true;
+                if (!visibleElements.Contains(element))
+                {
+                    visibleElements.Add(element);
+                }
             }
+        }
+
+        foreach (var element in allElements)
+        {
+            if (!visibleElements.Contains(element))
+            {
+                element.IsVisible = false;
+            }
+        }
+    }
+    public override void UpdateColor()
+    {
+        if (this.IsVisible)
+        {
+            // Wall is currently visible - show in dark yellow
+            this.Color = ConsoleColor.Yellow;
+        }
+        else if (this.HasBeenSeen && !this.IsVisible)
+        {
+            // Wall has been seen before but not currently visible - show in gray
+            this.Color = ConsoleColor.Yellow;
+            //Console.WriteLine("Is now visible and color is gray");
+        }
+        else
+        {
+            // Wall has never been seen - could be invisible or a specific color
+            this.Color = ConsoleColor.Black; // Or whatever color for unseen walls
         }
     }
 }
