@@ -17,9 +17,5 @@ public class Wall : LevelElement
         {
             this.Color = ConsoleColor.DarkGray;
         }
-        else
-        {
-            this.Color = ConsoleColor.Black;
-        }
     }
 }

@@ -19,26 +19,36 @@ public abstract class LevelElement
     public char RepresentationAsChar { get; set; }
     public int VisionRange { get; set; }
 
+    public bool PreviouslyVisible { get; set; }
     private bool _isVisible = false;
     public bool IsVisible
     {
         get => _isVisible;
         set
         {
+            PreviouslyVisible = _isVisible;
             _isVisible = value;
-            OnVisibilityChange(_isVisible);
+            if (PreviouslyVisible != _isVisible)
+            {
+                OnVisibilityChange(_isVisible);
+            }
         }
     }
 
 
+    public bool PreviouslyHasBeenSeen { get; set; }
     private bool _hasBeenSeen = false;
     public bool HasBeenSeen
     {
         get => _hasBeenSeen;
         set 
         {
+            PreviouslyHasBeenSeen = _hasBeenSeen;
             _hasBeenSeen = value;
-            OnHasBeenSeenChange(_hasBeenSeen);
+            if (PreviouslyHasBeenSeen != _hasBeenSeen)
+            {
+                OnHasBeenSeenChange(_hasBeenSeen);
+            }
         }
     }
     public ConsoleColor Color { get; set; }
@@ -72,22 +82,8 @@ public abstract class LevelElement
         Color = color;
     }
 
-    public virtual void UpdateColor()
-    {
-        if (IsVisible)
-        {
-            this.Color = ConsoleColor.DarkYellow;
-        }
-        else if (HasBeenSeen && !IsVisible)
-        {
-            this.Color = ConsoleColor.DarkGray;
-        }
-        else
-        {
-            this.Color = ConsoleColor.Black; 
-        }
-
-    }
+    public abstract void UpdateColor();
+        
 
     public override string ToString()
     {

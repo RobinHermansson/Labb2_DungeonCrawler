@@ -28,15 +28,15 @@ public class LevelData
                 {
                     if (character == '#')
                     {
-                        _elements.Add(new Wall(new Position(xpos, ypos), character, ConsoleColor.DarkYellow));
+                        _elements.Add(new Wall(new Position(xpos, ypos), character, ConsoleColor.Black));
                     }
                     if (character == 'r')
                     {
-                        _elements.Add(new Rat(new Position(xpos, ypos), character, ConsoleColor.Magenta));
+                        _elements.Add(new Rat(new Position(xpos, ypos), character, ConsoleColor.Black));
                     }
                     if (character == 's')
                     {
-                        _elements.Add(new Snake(new Position(xpos, ypos), character, ConsoleColor.Green));
+                        _elements.Add(new Snake(new Position(xpos, ypos), character, ConsoleColor.Black));
                     }
                     if (character == '@')
                     {

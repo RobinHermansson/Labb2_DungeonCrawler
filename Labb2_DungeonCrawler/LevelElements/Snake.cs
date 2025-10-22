@@ -75,13 +75,9 @@ public class Snake : Enemy
         {
             this.Color = ConsoleColor.Green;
         }
-        else if (this.HasBeenSeen && !this.IsVisible)
-        {
-            this.Color = ConsoleColor.Black;
-        }
         else
         {
-            this.Color = ConsoleColor.Black; 
+            this.Color = ConsoleColor.Black;
         }
     }
 

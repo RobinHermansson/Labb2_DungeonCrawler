@@ -28,7 +28,7 @@ public class Renderer
     public void HandleVisiblityChanged(object sender, bool newState)
     {
         LevelElement element = (LevelElement)sender;
-        if (newState == false) 
+        if (newState != element.PreviouslyVisible) 
         {
             ClearPosition(element.Position);
         }
@@ -49,6 +49,7 @@ public class Renderer
         Console.SetCursorPosition(element.Position.XPos, element.Position.YPos);
         Console.Write(element.RepresentationAsChar);
         ClearPosition(element.PreviousPosition);
+        Console.ResetColor();
         
     }
     public void ClearPosition(Position position)
