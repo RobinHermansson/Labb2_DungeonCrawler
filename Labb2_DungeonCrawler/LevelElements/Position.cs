@@ -33,9 +33,18 @@ public struct Position
         }
         return true;
     }
-
     public override bool Equals(object obj)
     {
-        throw new NotImplementedException();
+        if (obj is Position other)
+        {
+            return XPos == other.XPos && YPos == other.YPos;
+        }
+        return false;
     }
+
+    public override int GetHashCode()
+    {
+        return XPos.GetHashCode() ^ YPos.GetHashCode();
+    }
+
 }

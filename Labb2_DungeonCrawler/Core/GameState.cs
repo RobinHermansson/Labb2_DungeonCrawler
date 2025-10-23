@@ -10,6 +10,7 @@ public class GameState
     public LevelData LevelData = new LevelData();
     public List<Enemy> Enemies = new List<Enemy>();
     public List<Wall> Walls = new List<Wall>();
+    public Dictionary<Position, LevelElement> EntitiesDict = new();
 
     public Player Player = null;
 
@@ -33,6 +34,7 @@ public class GameState
             if (element is Wall wall) {
                 Walls.Add(wall);
             }
+            EntitiesDict[element.Position] = element;
         }
     }
 
