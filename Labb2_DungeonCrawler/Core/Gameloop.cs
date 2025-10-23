@@ -14,8 +14,10 @@ public class Gameloop
     public int UIWidth { get; set; } = 18;
     public int InstructionsXPos { get; private set; } = 0;
     public int InstructionsYPos { get; private set; } = 20;
-    public int DebugXPos { get; private set; } = 0;
-    public int DebugYPos { get; private set; } = 21;
+    public int DebugTextXPos { get; private set; } = 0;
+    public int DebugTextYPos { get; private set; } = 21;
+    public int DebugSelectorXPos { get; private set; } = 0;
+    public int DebugSelectorYPos { get; set; } = 0;
 
     public Gameloop(GameState gameState)
     {
@@ -106,9 +108,22 @@ public class Gameloop
 
         while (isGameRunning)
         {
+            if (GameState.Debug)
+            {
+                ConsoleKeyInfo cki;
+                Renderer.DrawDebugValues(GameState.Debug, DebugTextXPos, DebugTextYPos, Player);
+                while (!Console.KeyAvailable)
+                    Thread.Sleep(250); // Loop until input is entered.
+                cki = Console.ReadKey(true);
+                if (cki.Key == ConsoleKey.F1)
+                {
+                    Console.SetCursorPosition(DebugTextXPos, DebugTextYPos + 1);
+                    Console.WriteLine("DEBUG ON!");
+                }
+            }
 
             Turn++;
-            Renderer.DrawDebugValues(GameState.Debug, DebugXPos, DebugYPos, Player);
+            //Renderer.DrawDebugValues(GameState.Debug, DebugTextXPos, DebugTextYPos, Player);
             ProcessPlayerMovement();
             Renderer.RenderUIStats(character: Player, turn: Turn, height: UIHeight, width: UIWidth, startX: UIXStartPos, startY: UIYStartPos);
             Renderer.DrawInstructions(InstructionsXPos, InstructionsYPos);
