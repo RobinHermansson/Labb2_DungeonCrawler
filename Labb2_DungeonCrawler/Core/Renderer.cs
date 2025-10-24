@@ -1,4 +1,5 @@
 ﻿using Labb2_DungeonCrawler.LevelElements;
+using Labb2_DungeonCrawler.Utilities;
 namespace Labb2_DungeonCrawler.Core;
 
 public class Renderer
@@ -17,24 +18,21 @@ public class Renderer
         element.VisibilityChanged -= HandleVisiblityChanged;
         ClearPosition(element.Position);
     }
-    
+
     public void HandlePositionChanged(object sender, Position position)
     {
         LevelElement element = (LevelElement)sender;
 
         Draw(element);
     }
-    
+
     public void HandleVisiblityChanged(object sender, bool newState)
     {
         LevelElement element = (LevelElement)sender;
-        if (newState != element.PreviouslyVisible) 
-        {
-            ClearPosition(element.Position);
-        }
+        ClearPosition(element.Position);
         Draw(element);
     }
-    
+
     public void RenderLevel(List<LevelElement> elements)
     {
         foreach (LevelElement element in elements)
@@ -44,57 +42,38 @@ public class Renderer
     }
     private void Draw(LevelElement element)
     {
-       
+
         Console.ForegroundColor = element.Color;
         Console.SetCursorPosition(element.Position.XPos, element.Position.YPos);
         Console.Write(element.RepresentationAsChar);
         ClearPosition(element.PreviousPosition);
         Console.ResetColor();
-        
+
+    }
+    public void DebugDraw(DebugAssistant debugger)
+    {
+        Console.ForegroundColor = debugger.Color;
+        Console.SetCursorPosition(debugger.Position.XPos, debugger.Position.YPos);
+        Console.Write(debugger.CurrentRepresentation);
+        Console.SetCursorPosition(debugger.PreviousObjectPosition.XPos, debugger.PreviousObjectPosition.YPos);
+        Console.ForegroundColor = debugger.PreviousObjectPositionColor;
+        if (debugger.PreviousObjectPositionRepresentation == 'O')
+        {
+            Console.Write(' ');
+        }
+        else
+        {
+            Console.Write(debugger.PreviousObjectPositionRepresentation);
+        }
+        Console.ResetColor();
+
     }
     public void ClearPosition(Position position)
     {
         Console.SetCursorPosition(position.XPos, position.YPos);
         Console.Write(' ');
-    } 
-    
-    /*private void ProcessCharacterRendering(List<LevelElement> element)
-    {
-        foreach (var character in element.OfType<Character>())
-        {
-            if (character.isVisible)
-            {
-                LevelElement? charOnPosition = element.FirstOrDefault(element => element.Position == character.PreviousPosition);
-                {
-                    if (charOnPosition is null)
-                    {
-                        ClearPosition(character.PreviousPosition);
-                    }
-                }
-                Draw(character, character.Color);
-            }
-            else if (!character.isVisible)
-            {
-                ClearPosition(character.Position);
-                ClearPosition(character.PreviousPosition);
-            }
-        }
     }
-    private void ProcessWallRendering(List<LevelElement> elements)
-    {
-        foreach (var wall in elements.OfType<Wall>())
-        {
 
-            if (wall.isVisible)
-            {
-                Draw(wall, ConsoleColor.DarkYellow);
-            }
-            else if(wall.hasBeenSeen && !wall.isVisible)
-            {
-                Draw(wall, ConsoleColor.DarkGray);
-            }
-        }
-    }*/
     public void DisplayGameOver()
     {
         int height = 10;
@@ -231,11 +210,11 @@ public class Renderer
         Console.ForegroundColor = ConsoleColor.DarkRed;
         DrawUIBox(height, width, startX, startY);
         string UITitle = "STATS";
-        Console.SetCursorPosition(startX+1, startY+1);
+        Console.SetCursorPosition(startX + 1, startY + 1);
         Console.Write(UITitle);
-        Console.SetCursorPosition(startX+1, startY+2);
+        Console.SetCursorPosition(startX + 1, startY + 2);
         Console.Write($"HP: {character.HitPoints}/100");
-        Console.SetCursorPosition(startX+1, startY+3);
+        Console.SetCursorPosition(startX + 1, startY + 3);
         Console.Write($"Turn: {turn}");
 
     }

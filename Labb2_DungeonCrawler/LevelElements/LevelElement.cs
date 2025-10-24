@@ -60,15 +60,15 @@ public abstract class LevelElement
     public virtual void OnVisibilityChange(bool newState)
     {
 
-        VisibilityChanged?.Invoke(this, newState);
         UpdateColor();
+        VisibilityChanged?.Invoke(this, newState);
     }
 
     public virtual void OnHasBeenSeenChange(bool newState)
     {
 
-        HasBeenSeenChanged?.Invoke(this, newState);
         UpdateColor();
+        HasBeenSeenChanged?.Invoke(this, newState);
     }
     public virtual void OnPositionChange(Position newPosition)
     {
@@ -87,6 +87,6 @@ public abstract class LevelElement
 
     public override string ToString()
     {
-        return $"PreviousPosition: X:{this.PreviousPosition.XPos}, Y:{this.PreviousPosition.YPos}\nPosition: X:{this.Position.XPos},Y:{this.Position.YPos}";
+        return $"Representation: {RepresentationAsChar}, PreviousPosition: X:{this.PreviousPosition.XPos}, Y:{this.PreviousPosition.YPos}\nPosition: X:{this.Position.XPos},Y:{this.Position.YPos}, IsVisible: {IsVisible}, HasBeenSeen: {HasBeenSeen}                                                       ";
     }
 }

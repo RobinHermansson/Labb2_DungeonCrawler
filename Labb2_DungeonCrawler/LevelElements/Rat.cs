@@ -56,6 +56,7 @@ public class Rat : Enemy
             {
                 Combat combat = new Combat(this, GameState.Player);
                 combat.StartCombat();
+                GameState.FightHappened = true;
                 return;             
             }
             else if (AttemptMove(attempt, GameState))
