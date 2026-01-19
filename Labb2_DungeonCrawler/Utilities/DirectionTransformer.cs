@@ -1,6 +1,7 @@
-﻿using Labb2_DungeonCrawler.Core;
-using Labb2_DungeonCrawler.LevelElements;
-namespace Labb2_DungeonCrawler.Utilities;
+﻿using Labb2_DungeonCrawler.App.Core;
+using Labb2_DungeonCrawler.App.LevelElements;
+
+namespace Labb2_DungeonCrawler.App.Utilities;
 
 public static class DirectionTransformer
 {

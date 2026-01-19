@@ -1,7 +1,7 @@
-﻿using Labb2_DungeonCrawler.LevelElements;
-using Labb2_DungeonCrawler.LevelHandling;
+﻿using Labb2_DungeonCrawler.App.LevelElements;
+using Labb2_DungeonCrawler.App.LevelHandling;
 
-namespace Labb2_DungeonCrawler.Core;
+namespace Labb2_DungeonCrawler.App.Core;
 
 public class GameState
 {

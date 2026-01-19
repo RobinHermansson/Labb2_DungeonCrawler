@@ -1,6 +1,6 @@
-﻿using Labb2_DungeonCrawler.Core;
-using Labb2_DungeonCrawler.LevelElements;
-namespace Labb2_DungeonCrawler.Utilities;
+﻿using Labb2_DungeonCrawler.App.Core;
+using Labb2_DungeonCrawler.App.LevelElements;
+namespace Labb2_DungeonCrawler.App.Utilities;
 
 public class DebugAssistant
 {
@@ -20,29 +20,29 @@ public class DebugAssistant
 
         AllElementsDict = allLevelElements;
         Position = startingPosition;
-        
+
         // Instantiate the debugger with the current object but also with a color and repr. to work from.
-        this.CurrentObjectColor = AllElementsDict[startingPosition].Color;
-        this.CurrentRepresentation = AllElementsDict[startingPosition].RepresentationAsChar;
+        CurrentObjectColor = AllElementsDict[startingPosition].Color;
+        CurrentRepresentation = AllElementsDict[startingPosition].RepresentationAsChar;
     }
 
     public void Update()
     {
 
         //this.PreviousObjectPosition = Position;
-        this.PreviousObjectPositionRepresentation = CurrentRepresentation;
-        this.PreviousObjectPositionColor = CurrentObjectColor;
+        PreviousObjectPositionRepresentation = CurrentRepresentation;
+        PreviousObjectPositionColor = CurrentObjectColor;
 
         var currentObject = GetObjectDataWhereStanding();
-        this.CurrentRepresentation = currentObject.RepresentationAsChar;
-        this.CurrentObjectColor = currentObject.Color;
+        CurrentRepresentation = currentObject.RepresentationAsChar;
+        CurrentObjectColor = currentObject.Color;
 
     }
 
     public void MoveTo(Position position)
     {
-        this.PreviousObjectPosition = new Position(Position.XPos, Position.YPos);
-        this.Position = position;
+        PreviousObjectPosition = new Position(Position.XPos, Position.YPos);
+        Position = position;
         Update();
     }
 
@@ -71,21 +71,21 @@ public class DebugAssistant
         switch (input.Key)
         {
             case ConsoleKey.W:
-                return DirectionTransformer.GetPositionDelta(Direction.Up) + this.Position;
+                return DirectionTransformer.GetPositionDelta(Direction.Up) + Position;
             case ConsoleKey.S:
-                return DirectionTransformer.GetPositionDelta(Direction.Down) + this.Position;
+                return DirectionTransformer.GetPositionDelta(Direction.Down) + Position;
             case ConsoleKey.A:
-                return DirectionTransformer.GetPositionDelta(Direction.Left) + this.Position;
+                return DirectionTransformer.GetPositionDelta(Direction.Left) + Position;
             case ConsoleKey.D:
-                return DirectionTransformer.GetPositionDelta(Direction.Right) + this.Position;
+                return DirectionTransformer.GetPositionDelta(Direction.Right) + Position;
             case ConsoleKey.UpArrow:
-                return DirectionTransformer.GetPositionDelta(Direction.Up) + this.Position;
+                return DirectionTransformer.GetPositionDelta(Direction.Up) + Position;
             case ConsoleKey.DownArrow:
-                return DirectionTransformer.GetPositionDelta(Direction.Down) + this.Position;
+                return DirectionTransformer.GetPositionDelta(Direction.Down) + Position;
             case ConsoleKey.LeftArrow:
-                return DirectionTransformer.GetPositionDelta(Direction.Left) + this.Position;
+                return DirectionTransformer.GetPositionDelta(Direction.Left) + Position;
             case ConsoleKey.RightArrow:
-                return DirectionTransformer.GetPositionDelta(Direction.Right) + this.Position;
+                return DirectionTransformer.GetPositionDelta(Direction.Right) + Position;
             default:
                 return null;
         }

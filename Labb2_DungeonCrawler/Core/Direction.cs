@@ -1,4 +1,4 @@
-﻿namespace Labb2_DungeonCrawler.Core;
+﻿namespace Labb2_DungeonCrawler.App.Core;
 
 public enum Direction
 {

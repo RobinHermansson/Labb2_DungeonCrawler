@@ -1,7 +1,8 @@
-﻿using Labb2_DungeonCrawler.Core;
-using Labb2_DungeonCrawler.Features;
-using Labb2_DungeonCrawler.Utilities;
-namespace Labb2_DungeonCrawler.LevelElements;
+﻿using Labb2_DungeonCrawler.App.Core;
+using Labb2_DungeonCrawler.App.Features;
+using Labb2_DungeonCrawler.App.Utilities;
+
+namespace Labb2_DungeonCrawler.App.LevelElements;
 
 
 public class Player : Character
@@ -35,21 +36,21 @@ public class Player : Character
         switch (input.Key)
         {
             case ConsoleKey.W:
-                return DirectionTransformer.GetPositionDelta(Direction.Up) + this.Position;
+                return DirectionTransformer.GetPositionDelta(Direction.Up) + Position;
             case ConsoleKey.S:
-                return DirectionTransformer.GetPositionDelta(Direction.Down) + this.Position;
+                return DirectionTransformer.GetPositionDelta(Direction.Down) + Position;
             case ConsoleKey.A:
-                return DirectionTransformer.GetPositionDelta(Direction.Left) + this.Position;
+                return DirectionTransformer.GetPositionDelta(Direction.Left) + Position;
             case ConsoleKey.D:
-                return DirectionTransformer.GetPositionDelta(Direction.Right) + this.Position;
+                return DirectionTransformer.GetPositionDelta(Direction.Right) + Position;
             case ConsoleKey.UpArrow:
-                return DirectionTransformer.GetPositionDelta(Direction.Up) + this.Position;
+                return DirectionTransformer.GetPositionDelta(Direction.Up) + Position;
             case ConsoleKey.DownArrow:
-                return DirectionTransformer.GetPositionDelta(Direction.Down) + this.Position;
+                return DirectionTransformer.GetPositionDelta(Direction.Down) + Position;
             case ConsoleKey.LeftArrow:
-                return DirectionTransformer.GetPositionDelta(Direction.Left) + this.Position;
+                return DirectionTransformer.GetPositionDelta(Direction.Left) + Position;
             case ConsoleKey.RightArrow:
-                return DirectionTransformer.GetPositionDelta(Direction.Right) + this.Position;
+                return DirectionTransformer.GetPositionDelta(Direction.Right) + Position;
             default:
                 return null;
         }

@@ -1,6 +1,7 @@
-﻿using Labb2_DungeonCrawler.LevelElements;
-using Labb2_DungeonCrawler.Utilities;
-namespace Labb2_DungeonCrawler.Core;
+﻿using Labb2_DungeonCrawler.App.LevelElements;
+using Labb2_DungeonCrawler.App.Utilities;
+
+namespace Labb2_DungeonCrawler.App.Core;
 
 public class Renderer
 {
@@ -156,7 +157,7 @@ public class Renderer
         // Write all text centered but with some offets 
         int titleYOffset = 3;
         int titleX = startX + (width - titleText.Length) / 2;
-        int titleY = (startY + height / 2) - titleYOffset;
+        int titleY = startY + height / 2 - titleYOffset;
         Console.SetCursorPosition(titleX, titleY);
         Console.ForegroundColor = ConsoleColor.DarkRed;
         Console.Write(titleText);

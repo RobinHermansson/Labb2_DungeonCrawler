@@ -1,7 +1,7 @@
-﻿using Labb2_DungeonCrawler.Core;
-using Labb2_DungeonCrawler.Utilities;
-using Labb2_DungeonCrawler.Features;
-namespace Labb2_DungeonCrawler.LevelElements;
+﻿using Labb2_DungeonCrawler.App.Features;
+using Labb2_DungeonCrawler.App.Utilities;
+using Labb2_DungeonCrawler.App.Core;
+namespace Labb2_DungeonCrawler.App.LevelElements;
 
 public class Rat : Enemy
 {
@@ -70,17 +70,17 @@ public class Rat : Enemy
     }
     public override void UpdateColor()
     {
-        if (this.IsVisible)
+        if (IsVisible)
         {
-            this.Color = ConsoleColor.Magenta;
+            Color = ConsoleColor.Magenta;
         }
-        else if (this.HasBeenSeen && !this.IsVisible)
+        else if (HasBeenSeen && !IsVisible)
         {
-            this.Color = ConsoleColor.Black;
+            Color = ConsoleColor.Black;
         }
         else
         {
-            this.Color = ConsoleColor.Black;
+            Color = ConsoleColor.Black;
         }
     }
 

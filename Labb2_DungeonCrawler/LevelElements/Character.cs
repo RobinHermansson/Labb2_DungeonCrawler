@@ -1,7 +1,8 @@
-﻿using Labb2_DungeonCrawler.Core;
-using Labb2_DungeonCrawler.Features;
-using Labb2_DungeonCrawler.Utilities;
-namespace Labb2_DungeonCrawler.LevelElements;
+﻿using Labb2_DungeonCrawler.App.Core;
+using Labb2_DungeonCrawler.App.Features;
+using Labb2_DungeonCrawler.App.Utilities;
+
+namespace Labb2_DungeonCrawler.App.LevelElements;
 
 public abstract class Character : LevelElement
 {
@@ -26,8 +27,8 @@ public abstract class Character : LevelElement
     }
     public void MoveTo(Position position)
     {
-        this.PreviousPosition = new Position(Position.XPos, Position.YPos);
-        this.Position = position;
+        PreviousPosition = new Position(Position.XPos, Position.YPos);
+        Position = position;
     }
     public void MoveMe(Direction direction)
     {
@@ -59,8 +60,8 @@ public abstract class Character : LevelElement
     public virtual void CheckSurrounding(List<LevelElement> allElements)
     {
         var nearbyElements = allElements.Where(element => 
-            Math.Abs(element.Position.XPos - this.Position.XPos) <= VisionRange &&
-            Math.Abs(element.Position.YPos - this.Position.YPos) <= VisionRange
+            Math.Abs(element.Position.XPos - Position.XPos) <= VisionRange &&
+            Math.Abs(element.Position.YPos - Position.YPos) <= VisionRange
         );
         /*
         foreach (var element in allElements)
@@ -71,8 +72,8 @@ public abstract class Character : LevelElement
         List<LevelElement> visibleElements = new List<LevelElement>();
         foreach (LevelElement element in nearbyElements)
         {
-            var distance = CalculateDistance.Between(this.Position, element.Position);
-            if (distance < this.VisionRange)
+            var distance = CalculateDistance.Between(Position, element.Position);
+            if (distance < VisionRange)
             {
                 if (element is Wall)
                 {
@@ -96,21 +97,21 @@ public abstract class Character : LevelElement
     }
     public override void UpdateColor()
     {
-        if (this.IsVisible)
+        if (IsVisible)
         {
             // Wall is currently visible - show in dark yellow
-            this.Color = ConsoleColor.Yellow;
+            Color = ConsoleColor.Yellow;
         }
-        else if (this.HasBeenSeen && !this.IsVisible)
+        else if (HasBeenSeen && !IsVisible)
         {
             // Wall has been seen before but not currently visible - show in gray
-            this.Color = ConsoleColor.Yellow;
+            Color = ConsoleColor.Yellow;
             //Console.WriteLine("Is now visible and color is gray");
         }
         else
         {
             // Wall has never been seen - could be invisible or a specific color
-            this.Color = ConsoleColor.Black; // Or whatever color for unseen walls
+            Color = ConsoleColor.Black; // Or whatever color for unseen walls
         }
     }
 }

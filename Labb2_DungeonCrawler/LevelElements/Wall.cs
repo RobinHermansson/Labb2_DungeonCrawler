@@ -1,4 +1,4 @@
-﻿namespace Labb2_DungeonCrawler.LevelElements;
+﻿namespace Labb2_DungeonCrawler.App.LevelElements;
 
 public class Wall : LevelElement
 {
@@ -9,13 +9,13 @@ public class Wall : LevelElement
     // Update color based on current visibility state
     public override void UpdateColor()
     {
-        if (this.IsVisible)
+        if (IsVisible)
         {
-            this.Color = ConsoleColor.DarkYellow;
+            Color = ConsoleColor.DarkYellow;
         }
-        else if (this.HasBeenSeen && !this.IsVisible)
+        else if (HasBeenSeen && !IsVisible)
         {
-            this.Color = ConsoleColor.DarkGray;
+            Color = ConsoleColor.DarkGray;
         }
     }
 }

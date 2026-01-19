@@ -1,7 +1,7 @@
-﻿using Labb2_DungeonCrawler.Features;
-using Labb2_DungeonCrawler.LevelElements;
+﻿using Labb2_DungeonCrawler.App.Features;
+using Labb2_DungeonCrawler.App.LevelElements;
 
-namespace Labb2_DungeonCrawler.Core;
+namespace Labb2_DungeonCrawler.App.Core;
 
 public class Combat
 {

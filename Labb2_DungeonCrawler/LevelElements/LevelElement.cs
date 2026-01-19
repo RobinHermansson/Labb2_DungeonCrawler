@@ -1,4 +1,4 @@
-﻿namespace Labb2_DungeonCrawler.LevelElements;
+﻿namespace Labb2_DungeonCrawler.App.LevelElements;
 
 public abstract class LevelElement
 {
@@ -87,6 +87,6 @@ public abstract class LevelElement
 
     public override string ToString()
     {
-        return $"Representation: {RepresentationAsChar}, PreviousPosition: X:{this.PreviousPosition.XPos}, Y:{this.PreviousPosition.YPos}\nPosition: X:{this.Position.XPos},Y:{this.Position.YPos}, IsVisible: {IsVisible}, HasBeenSeen: {HasBeenSeen}                                                       ";
+        return $"Representation: {RepresentationAsChar}, PreviousPosition: X:{PreviousPosition.XPos}, Y:{PreviousPosition.YPos}\nPosition: X:{Position.XPos},Y:{Position.YPos}, IsVisible: {IsVisible}, HasBeenSeen: {HasBeenSeen}                                                       ";
     }
 }

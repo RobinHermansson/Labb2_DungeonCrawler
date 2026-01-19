@@ -1,6 +1,6 @@
-﻿using Labb2_DungeonCrawler.LevelElements;
+﻿using Labb2_DungeonCrawler.App.LevelElements;
 
-namespace Labb2_DungeonCrawler.LevelHandling;
+namespace Labb2_DungeonCrawler.App.LevelHandling;
 
 public class LevelData
 {

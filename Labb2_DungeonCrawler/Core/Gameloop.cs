@@ -1,6 +1,7 @@
-﻿using Labb2_DungeonCrawler.LevelElements;
-using Labb2_DungeonCrawler.Utilities;
-namespace Labb2_DungeonCrawler.Core;
+﻿using Labb2_DungeonCrawler.App.LevelElements;
+using Labb2_DungeonCrawler.App.Utilities;
+
+namespace Labb2_DungeonCrawler.App.Core;
 
 public class Gameloop
 {

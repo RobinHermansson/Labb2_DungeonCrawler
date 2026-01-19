@@ -1,4 +1,4 @@
-﻿namespace Labb2_DungeonCrawler.LevelElements;
+﻿namespace Labb2_DungeonCrawler.App.LevelElements;
 
 public struct Position
 {

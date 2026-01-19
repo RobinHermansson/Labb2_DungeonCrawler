@@ -1,8 +1,8 @@
-﻿using Labb2_DungeonCrawler.Core;
-using Labb2_DungeonCrawler.Utilities;
-using Labb2_DungeonCrawler.Features;
+﻿using Labb2_DungeonCrawler.App.Utilities;
+using Labb2_DungeonCrawler.App.Features;
+using Labb2_DungeonCrawler.App.Core;
 
-namespace Labb2_DungeonCrawler.LevelElements;
+namespace Labb2_DungeonCrawler.App.LevelElements;
 
 public class Snake : Enemy
 {
@@ -47,14 +47,14 @@ public class Snake : Enemy
     public override void CheckSurrounding(List<LevelElement> surroundingElements)
     {
         var nearbyElements = surroundingElements.Where(element => 
-            Math.Abs(element.Position.XPos - this.Position.XPos) <= VisionRange &&
-            Math.Abs(element.Position.YPos - this.Position.YPos) <= VisionRange
+            Math.Abs(element.Position.XPos - Position.XPos) <= VisionRange &&
+            Math.Abs(element.Position.YPos - Position.YPos) <= VisionRange
         );
 
         foreach (LevelElement element in nearbyElements)
         {
-            var distance = CalculateDistance.Between(this.Position, element.Position);
-            if (distance < this.VisionRange)
+            var distance = CalculateDistance.Between(Position, element.Position);
+            if (distance < VisionRange)
             {
                 if (element is Player)
                 {
@@ -71,13 +71,13 @@ public class Snake : Enemy
 
     public override void UpdateColor()
     {
-        if (this.IsVisible)
+        if (IsVisible)
         {
-            this.Color = ConsoleColor.Green;
+            Color = ConsoleColor.Green;
         }
         else
         {
-            this.Color = ConsoleColor.Black;
+            Color = ConsoleColor.Black;
         }
     }
 
@@ -88,10 +88,10 @@ public class Snake : Enemy
         if (IsScared)
         {
             Position[] possibleMoves = new Position[4] {
-                (DirectionTransformer.GetPositionDelta(Direction.Up) + Position ),
-                (DirectionTransformer.GetPositionDelta(Direction.Left) + Position ),
-                (DirectionTransformer.GetPositionDelta(Direction.Right) + Position ),
-                (DirectionTransformer.GetPositionDelta(Direction.Down) + Position )
+                DirectionTransformer.GetPositionDelta(Direction.Up) + Position ,
+                DirectionTransformer.GetPositionDelta(Direction.Left) + Position ,
+                DirectionTransformer.GetPositionDelta(Direction.Right) + Position ,
+                DirectionTransformer.GetPositionDelta(Direction.Down) + Position 
             };
 
             Position bestMove = new Position();
