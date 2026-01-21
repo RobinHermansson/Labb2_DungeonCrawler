@@ -1,4 +1,5 @@
-﻿using Labb2_DungeonCrawler.App.Core;
+﻿using DungeonCrawler.Domain.Entities;
+using Labb2_DungeonCrawler.App.Core;
 
 GameState gameState = new GameState();
 Console.CursorVisible = false;

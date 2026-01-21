@@ -1,8 +1,7 @@
-﻿using Labb2_DungeonCrawler.App.Utilities;
-using Labb2_DungeonCrawler.App.Features;
-using Labb2_DungeonCrawler.App.Core;
+﻿using DungeonCrawler.Domain.ValueObjects;
+using DungeonCrawler.Domain.Utilities;
 
-namespace Labb2_DungeonCrawler.App.LevelElements;
+namespace DungeonCrawler.Domain.Entities;
 
 public class Snake : Enemy
 {
@@ -84,7 +83,8 @@ public class Snake : Enemy
 
     public override void Update()
     {
-        CheckSurrounding(GameState.LevelData.LevelElementsList);
+        // TODO: FIX BELOW AFTER MONGODB ADDITION
+        //CheckSurrounding(GameState.LevelData.LevelElementsList);
         if (IsScared)
         {
             Position[] possibleMoves = new Position[4] {
@@ -98,7 +98,9 @@ public class Snake : Enemy
             double highestDistance = 0;
             foreach (var possibleMove in possibleMoves)
             {
-                double currentCheck = CalculateDistance.Between(possibleMove, GameState.Player.Position);
+                Console.WriteLine("SNAKE UPDATE(): REMOVE COMMENTED OUT CODE AFTER MONGODB ADDITION.");
+
+                /*double currentCheck = CalculateDistance.Between(possibleMove, GameState.Player.Position);
                 if ( currentCheck > highestDistance )
                 {
                     if (AttemptMove(possibleMove, GameState))
@@ -107,8 +109,10 @@ public class Snake : Enemy
                         bestMove = possibleMove;
                     }
                 }
+                */
             }
 
+            /* RE-ADD ME AFTER MONGODB ADDITION
             if (AttemptMove(bestMove, GameState))
             {
                 // Sometimes this must fail, because otherwise the snakes can NOT be caught.
@@ -123,6 +127,7 @@ public class Snake : Enemy
 
                 }
             }
+            */
         }
     }
 }

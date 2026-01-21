@@ -1,10 +1,10 @@
-﻿using Labb2_DungeonCrawler.App.Core;
-using Labb2_DungeonCrawler.App.Features;
-using Labb2_DungeonCrawler.App.Utilities;
+﻿using DungeonCrawler.Domain.ValueObjects;
+using DungeonCrawler.Domain.Utilities;
 
-namespace Labb2_DungeonCrawler.App.LevelElements;
+namespace DungeonCrawler.Domain.Entities;
 
 public abstract class Character : LevelElement
+
 {
     public string Name { get; set; }
     public bool IsPlayer { get; set; } = false;
@@ -15,16 +15,18 @@ public abstract class Character : LevelElement
     public int DefenceModifier { get; set; }
     public List<Dice> AttackDice { get; set; }
     public List<Dice> DefenceDice { get; set; }
-    public GameState GameState { get; set; }
+    //public GameState GameState { get; set; } fix me after mongodb addition
     public Character(Position pos, char representation, ConsoleColor color) : base(pos, representation, color)
     {
 
     }
+    
+    //fix me after mongodb addition
 
-    public bool AttemptMove(Position attempt, GameState gameState)
-    {
-        return gameState.IsPositionWalkable(attempt) ? true : false;
-    }
+    //public bool AttemptMove(Position attempt, GameState gameState)
+    //{
+    //    return gameState.IsPositionWalkable(attempt) ? true : false;
+    //}
     public void MoveTo(Position position)
     {
         PreviousPosition = new Position(Position.XPos, Position.YPos);

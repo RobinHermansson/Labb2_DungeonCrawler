@@ -1,4 +1,6 @@
-﻿namespace Labb2_DungeonCrawler.App.LevelElements;
+﻿using DungeonCrawler.Domain.ValueObjects;
+
+namespace DungeonCrawler.Domain.Entities;
 
 public abstract class Enemy : Character
 {

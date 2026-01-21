@@ -1,8 +1,9 @@
-﻿using Labb2_DungeonCrawler.App.LevelElements;
-using Labb2_DungeonCrawler.App.LevelHandling;
+﻿using DungeonCrawler.Domain.ValueObjects;
+//using DungeonCrawler.Infrastructure.Repositories;
 
-namespace Labb2_DungeonCrawler.App.Core;
+namespace DungeonCrawler.Domain.Entities;
 
+/*
 public class GameState
 {
     public bool Debug { get; private set; } = false;
@@ -53,3 +54,4 @@ public class GameState
     }
 
 }
+*/

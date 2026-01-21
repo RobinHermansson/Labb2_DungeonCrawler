@@ -1,6 +1,6 @@
-﻿using Labb2_DungeonCrawler.App.LevelElements;
+﻿using DungeonCrawler.Domain.ValueObjects;
+namespace DungeonCrawler.Domain.Utilities;
 
-namespace Labb2_DungeonCrawler.App.Utilities;
 
 public static class CalculateDistance
 {

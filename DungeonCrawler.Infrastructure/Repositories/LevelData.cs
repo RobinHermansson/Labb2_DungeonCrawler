@@ -1,6 +1,6 @@
-﻿using Labb2_DungeonCrawler.App.LevelElements;
-
-namespace Labb2_DungeonCrawler.App.LevelHandling;
+﻿using DungeonCrawler.Domain.Entities;
+using DungeonCrawler.Domain.ValueObjects;
+namespace DungeonCrawler.Infrastructure.Repositories;
 
 public class LevelData
 {
@@ -14,7 +14,7 @@ public class LevelData
         }
     }
 
-    public void LoadElementsFromFile(string filepath)
+    public void LoadElementsFromFile(string filepath) // Move to LevelRepository and refactor to use the call LoadLevel or smthn.
     {
         var numberOfCharacters = File.ReadLines(filepath).Sum(s => s.Length);
         int ypos = 0;

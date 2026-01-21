@@ -1,9 +1,7 @@
-﻿using Labb2_DungeonCrawler.App.Core;
-using Labb2_DungeonCrawler.App.Features;
-using Labb2_DungeonCrawler.App.Utilities;
+﻿using DungeonCrawler.Domain.ValueObjects;
+using DungeonCrawler.Domain.Utilities;
 
-namespace Labb2_DungeonCrawler.App.LevelElements;
-
+namespace DungeonCrawler.Domain.Entities;
 
 public class Player : Character
 {

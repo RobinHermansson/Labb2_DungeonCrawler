@@ -1,4 +1,5 @@
-﻿using Labb2_DungeonCrawler.App.LevelElements;
+﻿
+using DungeonCrawler.Domain.Entities;
 using Labb2_DungeonCrawler.App.Utilities;
 
 namespace Labb2_DungeonCrawler.App.Core;

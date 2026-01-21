@@ -1,4 +1,4 @@
-﻿namespace Labb2_DungeonCrawler.App.Features;
+﻿namespace DungeonCrawler.Domain.Entities;
 
 public class Dice
 {

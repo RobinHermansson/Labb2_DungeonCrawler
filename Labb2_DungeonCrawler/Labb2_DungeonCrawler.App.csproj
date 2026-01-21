@@ -8,13 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Levels\Level1.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Levels\Level1.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <ProjectReference Include="..\DungeonCrawler.Domain\DungeonCrawler.Domain.csproj" />
   </ItemGroup>
 
 </Project>
