@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36705.20
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Labb2_DungeonCrawler.App", "Labb2_DungeonCrawler\Labb2_DungeonCrawler.App.csproj", "{2D3DCCB1-A898-8249-7B80-57057D2CB830}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DungeonCrawler.App", "Labb2_DungeonCrawler\DungeonCrawler.App.csproj", "{2D3DCCB1-A898-8249-7B80-57057D2CB830}"
 	ProjectSection(ProjectDependencies) = postProject
 		{360CD845-193C-4EC6-8371-DFEF1AE2C43A} = {360CD845-193C-4EC6-8371-DFEF1AE2C43A}
 	EndProjectSection
