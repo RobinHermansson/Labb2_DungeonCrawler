@@ -15,18 +15,17 @@ public abstract class Character : LevelElement
     public int DefenceModifier { get; set; }
     public List<Dice> AttackDice { get; set; }
     public List<Dice> DefenceDice { get; set; }
-    //public GameState GameState { get; set; } fix me after mongodb addition
+    
+    public GameState GameState { get; set; } 
     public Character(Position pos, char representation, ConsoleColor color) : base(pos, representation, color)
     {
 
     }
     
-    //fix me after mongodb addition
-
-    //public bool AttemptMove(Position attempt, GameState gameState)
-    //{
-    //    return gameState.IsPositionWalkable(attempt) ? true : false;
-    //}
+    public bool AttemptMove(Position attempt, GameState gameState)
+    {
+        return gameState.IsPositionWalkable(attempt) ? true : false;
+    }
     public void MoveTo(Position position)
     {
         PreviousPosition = new Position(Position.XPos, Position.YPos);

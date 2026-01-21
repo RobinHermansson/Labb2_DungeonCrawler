@@ -1,6 +1,8 @@
 ﻿
+using DungeonCrawler.App.Services;
 using DungeonCrawler.Domain.Entities;
 using DungeonCrawler.Domain.ValueObjects;
+using DungeonCrawler.Infrastructure.Disc;
 using Labb2_DungeonCrawler.App.Utilities;
 
 namespace Labb2_DungeonCrawler.App.Core;
@@ -24,30 +26,35 @@ public class Gameloop
     public int DebugSelectorXPos { get; private set; } = 0;
     public int DebugSelectorYPos { get; set; } = 0;
 
-    public Gameloop(GameState gameState)
+    public Gameloop()
     {
 
         Turn = 0;
-        GameState = gameState;
-        Player = gameState.Player;
-        Player.CheckSurrounding(GameState.LevelData.LevelElementsList);
+        //GameState = gameState;
+        //Player = gameState.Player;
         Renderer = new Renderer();
+
+        
 
         InitializeGame();
     }
 
-    private void InitializeGame()
+    private async void InitializeGame()
     {
         Console.CursorVisible = false;
+
+        DiscRepository discRepository = new DiscRepository();
+        GameService gameService = new GameService(discRepository);
+        GameState = await gameService.CreateNewGameAsync();
 
         // Set game state references for enemies
         foreach (var enemy in GameState.Enemies)
         {
             enemy.GameState = GameState; // TODO: Improve this later
         }
-
-        Player.CheckSurrounding(GameState.LevelData.LevelElementsList);
-        Renderer.RenderLevel(GameState.LevelData.LevelElementsList);
+        Player = GameState.Player;
+        Player.CheckSurrounding(GameState.AllElements);
+        Renderer.RenderLevel(GameState.AllElements);
         Renderer.RenderUIStats(character: Player, turn: Turn, height: UIHeight, width: UIWidth, startX: UIXStartPos, startY: UIYStartPos);
         Renderer.DrawInstructions(InstructionsXPos, InstructionsYPos);
     }
@@ -70,12 +77,12 @@ public class Gameloop
                 combat.StartCombat();
                 GameState.FightHappened = true;
             }
-            else if (Player.AttemptMove(attempt, GameState))
+            else if (GameState.Player.AttemptMove(attempt, GameState))
             {
                 Player.MoveTo(attempt);
             }
         }
-        Player.CheckSurrounding(GameState.LevelData.LevelElementsList);
+        Player.CheckSurrounding(GameState.AllElements);
     }
 
     private void ProcessDebuggerMovement(ConsoleKeyInfo input)
@@ -112,7 +119,7 @@ public class Gameloop
         }    
         foreach (var deadEnemy in enemyDeaths)
         {
-            GameState.LevelData.LevelElementsList.Remove(deadEnemy);
+            GameState.AllElements.Remove(deadEnemy);
             GameState.Enemies.Remove(deadEnemy);
             Renderer.UnsubscribeElement(deadEnemy);
         }
@@ -134,7 +141,7 @@ public class Gameloop
                     Console.SetCursorPosition(DebugTextXPos, DebugTextYPos + 2);
                     Console.WriteLine("DEBUG ON!");
                     Dictionary<Position, LevelElement> freshEntityDict = new();
-                    foreach (var entity in GameState.LevelData.LevelElementsList) 
+                    foreach (var entity in GameState.AllElements) 
                     {
                         freshEntityDict[entity.Position] = entity;
                     }
@@ -170,7 +177,7 @@ public class Gameloop
             
             if (GameState.FightHappened)
             {
-                Renderer.RenderLevel(GameState.LevelData.LevelElementsList);
+                Renderer.RenderLevel(GameState.AllElements);
                 GameState.FightHappened = false; //Reset.
             }
             ProcessEnemyDeath();

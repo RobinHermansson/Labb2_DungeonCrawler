@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DungeonCrawler.Domain\DungeonCrawler.Domain.csproj" />
+    <ProjectReference Include="..\DungeonCrawler.Infrastructure\DungeonCrawler.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

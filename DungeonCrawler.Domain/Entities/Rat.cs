@@ -1,5 +1,5 @@
-﻿using DungeonCrawler.Domain.ValueObjects;
-using DungeonCrawler.Domain.Utilities;
+﻿using DungeonCrawler.Domain.Utilities;
+using DungeonCrawler.Domain.ValueObjects;
 
 namespace DungeonCrawler.Domain.Entities;
 
@@ -42,40 +42,30 @@ public class Rat : Enemy
         }
     }
 
-    public override void Update() // FIX AFTER MONGODBREWORK
+    public override void Update()
     {
-        throw new NotImplementedException();
-    }
+        Random ratRandom = new Random();
 
-    /* TODO: FIX AFTER MONGODB REWORK.
-
-        public override void Update()
+        for (int attempts = 0; attempts < _maxMoveAttempts; attempts++)
         {
-            Random ratRandom = new Random();
+            int stepInCardinalDirection = _random.Next(0, 4);
+            Position attempt = DirectionTransformer.GetPositionDelta((Direction)stepInCardinalDirection) + Position;
 
-            for (int attempts = 0; attempts < _maxMoveAttempts; attempts++)
+            if (attempt.XPos == GameState.Player.Position.XPos &&
+                attempt.YPos == GameState.Player.Position.YPos)
             {
-                int stepInCardinalDirection = _random.Next(0, 4);
-                Position attempt = DirectionTransformer.GetPositionDelta((Direction)stepInCardinalDirection) + Position;
-
-                if (attempt.XPos == GameState.Player.Position.XPos && 
-                    attempt.YPos == GameState.Player.Position.YPos)
-                {
-                    Combat combat = new Combat(this, GameState.Player);
-                    combat.StartCombat();
-                    GameState.FightHappened = true;
-                    return;             
-                }
-                else if (AttemptMove(attempt, GameState))
-                {
-                    MoveTo(attempt);
-                    return;            
-                }
+                GameState.FightHappened = true;
+                return;
             }
-            // Rat stays in place if none of the above were possible.
-
+            else if (AttemptMove(attempt, GameState))
+            {
+                MoveTo(attempt);
+                return;
+            }
         }
-    */
+        // Rat stays in place if none of the above were possible.
+
+    }
     public override void UpdateColor()
     {
         if (IsVisible)

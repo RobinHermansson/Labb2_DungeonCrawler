@@ -1,7 +1,7 @@
 ﻿using DungeonCrawler.Domain.Entities;
 using Labb2_DungeonCrawler.App.Core;
 
-GameState gameState = new GameState();
+//GameState gameState = new GameState();
 Console.CursorVisible = false;
 
 Renderer renderer = new Renderer();
@@ -27,7 +27,7 @@ while (true)
             if (selectedOption == Renderer.StartScreenOption.Start)
             {
                 Console.Clear();
-                Gameloop gameLoop = new Gameloop(gameState);
+                Gameloop gameLoop = new Gameloop();
                 gameLoop.PlayGame();
             }
             else

@@ -1,49 +1,29 @@
 ﻿using DungeonCrawler.Domain.ValueObjects;
-//using DungeonCrawler.Infrastructure.Repositories;
 
 namespace DungeonCrawler.Domain.Entities;
 
-/*
 public class GameState
 {
     public bool Debug { get; private set; } = false;
 
-    public LevelData LevelData = new LevelData();
-    public List<Enemy> Enemies = new List<Enemy>();
-    public List<Wall> Walls = new List<Wall>();
-    public Dictionary<Position, LevelElement> EntitiesDict = new();
+    public List<LevelElement> AllElements { get; set; } = new();
+    public List<Enemy> Enemies { get; set; } = new List<Enemy>();
+    public List<Wall> Walls { get; set; } = new List<Wall>();
+    public Dictionary<Position, LevelElement> EntitiesDict { get; set; } = new();
 
-    public Player Player = null;
+    public Player? Player { get; set; } = null;
 
-    public bool FightIsHappening = false;
-    public bool FightHappened = false;
+    public bool FightIsHappening { get; set; } = false;
+    public bool FightHappened { get; set; } = false;
 
 
     public GameState()
     {
-        string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-        string path = Path.Combine(baseDirectory, "Levels", "Level1.txt");
-        LevelData.LoadElementsFromFile(path);
-        foreach (var element in LevelData.LevelElementsList)
-        {
-            if (element is Player player)
-            {
-                Player = player;
-            }
-            if (element is Enemy enemy)
-            {
-                Enemies.Add(enemy);
-            }
-            if (element is Wall wall) {
-                Walls.Add(wall);
-            }
-            EntitiesDict[element.Position] = element;
-        }
     }
 
     public bool IsPositionWalkable(Position destination)
     {
-        foreach (var element in LevelData.LevelElementsList)
+        foreach (var element in AllElements)
         {
             if (element.Position.XPos == destination.XPos && element.Position.YPos == destination.YPos)
             {
@@ -53,5 +33,23 @@ public class GameState
         return true;
     }
 
+    public void AddElement(LevelElement element)
+    {
+        AllElements.Add(element);
+        EntitiesDict[element.Position] = element;
+
+        // Populate type-specific collections
+        switch (element)
+        {
+            case Player player:
+                Player = player;
+                break;
+            case Enemy enemy:
+                Enemies.Add(enemy);
+                break;
+            case Wall wall:
+                Walls.Add(wall);
+                break;
+        }
+    }
 }
-*/

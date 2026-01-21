@@ -83,8 +83,7 @@ public class Snake : Enemy
 
     public override void Update()
     {
-        // TODO: FIX BELOW AFTER MONGODB ADDITION
-        //CheckSurrounding(GameState.LevelData.LevelElementsList);
+        CheckSurrounding(GameState.AllElements);
         if (IsScared)
         {
             Position[] possibleMoves = new Position[4] {
@@ -98,9 +97,8 @@ public class Snake : Enemy
             double highestDistance = 0;
             foreach (var possibleMove in possibleMoves)
             {
-                Console.WriteLine("SNAKE UPDATE(): REMOVE COMMENTED OUT CODE AFTER MONGODB ADDITION.");
 
-                /*double currentCheck = CalculateDistance.Between(possibleMove, GameState.Player.Position);
+                double currentCheck = CalculateDistance.Between(possibleMove, GameState.Player.Position);
                 if ( currentCheck > highestDistance )
                 {
                     if (AttemptMove(possibleMove, GameState))
@@ -109,10 +107,8 @@ public class Snake : Enemy
                         bestMove = possibleMove;
                     }
                 }
-                */
             }
 
-            /* RE-ADD ME AFTER MONGODB ADDITION
             if (AttemptMove(bestMove, GameState))
             {
                 // Sometimes this must fail, because otherwise the snakes can NOT be caught.
@@ -127,7 +123,6 @@ public class Snake : Enemy
 
                 }
             }
-            */
         }
     }
 }
