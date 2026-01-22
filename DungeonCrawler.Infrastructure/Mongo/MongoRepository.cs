@@ -33,4 +33,21 @@ public abstract class MongoRepository<TEntity, TId> : IRepository<TEntity, TId> 
         var filter = Builders<TEntity>.Filter.Eq(x => x.Id, entity.Id);
         await _collection.ReplaceOneAsync(filter, entity);
     }
+
+    public async Task<IEnumerable<TEntity>> GetAllAsync()
+    {
+        return await _collection.Find(_ => true).ToListAsync();
+    }
+
+    public async Task<bool> ExistsAsync(TId id)
+    {
+        var filter = Builders<TEntity>.Filter.Eq(x => x.Id, id);
+        return await _collection.Find(filter).AnyAsync();
+    }
+
+
+    public async Task<long> CountAsync()
+    {
+        return await _collection.CountDocumentsAsync(_ => true);
+    }
 }
