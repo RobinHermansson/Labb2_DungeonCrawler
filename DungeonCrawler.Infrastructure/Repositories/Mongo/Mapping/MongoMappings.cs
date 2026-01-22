@@ -1,4 +1,5 @@
 ﻿using DungeonCrawler.Domain.Entities;
+using DungeonCrawler.Domain.ValueObjects;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
@@ -30,6 +31,13 @@ public class MongoMappings
                 .SetIdGenerator(null) // Don't auto-generate, use our Guid
                 .SetSerializer(new MongoDB.Bson.Serialization.Serializers.GuidSerializer(BsonType.String)); // Store as string for readability
         });
+
+        BsonClassMap.RegisterClassMap<Position>(p =>
+    {
+        p.AutoMap();
+        p.MapMember(x => x.XPos).SetElementName("xPos");
+        p.MapMember(x => x.YPos).SetElementName("yPos");
+    });
         // Character mapping
 
         BsonClassMap.RegisterClassMap<Character>(c =>

@@ -5,7 +5,7 @@ using MongoDB.Driver;
 
 namespace DungeonCrawler.Infrastructure.Repositories.Mongo;
 
-internal class MongoCharacterRepository : MongoRepository<Character, Guid>, ICharacterRepository
+public class MongoCharacterRepository : MongoRepository<Character, Guid>, ICharacterRepository
 {
     public MongoCharacterRepository(IMongoDatabase database) : base(database, "characters")
     {

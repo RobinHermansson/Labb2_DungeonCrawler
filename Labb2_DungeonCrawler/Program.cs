@@ -1,18 +1,24 @@
 ﻿using DungeonCrawler.Domain.Entities;
 using DungeonCrawler.Domain.Interfaces;
-using DungeonCrawler.Infrastructure.Repositories;
+using DungeonCrawler.Infrastructure.Repositories.Mongo;
 using MongoDB.Driver;
 using Labb2_DungeonCrawler.App.Core;
+using DungeonCrawler.Domain.ValueObjects;
+using DungeonCrawler.Infrastructure.Repositories.Mongo.Mapping;
 
 //GameState gameState = new GameState();
 Console.CursorVisible = false;
 
+
+MongoMappings.Register();
+
 Renderer renderer = new Renderer();
 Renderer.StartScreenOption selectedOption = Renderer.StartScreenOption.Start;
 var client = new MongoClient("mongodb://localhost:27017/");
-var mongoDatabase = client.GetDatabase("characters");
+var mongoDatabase = client.GetDatabase("DungeonCrawler");
 
-ICharacterRepository = new MongoCharacterRepository
+IEnemyRepository enemyRepository= new MongoEnemyRepository(mongoDatabase);
+
 while (true)
 {
     renderer.DisplayTitleScreen(selectedOption);
@@ -33,7 +39,8 @@ while (true)
             if (selectedOption == Renderer.StartScreenOption.Start)
             {
                 Console.Clear();
-                Gameloop gameLoop = new Gameloop();
+                Gameloop gameLoop = new Gameloop(enemyRepository);
+                await gameLoop.InitializeAsync();
                 gameLoop.PlayGame();
             }
             else
