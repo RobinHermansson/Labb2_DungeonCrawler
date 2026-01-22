@@ -5,6 +5,8 @@ namespace DungeonCrawler.Domain.Entities;
 public abstract class LevelElement
 {
 
+    public Guid Id { get; set; } = Guid.NewGuid();
+
     private Position _position;
     public Position Position 
     { 

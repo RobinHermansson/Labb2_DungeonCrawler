@@ -4,7 +4,6 @@ using DungeonCrawler.Domain.Utilities;
 namespace DungeonCrawler.Domain.Entities;
 
 public abstract class Character : LevelElement
-
 {
     public string Name { get; set; }
     public bool IsPlayer { get; set; } = false;
@@ -16,7 +15,7 @@ public abstract class Character : LevelElement
     public List<Dice> AttackDice { get; set; }
     public List<Dice> DefenceDice { get; set; }
     
-    public GameState GameState { get; set; } 
+    public GameState GameState { get; set; }
     public Character(Position pos, char representation, ConsoleColor color) : base(pos, representation, color)
     {
 
