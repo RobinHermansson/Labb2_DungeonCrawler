@@ -1,8 +1,9 @@
-﻿using DungeonCrawler.Domain.ValueObjects;
+﻿using DungeonCrawler.Domain.Interfaces;
+using DungeonCrawler.Domain.ValueObjects;
 
 namespace DungeonCrawler.Domain.Entities;
 
-public abstract class LevelElement
+public abstract class LevelElement : IHasId<Guid>
 {
 
     public Guid Id { get; set; } = Guid.NewGuid();
