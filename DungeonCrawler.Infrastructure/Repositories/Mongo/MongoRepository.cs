@@ -1,7 +1,7 @@
 ﻿using DungeonCrawler.Domain.Interfaces;
 using MongoDB.Driver;
 
-namespace DungeonCrawler.Infrastructure.Mongo;
+namespace DungeonCrawler.Infrastructure.Repositories.Mongo;
 
 public abstract class MongoRepository<TEntity, TId> : IRepository<TEntity, TId> where TEntity : class, IHasId<TId>
 {

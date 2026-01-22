@@ -3,7 +3,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
 
-namespace DungeonCrawler.Infrastructure.Mongo.Mapping;
+namespace DungeonCrawler.Infrastructure.Repositories.Mongo.Mapping;
 
 public class MongoMappings
 {
