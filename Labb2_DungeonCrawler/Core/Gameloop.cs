@@ -4,11 +4,13 @@ using DungeonCrawler.Domain.Entities;
 using DungeonCrawler.Domain.ValueObjects;
 using DungeonCrawler.Infrastructure.Disc;
 using Labb2_DungeonCrawler.App.Utilities;
+using DungeonCrawler.Domain.Interfaces;
 
 namespace Labb2_DungeonCrawler.App.Core;
 
 public class Gameloop
 {
+    private readonly ICharacterRepository _characterRepository;
     public GameState GameState { get; set; }
     public Player Player { get; set; }
     public Renderer Renderer { get; private set; }
@@ -26,8 +28,9 @@ public class Gameloop
     public int DebugSelectorXPos { get; private set; } = 0;
     public int DebugSelectorYPos { get; set; } = 0;
 
-    public Gameloop()
+    public Gameloop(ICharacterRepository characterRepository)
     {
+        _characterRepository = characterRepository;
 
         Turn = 0;
         //GameState = gameState;

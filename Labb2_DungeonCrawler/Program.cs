@@ -1,4 +1,7 @@
 ﻿using DungeonCrawler.Domain.Entities;
+using DungeonCrawler.Domain.Interfaces;
+using DungeonCrawler.Infrastructure.Repositories;
+using MongoDB.Driver;
 using Labb2_DungeonCrawler.App.Core;
 
 //GameState gameState = new GameState();
@@ -6,7 +9,10 @@ Console.CursorVisible = false;
 
 Renderer renderer = new Renderer();
 Renderer.StartScreenOption selectedOption = Renderer.StartScreenOption.Start;
+var client = new MongoClient("mongodb://localhost:27017/");
+var mongoDatabase = client.GetDatabase("characters");
 
+ICharacterRepository = new MongoCharacterRepository
 while (true)
 {
     renderer.DisplayTitleScreen(selectedOption);
