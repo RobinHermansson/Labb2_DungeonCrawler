@@ -1,26 +1,36 @@
 ﻿using DungeonCrawler.Domain.Interfaces;
+using MongoDB.Driver;
 
 namespace DungeonCrawler.Infrastructure.Mongo;
 
-public class MongoRepository<TEntity, TId> : IRepository<TEntity, TId> where TEntity : class, IHasId<TId>
+public abstract class MongoRepository<TEntity, TId> : IRepository<TEntity, TId> where TEntity : class, IHasId<TId>
 {
-    public Task AddAsync(TEntity entity)
+    protected readonly IMongoCollection<TEntity> _collection;
+    public MongoRepository(IMongoDatabase database, string collectionName)
     {
-        throw new NotImplementedException();
+        _collection = database.GetCollection<TEntity>(collectionName);
+        
+    }
+    public async Task<TEntity?> GetByIdAsync(TId id)
+    {
+        var filter = Builders<TEntity>.Filter.Eq(x => x.Id, id);
+        return await _collection.Find(filter).FirstOrDefaultAsync();
+    }
+    public async Task AddAsync(TEntity entity)
+    {
+        await _collection.InsertOneAsync(entity);
     }
 
-    public Task<TEntity?> GetByIdAsync(TId id)
+
+    public async Task RemoveAsync(TEntity entity)
     {
-        throw new NotImplementedException();
+        var filter = Builders<TEntity>.Filter.Eq(x => x.Id, entity.Id);
+        await _collection.DeleteOneAsync(filter);
     }
 
-    public Task RemoveAsync(TEntity entity)
+    public async Task ReplaceAsync(TEntity entity)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task ReplaceAsync(TEntity entity)
-    {
-        throw new NotImplementedException();
+        var filter = Builders<TEntity>.Filter.Eq(x => x.Id, entity.Id);
+        await _collection.ReplaceOneAsync(filter, entity);
     }
 }
