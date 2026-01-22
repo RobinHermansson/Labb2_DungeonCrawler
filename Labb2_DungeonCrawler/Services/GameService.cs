@@ -23,21 +23,8 @@ public class GameService
 
 
 
-        
-        // Just as a test, attempting to load in stuff to the DB...
-        /*
-        foreach (var item in levelElements)
-        {
-
-            //_characterRepository.AddAsync
-            if (item is Enemy enemy)
-            {
-                Debug.WriteLine(enemy.Name);
-                await  _enemyRepository.AddAsync(enemy);
-            }
-        }
-        */
-        
+      
+                
         foreach (var element in levelElements)
         {
             gameState.AddElement(element);

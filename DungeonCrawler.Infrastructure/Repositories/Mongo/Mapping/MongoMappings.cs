@@ -22,6 +22,15 @@ public class MongoMappings
 
         ConventionRegistry.Register("appConventions", pack, _ => true);
 
+        //LevelTemplate
+        BsonClassMap.RegisterClassMap<LevelTemplate>(lt =>
+        {
+            lt.AutoMap();
+            lt.MapIdMember(lt => lt.Id)
+            .SetIdGenerator(null)
+            .SetSerializer(new MongoDB.Bson.Serialization.Serializers.GuidSerializer(BsonType.String));
+        });
+
         // Base LevelElement mapping
         BsonClassMap.RegisterClassMap<LevelElement>(le =>
         {
@@ -33,13 +42,13 @@ public class MongoMappings
         });
 
         BsonClassMap.RegisterClassMap<Position>(p =>
-    {
-        p.AutoMap();
-        p.MapMember(x => x.XPos).SetElementName("xPos");
-        p.MapMember(x => x.YPos).SetElementName("yPos");
-    });
-        // Character mapping
+        {
+            p.AutoMap();
+            p.MapMember(x => x.XPos).SetElementName("xPos");
+            p.MapMember(x => x.YPos).SetElementName("yPos");
+        });
 
+        // Character mapping
         BsonClassMap.RegisterClassMap<Character>(c =>
         {
             c.AutoMap();

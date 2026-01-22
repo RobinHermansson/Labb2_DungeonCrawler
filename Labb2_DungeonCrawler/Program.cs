@@ -5,6 +5,8 @@ using MongoDB.Driver;
 using Labb2_DungeonCrawler.App.Core;
 using DungeonCrawler.Domain.ValueObjects;
 using DungeonCrawler.Infrastructure.Repositories.Mongo.Mapping;
+using DungeonCrawler.Infrastructure.Repositories;
+using DungeonCrawler.Infrastructure.Utilities;
 
 //GameState gameState = new GameState();
 Console.CursorVisible = false;
@@ -17,7 +19,13 @@ Renderer.StartScreenOption selectedOption = Renderer.StartScreenOption.Start;
 var client = new MongoClient("mongodb://localhost:27017/");
 var mongoDatabase = client.GetDatabase("DungeonCrawler");
 
-IEnemyRepository enemyRepository= new MongoEnemyRepository(mongoDatabase);
+var enemyRepository = new MongoEnemyRepository(mongoDatabase);
+
+ILevelTemplateRepository templateRepo = new MongoLevelTemplateRepository(mongoDatabase);
+var levelImporter = new LevelImporter(templateRepo);
+string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+string path = Path.Combine(baseDirectory, "Levels", $"Level1.txt");
+await levelImporter.ImportFromFileAsync(path, 1);
 
 while (true)
 {
