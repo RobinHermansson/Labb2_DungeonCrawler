@@ -22,6 +22,15 @@ public class MongoMappings
 
         ConventionRegistry.Register("appConventions", pack, _ => true);
 
+        //SaveGame
+        BsonClassMap.RegisterClassMap<SaveGame>(lt =>
+        {
+            lt.AutoMap();
+            lt.MapIdMember(lt => lt.Id)
+            .SetIdGenerator(null)
+            .SetSerializer(new MongoDB.Bson.Serialization.Serializers.GuidSerializer(BsonType.String));
+        });
+
         //LevelTemplate
         BsonClassMap.RegisterClassMap<LevelTemplate>(lt =>
         {
@@ -39,6 +48,9 @@ public class MongoMappings
             le.MapIdMember(x => x.Id)
                 .SetIdGenerator(null) // Don't auto-generate, use our Guid
                 .SetSerializer(new MongoDB.Bson.Serialization.Serializers.GuidSerializer(BsonType.String)); // Store as string for readability
+            le.UnmapMember(x => x.PositionChanged);
+            le.UnmapMember(x => x.HasBeenSeenChanged);
+            le.UnmapMember(x => x.VisibilityChanged);
         });
 
         BsonClassMap.RegisterClassMap<Position>(p =>
@@ -85,6 +97,11 @@ public class MongoMappings
         {
             c.AutoMap();
             c.SetDiscriminator("Wall");
+        });
+        BsonClassMap.RegisterClassMap<EmptySpace>(c =>
+        {
+            c.AutoMap();
+            c.SetDiscriminator("EmptySpace");
         });
 
         _registered = true;
