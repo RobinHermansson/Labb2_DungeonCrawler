@@ -1,4 +1,4 @@
-﻿using DungeonCrawler.Infrastructure.Repositories.Mongo;
+using DungeonCrawler.Infrastructure.Repositories.Mongo;
 using DungeonCrawler.Domain.Entities;
 using MongoDB.Driver;
 using DungeonCrawler.Domain.Interfaces;
@@ -10,6 +10,13 @@ public class SaveGameRepository : MongoRepository<SaveGame, Guid>, ISaveGameRepo
     public SaveGameRepository(IMongoDatabase database) : base(database, "SavedGames")
     {
     }
+
+    public async Task CreateSaveGameAsync(GameState gameState, int number)
+    {
+        var saveGame = SaveGame.FromGameState(gameState, 1, gameState.Player?.Name ?? "Player");
+        await _collection.InsertOneAsync(saveGame);
+    }
+
     public async Task<SaveGame?> GetBySlotNumberAsync(int number)
     {
         var filter = Builders<SaveGame>.Filter.Eq(x => x.SlotNumber, number);
