@@ -11,19 +11,22 @@ public class MongoLevelTemplateRepository : MongoRepository<LevelTemplate, Guid>
     {
     }
 
-    public async Task Exists(LevelTemplate template)
+    public async Task<bool> ExistsAsync(LevelTemplate template)
     {
-        throw new NotImplementedException();
+        var filter = Builders<LevelTemplate>.Filter.Eq(x => x.Id, template.Id);
+        return await _collection.Find(filter).AnyAsync();
     }
 
-    public async Task<LevelTemplate?> GetByIdAsync()
+    public async Task<LevelTemplate?> GetByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var filter = Builders<LevelTemplate>.Filter.Eq(x => x.Id, id);
+        return await _collection.Find(filter).FirstOrDefaultAsync();
     }
 
     public async Task<LevelTemplate?> GetByLevelNumberAsync(int levelNumber)
     {
-        throw new NotImplementedException();
+        var filter = Builders<LevelTemplate>.Filter.Eq(x => x.LevelNumber, levelNumber);
+        return await _collection.Find(filter).FirstOrDefaultAsync();
     }
 
     public async Task SaveAsync(LevelTemplate template)
@@ -34,8 +37,12 @@ public class MongoLevelTemplateRepository : MongoRepository<LevelTemplate, Guid>
         await _collection.ReplaceOneAsync(filter, template, options); 
     }
 
+    /* Implemented through base...?
     public async Task<List<LevelTemplate>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        var filter = Builders<LevelTemplate>.Filter.Empty;
+        return await _collection.Find(filter).ToListAsync();
+    
     }
+    */
 }
