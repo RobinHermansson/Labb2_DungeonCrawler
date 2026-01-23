@@ -1,6 +1,7 @@
-﻿using DungeonCrawler.Domain.Entities;
+using DungeonCrawler.Domain.Entities;
 using DungeonCrawler.Domain.Interfaces;
 using DungeonCrawler.Infrastructure.Disc;
+using DungeonCrawler.Infrastructure.Repositories;
 using System.Diagnostics;
 
 namespace DungeonCrawler.App.Services;
@@ -8,28 +9,44 @@ public class GameService
 {
     private readonly DiscRepository _discRepository;
     private readonly ILevelTemplateRepository _levelTemplateRepository;
+    private ISaveGameRepository _saveGameRepository;
     private readonly IEnemyRepository _enemyRepository;    
-    public GameService(DiscRepository diskRepository, IEnemyRepository enemyRepository, ILevelTemplateRepository levelTemplateRepo)
+    public GameService(DiscRepository diskRepository, IEnemyRepository enemyRepository, ILevelTemplateRepository levelTemplateRepo, ISaveGameRepository saveGameRepository)
     {
         _discRepository = diskRepository;
         _enemyRepository = enemyRepository;
         _levelTemplateRepository = levelTemplateRepo;
+        _saveGameRepository = saveGameRepository;
     }
     
     public async Task<GameState> CreateNewGameAsync()
     {
-        //var gameState = new GameState();
         
         var levelElements = await _discRepository.LoadLevelElementsAsync(1);
 
         var levelTemplate = await _levelTemplateRepository.GetByLevelNumberAsync(1);
 
         var gameState = levelTemplate.CreateInitialGameState();
-                
+
+                       
         return gameState;
-
-
-      
+           
                 
+    }
+
+    public async Task SaveGameAsync(GameState gameState, int slotNumber)
+    {
+        var existingSave = await _saveGameRepository.GetBySlotNumberAsync(slotNumber);
+        if (existingSave is null)
+        {
+            await _saveGameRepository.CreateSaveGameAsync(gameState, slotNumber);
+            return;
+        }
+        
+        var updatedSave = SaveGame.FromGameState(gameState, slotNumber, existingSave.PlayerName);
+        updatedSave.Id = existingSave.Id;
+        updatedSave.CreatedAt = existingSave.CreatedAt;        
+        updatedSave.LastPlayedAt = DateTime.UtcNow;        
+        await _saveGameRepository.SaveToSlotNumberAsync(updatedSave, slotNumber);
     }
 }

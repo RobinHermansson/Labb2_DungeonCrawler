@@ -12,12 +12,13 @@ public class Gameloop
 {
     private readonly IEnemyRepository _enemyRepository;
     private readonly ILevelTemplateRepository _levelTemplateRepository;
+    private readonly ISaveGameRepository _saveGameRepository;
+    private GameService _gameService;
     public GameState GameState { get; set; }
     public Player Player { get; set; }
     public Renderer Renderer { get; private set; }
     public DebugAssistant Debugger { get; set; }
 
-    public int Turn { get; set; }
     public int UIXStartPos { get; set; } = 53;
     public int UIYStartPos { get; set; } = 0;
     public int UIHeight { get; set; } = 12;
@@ -29,12 +30,12 @@ public class Gameloop
     public int DebugSelectorXPos { get; private set; } = 0;
     public int DebugSelectorYPos { get; set; } = 0;
 
-    public Gameloop(IEnemyRepository enemyRepository, ILevelTemplateRepository levelTemplateRepository)
+    public Gameloop(IEnemyRepository enemyRepository, ILevelTemplateRepository levelTemplateRepository, ISaveGameRepository saveGameRepository)
     {
         _levelTemplateRepository = levelTemplateRepository;
         _enemyRepository = enemyRepository;
+        _saveGameRepository = saveGameRepository;
 
-        Turn = 0;
         //GameState = gameState;
         //Player = gameState.Player;
         Renderer = new Renderer();
@@ -54,8 +55,8 @@ public class Gameloop
         Console.CursorVisible = false;
 
         DiscRepository discRepository = new DiscRepository();
-        GameService gameService = new GameService(discRepository, _enemyRepository, _levelTemplateRepository);
-        GameState = await gameService.CreateNewGameAsync();
+        _gameService = new GameService(discRepository, _enemyRepository, _levelTemplateRepository, _saveGameRepository);
+        GameState = await _gameService.CreateNewGameAsync();
 
         // Set game state references for enemies
         foreach (var enemy in GameState.Enemies)
@@ -65,7 +66,7 @@ public class Gameloop
         Player = GameState.Player;
         Player.CheckSurrounding(GameState.AllElements);
         Renderer.RenderLevel(GameState.AllElements);
-        Renderer.RenderUIStats(character: Player, turn: Turn, height: UIHeight, width: UIWidth, startX: UIXStartPos, startY: UIYStartPos);
+        Renderer.RenderUIStats(character: Player, turn: GameState.Turn, height: UIHeight, width: UIWidth, startX: UIXStartPos, startY: UIYStartPos);
         Renderer.DrawInstructions(InstructionsXPos, InstructionsYPos);
     }
 
@@ -135,7 +136,7 @@ public class Gameloop
         }
     }
 
-    public void PlayGame()
+    public async Task PlayGame()
     {
 
         bool isGameRunning = true;
@@ -174,15 +175,15 @@ public class Gameloop
                 }
             }
 
-            Turn++;
+            GameState.Turn++;
             ProcessPlayerMovement();
-            Renderer.RenderUIStats(character: Player, turn: Turn, height: UIHeight, width: UIWidth, startX: UIXStartPos, startY: UIYStartPos);
+            Renderer.RenderUIStats(character: Player, turn: GameState.Turn, height: UIHeight, width: UIWidth, startX: UIXStartPos, startY: UIYStartPos);
             Renderer.DrawInstructions(InstructionsXPos, InstructionsYPos);
 
 
 
             ProcessEnemyMovement();
-            Renderer.RenderUIStats(character: Player, turn: Turn, height: UIHeight, width: UIWidth, startX: UIXStartPos, startY: UIYStartPos);
+            Renderer.RenderUIStats(character: Player, turn: GameState.Turn, height: UIHeight, width: UIWidth, startX: UIXStartPos, startY: UIYStartPos);
             Renderer.DrawInstructions(InstructionsXPos, InstructionsYPos);
             
             if (GameState.FightHappened)
@@ -196,6 +197,11 @@ public class Gameloop
             {
                 isGameRunning = false;
                 Renderer.DisplayGameOver();
+            }
+            if (GameState.Turn % 20 == 0)
+            {
+                await _gameService.SaveGameAsync(GameState, 1);
+                
             }
 
         }
