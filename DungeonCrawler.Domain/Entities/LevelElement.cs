@@ -14,7 +14,7 @@ public abstract class LevelElement : IHasId<Guid>
         get => _position;
         set 
         {
-            PreviousPosition = Position;
+            PreviousPosition = _position; 
             _position = value;
             // Raise event when position changes
             OnPositionChange(_position);
@@ -56,7 +56,7 @@ public abstract class LevelElement : IHasId<Guid>
             }
         }
     }
-    public ConsoleColor Color { get; set; }
+    public ConsoleColor Color { get; set; } = ConsoleColor.Black;
 
     public EventHandler<Position> PositionChanged;
     public EventHandler<bool> VisibilityChanged;
