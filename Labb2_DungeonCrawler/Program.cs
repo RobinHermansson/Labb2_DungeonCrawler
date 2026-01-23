@@ -25,7 +25,7 @@ ILevelTemplateRepository templateRepo = new MongoLevelTemplateRepository(mongoDa
 var levelImporter = new LevelImporter(templateRepo);
 string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
 string path = Path.Combine(baseDirectory, "Levels", $"Level1.txt");
-await levelImporter.ImportFromFileAsync(path, 1);
+//await levelImporter.ImportFromFileAsync(path, 1);
 
 while (true)
 {
@@ -47,7 +47,7 @@ while (true)
             if (selectedOption == Renderer.StartScreenOption.Start)
             {
                 Console.Clear();
-                Gameloop gameLoop = new Gameloop(enemyRepository);
+                Gameloop gameLoop = new Gameloop(enemyRepository, templateRepo);
                 await gameLoop.InitializeAsync();
                 gameLoop.PlayGame();
             }

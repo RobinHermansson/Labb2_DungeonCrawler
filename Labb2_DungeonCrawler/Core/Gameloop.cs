@@ -11,6 +11,7 @@ namespace Labb2_DungeonCrawler.App.Core;
 public class Gameloop
 {
     private readonly IEnemyRepository _enemyRepository;
+    private readonly ILevelTemplateRepository _levelTemplateRepository;
     public GameState GameState { get; set; }
     public Player Player { get; set; }
     public Renderer Renderer { get; private set; }
@@ -28,8 +29,9 @@ public class Gameloop
     public int DebugSelectorXPos { get; private set; } = 0;
     public int DebugSelectorYPos { get; set; } = 0;
 
-    public Gameloop(IEnemyRepository enemyRepository)
+    public Gameloop(IEnemyRepository enemyRepository, ILevelTemplateRepository levelTemplateRepository)
     {
+        _levelTemplateRepository = levelTemplateRepository;
         _enemyRepository = enemyRepository;
 
         Turn = 0;
@@ -39,7 +41,7 @@ public class Gameloop
 
         
 
-        InitializeGame();
+        //InitializeGame();
     }
 
     public async Task InitializeAsync()
@@ -52,7 +54,7 @@ public class Gameloop
         Console.CursorVisible = false;
 
         DiscRepository discRepository = new DiscRepository();
-        GameService gameService = new GameService(discRepository, _enemyRepository);
+        GameService gameService = new GameService(discRepository, _enemyRepository, _levelTemplateRepository);
         GameState = await gameService.CreateNewGameAsync();
 
         // Set game state references for enemies
