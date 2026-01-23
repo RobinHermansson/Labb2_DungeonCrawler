@@ -84,28 +84,7 @@ public class Renderer
         int startY = 0;
         Console.Clear();
 
-        // Draw the top border
-        Console.SetCursorPosition(startX, startY);
-        Console.Write("╔");
-        for (int i = 1; i < width - 1; i++)
-            Console.Write("═");
-        Console.Write("╗");
-
-        // Draw the sides
-        for (int i = 1; i < height - 1; i++)
-        {
-            Console.SetCursorPosition(startX, startY + i);
-            Console.Write("║");
-            Console.SetCursorPosition(startX + width - 1, startY + i);
-            Console.Write("║");
-        }
-
-        // Draw the bottom border
-        Console.SetCursorPosition(startX, startY + height - 1);
-        Console.Write("╚");
-        for (int i = 1; i < width - 1; i++)
-            Console.Write("═");
-        Console.Write("╝");
+        DrawABox(height, width, startX, startY, '═', '║', '╔', '╗', '╚', '╝');
 
         // Write the centered text
         string gameOverText = "Game Over!";
@@ -132,30 +111,8 @@ public class Renderer
 
         Console.ForegroundColor = ConsoleColor.DarkRed;
 
-        // Draw the top border
-        Console.SetCursorPosition(startX, startY);
-        Console.Write("╔");
-        for (int i = 1; i < width - 1; i++)
-            Console.Write("═");
-        Console.Write("╗");
-
-        // Draw the sides
-        for (int i = 1; i < height - 1; i++)
-        {
-            Console.SetCursorPosition(startX, startY + i);
-            Console.Write("║");
-            Console.SetCursorPosition(startX + width - 1, startY + i);
-            Console.Write("║");
-        }
-
-        // Draw the bottom border
-        Console.SetCursorPosition(startX, startY + height - 1);
-        Console.Write("╚");
-        for (int i = 1; i < width - 1; i++)
-            Console.Write("═");
-        Console.Write("╝");
-
-        // Write all text centered but with some offets 
+        DrawABox(height, width, startX, startY, '═', '║', '╔', '╗', '╚', '╝');
+        
         int titleYOffset = 3;
         int titleX = startX + (width - titleText.Length) / 2;
         int titleY = startY + height / 2 - titleYOffset;
@@ -206,11 +163,16 @@ public class Renderer
         Console.SetCursorPosition(0, height);
         Console.WriteLine();
     }
+    public void DisplayLoadSaveScreen()
+    {
+
+    }
 
     public void RenderUIStats(Character character, int turn, int height, int width, int startX, int startY)
     {
         Console.ForegroundColor = ConsoleColor.DarkRed;
-        DrawUIBox(height, width, startX, startY);
+        DrawABox(height, width, startX, startY, '-', '|', '+', '+', '+', '+');
+
         string UITitle = "STATS";
         Console.SetCursorPosition(startX + 1, startY + 1);
         Console.Write(UITitle);
@@ -237,32 +199,34 @@ public class Renderer
         }
     }
 
-    public void DrawUIBox(int height, int width, int startX, int startY)
+    public void DrawABox(int height, int width, int startX, int startY, char horizontalLine, char verticalLine, char upperLeftCorner, char upperRightCorner, char lowerLeftCorner, char lowerRightCorner)
     {
-        Console.ForegroundColor = ConsoleColor.DarkRed;
 
         // TOP
         Console.SetCursorPosition(startX, startY);
-        Console.Write("+");
+        Console.Write(upperLeftCorner);
         for (int i = 1; i < width - 1; i++)
-            Console.Write("-");
-        Console.Write("+");
+            Console.Write(horizontalLine);
+        Console.Write(upperRightCorner);
 
         // BOTH SIDES
         for (int i = 1; i < height - 1; i++)
         {
             Console.SetCursorPosition(startX, startY + i);
-            Console.Write("|");
+            Console.Write(verticalLine);
             Console.SetCursorPosition(startX + width - 1, startY + i);
-            Console.Write("|");
+            Console.Write(verticalLine);
         }
 
         // BOTTOM
         Console.SetCursorPosition(startX, startY + height - 1);
-        Console.Write("+");
+        Console.Write(lowerLeftCorner);
         for (int i = 1; i < width - 1; i++)
-            Console.Write("-");
-        Console.Write("+");
+            Console.Write(horizontalLine);
+        Console.Write(lowerRightCorner);
+
+
+
     }
     public enum StartScreenOption
     {
