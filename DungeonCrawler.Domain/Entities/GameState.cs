@@ -4,7 +4,7 @@ namespace DungeonCrawler.Domain.Entities;
 
 public class GameState
 {
-    public bool Debug { get; private set; } = false;
+    public bool Debug { get; set; } = false;
 
     public List<LevelElement> AllElements { get; set; } = new();
     public List<Enemy> Enemies { get; set; } = new List<Enemy>();
