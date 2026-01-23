@@ -12,6 +12,8 @@ public class GameState
     public Dictionary<Position, LevelElement> EntitiesDict { get; set; } = new();
 
     public Player? Player { get; set; } = null;
+    public int Turn { get; set; }
+    public int LevelNumber { get; set; } = 1; // defaulting to first level.
 
     public bool FightIsHappening { get; set; } = false;
     public bool FightHappened { get; set; } = false;

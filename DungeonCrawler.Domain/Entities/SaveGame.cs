@@ -17,16 +17,16 @@ public class SaveGame : IHasId<Guid>
 
     public List<LevelElement> AllElements { get; set; } = new List<LevelElement>();
 
-    public static SaveGame FromGameState(GameState gameState, int slotNumber, int levelNumber, string playerName, int turn)
+    public static SaveGame FromGameState(GameState gameState, int slotNumber,  string playerName)
     {
         return new SaveGame
         {
             SlotNumber = slotNumber,
-            LevelNumber = levelNumber,
+            LevelNumber = gameState.LevelNumber,
             PlayerName = playerName,
             CreatedAt = DateTime.UtcNow,
             LastPlayedAt = DateTime.UtcNow,
-            Turn = turn,
+            Turn = gameState.Turn,
             Debug = gameState.Debug,
             AllElements = new List<LevelElement>(gameState.AllElements)
         };
