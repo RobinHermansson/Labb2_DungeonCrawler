@@ -1,4 +1,5 @@
-﻿using DungeonCrawler.Domain.Interfaces;
+﻿using DungeonCrawler.Domain.Entities;
+using DungeonCrawler.Domain.Interfaces;
 using DungeonCrawler.Infrastructure.Repositories;
 using DungeonCrawler.Infrastructure.Repositories.Mongo;
 using DungeonCrawler.Infrastructure.Repositories.Mongo.Mapping;
@@ -23,6 +24,8 @@ var enemyRepository = new MongoEnemyRepository(mongoDatabase);
 
 ILevelTemplateRepository templateRepo = new MongoLevelTemplateRepository(mongoDatabase);
 ISaveGameRepository saveGameRepository = new SaveGameRepository(mongoDatabase);
+
+IEnumerable<SaveGame> savedGames = await saveGameRepository.GetAllAsync();
 var levelImporter = new LevelImporter(templateRepo);
 string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
 string path = Path.Combine(baseDirectory, "Levels", $"Level1.txt");
@@ -55,7 +58,7 @@ while (true)
                 bool continueCheck = true;
                 while (continueCheck)
                 {
-                    renderer.DisplayLoadSaveScreen(loadSelectedOption);
+                    renderer.DisplayLoadSaveScreen(loadSelectedOption, savedGames);
                     var selectSaveInput = Console.ReadKey();
                     switch (selectSaveInput.Key)
                     {
