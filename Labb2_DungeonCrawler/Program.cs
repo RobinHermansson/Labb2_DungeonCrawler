@@ -26,6 +26,8 @@ ILevelTemplateRepository templateRepo = new MongoLevelTemplateRepository(mongoDa
 ISaveGameRepository saveGameRepository = new SaveGameRepository(mongoDatabase);
 
 IEnumerable<SaveGame> savedGames = await saveGameRepository.GetAllAsync();
+List<SaveGame> savedGamesList = savedGames.ToList() ?? new List<SaveGame>();
+
 var levelImporter = new LevelImporter(templateRepo);
 string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
 string path = Path.Combine(baseDirectory, "Levels", $"Level1.txt");
@@ -55,42 +57,85 @@ while (true)
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.DarkRed;
                 renderer.DrawABox(Console.WindowHeight, Console.WindowWidth, 0, 0, '═', '║', '╔', '╗', '╚', '╝');
-                bool continueCheck = true;
-                while (continueCheck)
+
+                var saveGamesList = savedGames?.ToList() ?? new List<SaveGame>();
+
+                SaveGame selectedSave = await SelectSaveGame(renderer, saveGamesList);
+
+                if (selectedSave != null)
                 {
-                    renderer.DisplayLoadSaveScreen(loadSelectedOption, savedGames);
-                    var selectSaveInput = Console.ReadKey();
-                    switch (selectSaveInput.Key)
-                    {
-                        case ConsoleKey.UpArrow:
-                            if (loadSelectedOption == Renderer.LoadSavesScreenOption.Back)
-                                loadSelectedOption = Renderer.LoadSavesScreenOption.Saves;
-                            break;
-                        case ConsoleKey.DownArrow:
-                            if (loadSelectedOption == Renderer.LoadSavesScreenOption.Saves)
-                                loadSelectedOption = Renderer.LoadSavesScreenOption.Back;
-                            break;
-                        case ConsoleKey.Enter:
-                            if (loadSelectedOption == Renderer.LoadSavesScreenOption.Saves)
-                            {
-                                Console.Clear();
-                                Gameloop gameLoop = new Gameloop(enemyRepository, templateRepo, saveGameRepository);
-                                await gameLoop.InitializeAsync();
-                                await gameLoop.PlayGame();
-                            }
-                            break;
-                        case ConsoleKey.Escape:
-                            Console.Clear();
-                            continueCheck = false;
-                            break;
-                    }
+                    Console.Clear();
+                    Gameloop gameLoop = new Gameloop(enemyRepository, templateRepo, saveGameRepository);
+
+                    await gameLoop.InitializeAsync(selectedSave);
+                    await gameLoop.PlayGame();
+
                 }
             }
             else
+            {
                 Console.Clear();
-            Environment.Exit(0);
+                Environment.Exit(0);
+            }
             break;
     }
+
 }
+static async Task<SaveGame> SelectSaveGame(Renderer renderer, IList<SaveGame> savedGames)
+{
+    if (savedGames == null || savedGames.Count == 0)
+        return null;
+
+    int selectedSaveIndex = 0;
+    Renderer.LoadSavesScreenOption loadSelectedOption = Renderer.LoadSavesScreenOption.Saves;
+
+    while (true)
+    {
+        renderer.DisplayLoadSaveScreen(loadSelectedOption, savedGames, selectedSaveIndex);
+        var input = Console.ReadKey();
+
+        switch (input.Key)
+        {
+            case ConsoleKey.UpArrow:
+                if (loadSelectedOption == Renderer.LoadSavesScreenOption.Back)
+                    loadSelectedOption = Renderer.LoadSavesScreenOption.Saves;
+                break;
+
+            case ConsoleKey.DownArrow:
+                if (loadSelectedOption == Renderer.LoadSavesScreenOption.Saves)
+                    loadSelectedOption = Renderer.LoadSavesScreenOption.Back;
+                break;
+
+            case ConsoleKey.LeftArrow:
+                if (loadSelectedOption == Renderer.LoadSavesScreenOption.Saves && savedGames.Count > 1)
+                {
+                    selectedSaveIndex = (selectedSaveIndex - 1 + savedGames.Count) % savedGames.Count;
+                }
+                break;
+
+            case ConsoleKey.RightArrow:
+                if (loadSelectedOption == Renderer.LoadSavesScreenOption.Saves && savedGames.Count > 1)
+                {
+                    selectedSaveIndex = (selectedSaveIndex + 1) % savedGames.Count;
+                }
+                break;
+
+            case ConsoleKey.Enter:
+                if (loadSelectedOption == Renderer.LoadSavesScreenOption.Saves)
+                {
+                    return savedGames[selectedSaveIndex];                 }
+
+                else
+                {
+                    return null; // User chose "Back"
+                }
+
+            case ConsoleKey.Escape:
+                return null; // User cancelled
+        }
+    }
+}
+
+
 
 

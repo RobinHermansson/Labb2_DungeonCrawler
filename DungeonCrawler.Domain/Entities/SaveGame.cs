@@ -38,6 +38,8 @@ public class SaveGame : IHasId<Guid>
         {
             Debug = false
         };
+
+        gameState.Turn = Turn;
         
         foreach (var element in AllElements)
         {

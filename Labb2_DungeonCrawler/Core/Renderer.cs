@@ -175,15 +175,20 @@ public class Renderer
             }
         }
     }
-    public void DisplayLoadSaveScreen(LoadSavesScreenOption selection, IEnumerable<SaveGame> savedGames)
+    public void DisplayLoadSaveScreen(LoadSavesScreenOption selection, IList<SaveGame> savedGames, int selectedSaveIndex)
     {
+
+        SaveGame? selectedSave = (savedGames?.Count > 0 && selectedSaveIndex < savedGames.Count)
+                ? savedGames[selectedSaveIndex]
+                : null;
+
         string[] saveGameInfo = new string[4];
         if (savedGames is not null)
         {
-            saveGameInfo[0] = "Player: NameOfPlayer";
-            saveGameInfo[1] = "Turn: 150";
-            saveGameInfo[2] = "Last played: 2024-01-15 14:30";
-            saveGameInfo[3] = "Class: Warrior";
+            saveGameInfo[0] = $"Player: {selectedSave.PlayerName}";
+            saveGameInfo[1] = $"Turn: {selectedSave.Turn}";
+            saveGameInfo[2] = $"Last played: {selectedSave.LastPlayedAt}";
+            saveGameInfo[3] = $"Class: Not yet impl.";
         }
         else
         {
@@ -192,6 +197,7 @@ public class Renderer
             saveGameInfo[2] = "- NO SAVE DATA -";
             saveGameInfo[3] = "- NO SAVE DATA -";
         }
+
 
         int height = Console.WindowHeight;
         int width = Console.WindowWidth;
@@ -218,6 +224,15 @@ public class Renderer
         int savedGamesWindowX = (startX + (width - savedGamesWindowWidth) - 1) / 2;
         int savedGamesWindowY = startY + height / 2;
 
+        if (savedGames?.Count > 1)
+        {
+            string navigationInfo = $"Save {selectedSaveIndex + 1} of {savedGames.Count} (Use ←→ to switch)";
+            int navX = savedGamesWindowX + (savedGamesWindowWidth - navigationInfo.Length) / 2;
+            int navY = savedGamesWindowY - 1;
+            Console.SetCursorPosition(navX, navY);
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write(navigationInfo);
+        }
         int backToPreviousMenuX = (startX + (width - goBackText.Length) - 1) / 2;
         int backToPreviousMenuY = savedGamesWindowY + savedGamesWindowHeight + 2;
         Console.SetCursorPosition(backToPreviousMenuX, backToPreviousMenuY);

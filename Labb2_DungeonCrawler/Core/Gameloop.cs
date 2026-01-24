@@ -45,18 +45,25 @@ public class Gameloop
         //InitializeGame();
     }
 
-    public async Task InitializeAsync()
+    public async Task InitializeAsync(SaveGame selectedGame)
     {
-        await InitializeGame();
+        await InitializeGame(selectedGame);
     }
 
-    private async Task InitializeGame()
+    private async Task InitializeGame(SaveGame selectedGame)
     {
         Console.CursorVisible = false;
 
         DiscRepository discRepository = new DiscRepository();
         _gameService = new GameService(discRepository, _enemyRepository, _levelTemplateRepository, _saveGameRepository);
-        GameState = await _gameService.CreateNewGameAsync();
+        if (selectedGame.Turn < 2)
+        {
+            GameState = await _gameService.CreateNewGameAsync();
+        }
+        else
+        {
+            GameState = selectedGame.ToGameState();
+        }
 
         // Set game state references for enemies
         foreach (var enemy in GameState.Enemies)
