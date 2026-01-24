@@ -99,8 +99,10 @@ public class Renderer
     }
     public void DisplayTitleScreen(StartScreenOption selection)
     {
-        int height = 16;
-        int width = 32;
+
+        //Console.Clear();
+        int height = Console.WindowHeight;
+        int width = Console.WindowWidth;
         int startX = 0;
         int startY = 0;
 
@@ -111,8 +113,6 @@ public class Renderer
 
         Console.ForegroundColor = ConsoleColor.DarkRed;
 
-        DrawABox(height, width, startX, startY, '═', '║', '╔', '╗', '╚', '╝');
-        
         int titleYOffset = 3;
         int titleX = startX + (width - titleText.Length) / 2;
         int titleY = startY + height / 2 - titleYOffset;
@@ -160,12 +160,127 @@ public class Renderer
             Console.Write('>');
         }
 
-        Console.SetCursorPosition(0, height);
+        Console.SetCursorPosition(0, 0);
         Console.WriteLine();
     }
-    public void DisplayLoadSaveScreen()
+
+    public void FillTextInsideBox(char charToWrite, int origboxHeight, int origBoxWidth, int origBoxXpos, int origBoxYpos)
+    {
+        for (int row = 1; row < origboxHeight - 1; row++)
+        {
+            for (int col = 1; col < origBoxWidth - 1; col++)
+            {
+                Console.SetCursorPosition(origBoxXpos + col, origBoxYpos + row);
+                Console.Write(charToWrite);
+            }
+        }
+    }
+    public void DisplayLoadSaveScreen(LoadSavesScreenOption selection)
     {
 
+        int height = Console.WindowHeight;
+        int width = Console.WindowWidth;
+        int startX = 0;
+        int startY = 0;
+
+        string titleText = "CREATE/LOAD SAVE";
+        string goBackText = "Back";
+
+        string[] saveGameInfo = {
+                "Player: NameOfPlayer",
+                "Turn: 150",
+                "Last played: 2024-01-15 14:30",
+                "Class: Warrior"
+            };
+
+
+        Console.ForegroundColor = ConsoleColor.DarkRed;
+
+
+        int titleYOffset = 3;
+        int titleX = startX + (width - titleText.Length) / 2;
+        int titleY = startY + height / 2 - titleYOffset;
+        Console.SetCursorPosition(titleX, titleY);
+        Console.ForegroundColor = ConsoleColor.DarkRed;
+        Console.Write(titleText);
+
+        int savedGamesWindowHeight = 8;
+        int savedGamesWindowWidth = 26;
+
+        int savedGamesWindowX = (startX + (width - savedGamesWindowWidth) - 1) / 2;
+        int savedGamesWindowY = startY + height / 2;
+
+        int backToPreviousMenuX = (startX + (width - goBackText.Length) - 1) / 2;
+        int backToPreviousMenuY = savedGamesWindowY + savedGamesWindowHeight + 2;
+        Console.SetCursorPosition(backToPreviousMenuX, backToPreviousMenuY);
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.Write(goBackText);
+
+
+
+        if (selection == LoadSavesScreenOption.Saves)
+        {
+            Console.SetCursorPosition(backToPreviousMenuX - 3, backToPreviousMenuY);
+            Console.Write(' ');
+            Console.SetCursorPosition(backToPreviousMenuX - 2, backToPreviousMenuY);
+            Console.Write(' ');
+
+            DrawABox(savedGamesWindowHeight, savedGamesWindowWidth, savedGamesWindowX, savedGamesWindowY, '-', '|', '+', '+', '+', '+', ConsoleColor.White);
+            FillTextInsideBox(' ', 8, 26, savedGamesWindowX, savedGamesWindowY);
+
+            WriteTextCenteredInBox(saveGameInfo, 8, 26, savedGamesWindowX, savedGamesWindowY);
+
+
+        }
+        else
+        {
+            Console.SetCursorPosition(backToPreviousMenuX - 3, backToPreviousMenuY);
+            Console.Write('=');
+            Console.SetCursorPosition(backToPreviousMenuX - 2, backToPreviousMenuY);
+            Console.Write('>');
+            DrawABox(savedGamesWindowHeight, savedGamesWindowWidth, savedGamesWindowX, savedGamesWindowY, ' ', ' ', ' ', ' ', ' ', ' ', ConsoleColor.Gray);
+            FillTextInsideBox(' ', 8, 26, savedGamesWindowX, savedGamesWindowY);
+
+            WriteTextCenteredInBox(saveGameInfo, 8, 26, savedGamesWindowX, savedGamesWindowY, ConsoleColor.Gray);
+        }
+
+        Console.ResetColor();
+
+
+
+    }
+    public void WriteTextCenteredInBox(string[] textLines, int boxHeight, int boxWidth, int boxXpos, int boxYpos, ConsoleColor consoleColor = ConsoleColor.White)
+    {
+        Console.ForegroundColor = consoleColor;
+        // Calculate the interior dimensions (excluding border)
+        int interiorHeight = boxHeight - 2;
+        int interiorWidth = boxWidth - 2;
+
+        // Calculate starting position to center the text block vertically
+        int textBlockHeight = textLines.Length;
+        int startRow = (interiorHeight - textBlockHeight) / 2;
+
+        // Make sure we don't go outside the box
+        if (startRow < 0) startRow = 0;
+
+        for (int i = 0; i < textLines.Length && i < interiorHeight; i++)
+        {
+            string line = textLines[i];
+
+            // Truncate line if it's too long for the box
+            if (line.Length > interiorWidth)
+            {
+                line = line.Substring(0, interiorWidth);
+            }
+
+            // Calculate horizontal center position
+            int startCol = (interiorWidth - line.Length) / 2;
+            if (startCol < 0) startCol = 0;
+
+            // Set cursor position (adding 1 to account for border)
+            Console.SetCursorPosition(boxXpos + 1 + startCol, boxYpos + 1 + startRow + i);
+            Console.Write(line);
+        }
     }
 
     public void RenderUIStats(Character character, int turn, int height, int width, int startX, int startY)
@@ -199,8 +314,9 @@ public class Renderer
         }
     }
 
-    public void DrawABox(int height, int width, int startX, int startY, char horizontalLine, char verticalLine, char upperLeftCorner, char upperRightCorner, char lowerLeftCorner, char lowerRightCorner)
+    public void DrawABox(int height, int width, int startX, int startY, char horizontalLine, char verticalLine, char upperLeftCorner, char upperRightCorner, char lowerLeftCorner, char lowerRightCorner, ConsoleColor consoleColor = ConsoleColor.White)
     {
+        Console.ForegroundColor = consoleColor;
 
         // TOP
         Console.SetCursorPosition(startX, startY);
@@ -232,5 +348,10 @@ public class Renderer
     {
         Start,
         Quit
+    }
+    public enum LoadSavesScreenOption
+    {
+        Back,
+        Saves
     }
 }
