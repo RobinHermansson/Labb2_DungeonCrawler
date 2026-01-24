@@ -175,8 +175,23 @@ public class Renderer
             }
         }
     }
-    public void DisplayLoadSaveScreen(LoadSavesScreenOption selection)
+    public void DisplayLoadSaveScreen(LoadSavesScreenOption selection, IEnumerable<SaveGame> savedGames)
     {
+        string[] saveGameInfo = new string[4];
+        if (savedGames is not null)
+        {
+            saveGameInfo[0] = "Player: NameOfPlayer";
+            saveGameInfo[1] = "Turn: 150";
+            saveGameInfo[2] = "Last played: 2024-01-15 14:30";
+            saveGameInfo[3] = "Class: Warrior";
+        }
+        else
+        {
+            saveGameInfo[0] = "- NO SAVE DATA -";
+            saveGameInfo[1] = "- NO SAVE DATA -";
+            saveGameInfo[2] = "- NO SAVE DATA -";
+            saveGameInfo[3] = "- NO SAVE DATA -";
+        }
 
         int height = Console.WindowHeight;
         int width = Console.WindowWidth;
@@ -185,13 +200,6 @@ public class Renderer
 
         string titleText = "CREATE/LOAD SAVE";
         string goBackText = "Back";
-
-        string[] saveGameInfo = {
-                "Player: NameOfPlayer",
-                "Turn: 150",
-                "Last played: 2024-01-15 14:30",
-                "Class: Warrior"
-            };
 
 
         Console.ForegroundColor = ConsoleColor.DarkRed;
@@ -204,8 +212,8 @@ public class Renderer
         Console.ForegroundColor = ConsoleColor.DarkRed;
         Console.Write(titleText);
 
-        int savedGamesWindowHeight = 8;
-        int savedGamesWindowWidth = 26;
+        int savedGamesWindowHeight = 10;
+        int savedGamesWindowWidth = 32;
 
         int savedGamesWindowX = (startX + (width - savedGamesWindowWidth) - 1) / 2;
         int savedGamesWindowY = startY + height / 2;
@@ -226,9 +234,9 @@ public class Renderer
             Console.Write(' ');
 
             DrawABox(savedGamesWindowHeight, savedGamesWindowWidth, savedGamesWindowX, savedGamesWindowY, '-', '|', '+', '+', '+', '+', ConsoleColor.White);
-            FillTextInsideBox(' ', 8, 26, savedGamesWindowX, savedGamesWindowY);
+            FillTextInsideBox(' ', savedGamesWindowHeight, savedGamesWindowWidth, savedGamesWindowX, savedGamesWindowY);
 
-            WriteTextCenteredInBox(saveGameInfo, 8, 26, savedGamesWindowX, savedGamesWindowY);
+            WriteTextCenteredInBox(saveGameInfo, savedGamesWindowHeight, savedGamesWindowWidth, savedGamesWindowX, savedGamesWindowY);
 
 
         }
@@ -239,9 +247,9 @@ public class Renderer
             Console.SetCursorPosition(backToPreviousMenuX - 2, backToPreviousMenuY);
             Console.Write('>');
             DrawABox(savedGamesWindowHeight, savedGamesWindowWidth, savedGamesWindowX, savedGamesWindowY, ' ', ' ', ' ', ' ', ' ', ' ', ConsoleColor.Gray);
-            FillTextInsideBox(' ', 8, 26, savedGamesWindowX, savedGamesWindowY);
+            FillTextInsideBox(' ', savedGamesWindowHeight, savedGamesWindowWidth, savedGamesWindowX, savedGamesWindowY);
 
-            WriteTextCenteredInBox(saveGameInfo, 8, 26, savedGamesWindowX, savedGamesWindowY, ConsoleColor.Gray);
+            WriteTextCenteredInBox(saveGameInfo, savedGamesWindowHeight, savedGamesWindowWidth, savedGamesWindowX, savedGamesWindowY, ConsoleColor.Gray);
         }
 
         Console.ResetColor();
