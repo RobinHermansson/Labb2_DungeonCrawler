@@ -5,6 +5,7 @@ using DungeonCrawler.Domain.Interfaces;
 using DungeonCrawler.Domain.ValueObjects;
 using DungeonCrawler.Infrastructure.Disc;
 using Labb2_DungeonCrawler.App.Utilities;
+using static Labb2_DungeonCrawler.App.Core.Renderer;
 
 namespace Labb2_DungeonCrawler.App.Core;
 
@@ -68,13 +69,13 @@ public class Gameloop
         else // Existing save - load it
         {
             GameState = selectedSave.ToGameState();
-            
+
             if (selectedSave.PlayerClassId.HasValue)
             {
                 var existingPlayerClass = await _playerClassRepository.GetByIdAsync(selectedSave.PlayerClassId.Value);
                 GameState.Player.ApplyPlayerClassStats(existingPlayerClass);
             }
-        } 
+        }
         GameState.SlotNumber = slotNumber;
 
         // Set game state references for enemies
@@ -96,9 +97,13 @@ public class Gameloop
         Renderer.WriteMessageLog(MessageLogXPos, MessageLogYPos);
     }
 
-    private void ProcessPlayerMovement()
+    private bool ProcessPlayerMovement()
     {
         ConsoleKeyInfo input = Console.ReadKey(true);
+        if (input.Key == ConsoleKey.Escape)
+        {
+            return true; //  pause was requested
+        }
 
         Position? selectedMove = Player.MovementHandler(input);
         if (selectedMove is Position attempt)
@@ -120,6 +125,7 @@ public class Gameloop
             }
         }
         Player.CheckSurrounding(GameState.AllElements);
+        return false; // did not Pause.
     }
 
     private void ProcessDebuggerMovement(ConsoleKeyInfo input)
@@ -169,6 +175,7 @@ public class Gameloop
 
         while (isGameRunning)
         {
+
             if (GameState.Debug)
             {
                 ConsoleKeyInfo cki;
@@ -203,12 +210,41 @@ public class Gameloop
             }
 
             GameState.Turn++;
-            ProcessPlayerMovement();
-            Renderer.RenderUIStats(character: Player, turn: GameState.Turn, height: UIHeight, width: UIWidth, startX: UIXStartPos, startY: UIYStartPos);
-            Renderer.DrawInstructions(InstructionsXPos, InstructionsYPos);
-            Renderer.WriteMessageLog(MessageLogXPos, MessageLogYPos);
+            bool pauseRequested = ProcessPlayerMovement();
 
 
+            if (pauseRequested)
+            {
+                var pauseResult = await ShowPauseMenuAsync();
+
+                switch (pauseResult)
+                {
+                    case PauseScreenOption.Resume:
+                        Renderer.RenderLevel(GameState.AllElements);
+                        Renderer.RenderUIStats(character: Player, turn: GameState.Turn, height: UIHeight, width: UIWidth, startX: UIXStartPos, startY: UIYStartPos);
+                        Renderer.DrawInstructions(InstructionsXPos, InstructionsYPos);
+                        Renderer.WriteMessageLog(MessageLogXPos, MessageLogYPos);
+                        continue; 
+
+                    case PauseScreenOption.SaveAndQuit:
+                        await _gameService.SaveGameAsync(GameState, GameState.SlotNumber);
+                        isGameRunning = false;
+                        break;
+
+                    case PauseScreenOption.Quit:
+                        isGameRunning = false;
+                        break;
+                }
+
+                if (!isGameRunning)
+                    break;             
+            }
+            else
+            {
+                Renderer.RenderUIStats(character: Player, turn: GameState.Turn, height: UIHeight, width: UIWidth, startX: UIXStartPos, startY: UIYStartPos);
+                Renderer.DrawInstructions(InstructionsXPos, InstructionsYPos);
+                Renderer.WriteMessageLog(MessageLogXPos, MessageLogYPos);
+            }
 
 
             ProcessEnemyMovement();
@@ -237,4 +273,40 @@ public class Gameloop
 
         }
     }
+    private async Task<PauseScreenOption> ShowPauseMenuAsync()
+    {
+        PauseScreenOption selectedOption = PauseScreenOption.Resume;
+        Console.Clear();
+        while (true)
+        {
+            Renderer.DrawPauseScreen(selectedOption);
+            var input = Console.ReadKey(true);
+
+            switch (input.Key)
+            {
+                case ConsoleKey.UpArrow:
+                    if (selectedOption == PauseScreenOption.Quit)
+                        selectedOption = PauseScreenOption.SaveAndQuit;
+                    else if (selectedOption == PauseScreenOption.SaveAndQuit)
+                        selectedOption = PauseScreenOption.Resume;
+                    break;
+
+                case ConsoleKey.DownArrow:
+                    if (selectedOption == PauseScreenOption.Resume)
+                        selectedOption = PauseScreenOption.SaveAndQuit;
+                    else if (selectedOption == PauseScreenOption.SaveAndQuit)
+                        selectedOption = PauseScreenOption.Quit;
+                    break;
+
+                case ConsoleKey.Enter:
+                    Console.Clear();
+                    return selectedOption;
+
+                case ConsoleKey.Escape:
+                    // Escape also resumes
+                    return PauseScreenOption.Resume;
+            }
+        }
+    }
+
 }
