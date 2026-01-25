@@ -26,7 +26,7 @@ public class GameService
 
         var gameState = levelTemplate.CreateInitialGameState();
         
-        gameState.Player.Class = playerClass;
+        gameState.Player.ApplyPlayerClassStats(playerClass);
         gameState.Player.Name = playerName;
         gameState.PlayerName = playerName;
                        

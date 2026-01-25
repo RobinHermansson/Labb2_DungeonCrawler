@@ -40,6 +40,19 @@ public class Player : Character
 
         InitializeDice();
     }
+    public void ApplyPlayerClassStats(PlayerClass playerClass)
+    {
+        Class = playerClass;
+        VisionRange = playerClass.BaseVisionRange;
+        HitPoints = playerClass.BaseHitPoints;
+        AttackDiceCount = playerClass.BaseAttackDiceCount;
+        DefenceDiceCount = playerClass.BaseDefenceDiceCount;
+        AttackModifier = playerClass.BaseAttackModifier;
+        DefenceModifier = playerClass.BaseDefenceModifier;
+        
+        // Reinitialize dice with new counts
+        InitializeDice();
+    }
 
     private void InitializeDice()
     {

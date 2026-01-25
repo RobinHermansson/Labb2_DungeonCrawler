@@ -72,7 +72,7 @@ public class Gameloop
             if (selectedSave.PlayerClassId.HasValue)
             {
                 var existingPlayerClass = await _playerClassRepository.GetByIdAsync(selectedSave.PlayerClassId.Value);
-                GameState.Player.Class = existingPlayerClass;
+                GameState.Player.ApplyPlayerClassStats(existingPlayerClass);
             }
         } 
         GameState.SlotNumber = slotNumber;
@@ -84,7 +84,6 @@ public class Gameloop
         }
         Player = GameState.Player;
         Player.Name = GameState.PlayerName;
-        Player.Class = playerClass;
         if (GameState.MessageLog is null)
         {
             GameState.MessageLog = new MessageLog();
