@@ -83,8 +83,8 @@ public class Renderer
 
     public void DisplayGameOver()
     {
-        int height = 10;
-        int width = 20;
+        int height = Console.WindowHeight;
+        int width = Console.WindowWidth;
         int startX = 0;
         int startY = 0;
         Console.Clear();
@@ -99,8 +99,13 @@ public class Renderer
         Console.BackgroundColor = ConsoleColor.DarkRed;
         Console.Write(gameOverText);
         Console.ResetColor();
-        Console.SetCursorPosition(0, 10);
         Console.WriteLine();
+        string pressAnyKeyText = "Press any key to accept your fate. (Save will be deleted.)";
+        int pressAnyKeyTextXPos = startX + (width - pressAnyKeyText.Length) / 2;
+        Console.SetCursorPosition(pressAnyKeyTextXPos, textY + 1 );
+        Console.WriteLine(pressAnyKeyText);
+        Console.ReadKey();
+        Console.Clear();
     }
     public void DisplayTitleScreen(StartScreenOption selection)
     {

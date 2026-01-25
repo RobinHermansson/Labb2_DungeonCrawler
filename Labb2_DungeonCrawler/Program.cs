@@ -86,6 +86,11 @@ while (true)
                     await gameLoop.InitializeAsync(selectedSave, slotNumber, nameInput, availableClassesList[playerClassSelected]);
                     await gameLoop.PlayGame();
 
+                    if (!gameLoop.GameState.Player.IsAlive())
+                    {
+                        var saveToDelete = await saveGameRepository.GetBySlotNumberAsync(gameLoop.GameState.SlotNumber);
+                        await saveGameRepository.RemoveAsync(saveToDelete);
+                    }
                     // If the user saves and returns to this title screen, rebuild save slots after game ends to show updated information
                     saveSlots = await BuildSaveSlots(saveGameRepository);
                 }

@@ -273,8 +273,8 @@ public class Gameloop
 
             if (!Player.IsAlive())
             {
-                isGameRunning = false;
                 Renderer.DisplayGameOver();
+                isGameRunning = false;
             }
             if (GameState.Turn % 20 == 0)
             {
