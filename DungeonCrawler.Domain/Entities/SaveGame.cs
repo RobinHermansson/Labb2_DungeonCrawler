@@ -5,6 +5,7 @@ namespace DungeonCrawler.Domain.Entities;
 public class SaveGame : IHasId<Guid>
 {
     public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid? PlayerClassId { get; set; }
     public int SlotNumber { get; set; }
     public int LevelNumber { get; set; }
     public int Turn { get; set; }
@@ -25,6 +26,7 @@ public class SaveGame : IHasId<Guid>
             SlotNumber = slotNumber,
             LevelNumber = gameState.LevelNumber,
             PlayerName = gameState.PlayerName,
+            PlayerClassId = gameState.Player?.Class?.Id,
             CreatedAt = DateTime.UtcNow,
             LastPlayedAt = DateTime.UtcNow,
             Turn = gameState.Turn,
