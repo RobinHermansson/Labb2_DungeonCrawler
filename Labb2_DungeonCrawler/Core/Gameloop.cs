@@ -1,10 +1,10 @@
 ﻿
 using DungeonCrawler.App.Services;
 using DungeonCrawler.Domain.Entities;
+using DungeonCrawler.Domain.Interfaces;
 using DungeonCrawler.Domain.ValueObjects;
 using DungeonCrawler.Infrastructure.Disc;
 using Labb2_DungeonCrawler.App.Utilities;
-using DungeonCrawler.Domain.Interfaces;
 
 namespace Labb2_DungeonCrawler.App.Core;
 
@@ -40,30 +40,34 @@ public class Gameloop
         //Player = gameState.Player;
         Renderer = new Renderer();
 
-        
+
 
         //InitializeGame();
     }
 
-    public async Task InitializeAsync(SaveGame selectedGame)
+    public async Task InitializeAsync(SaveGame selectedSave, int slotNumber)
     {
-        await InitializeGame(selectedGame);
+        await InitializeGame(selectedSave, slotNumber);
     }
 
-    private async Task InitializeGame(SaveGame selectedGame)
+    private async Task InitializeGame(SaveGame selectedSave, int slotNumber)
     {
         Console.CursorVisible = false;
 
         DiscRepository discRepository = new DiscRepository();
         _gameService = new GameService(discRepository, _enemyRepository, _levelTemplateRepository, _saveGameRepository);
-        if (selectedGame.Turn < 2)
+
+        if (selectedSave == null) // Empty slot - create new game
         {
             GameState = await _gameService.CreateNewGameAsync();
+            await _gameService.SaveGameAsync(GameState, slotNumber);
         }
-        else
+        else // Existing save - load it
         {
-            GameState = selectedGame.ToGameState();
+            GameState = selectedSave.ToGameState();
         }
+
+        GameState.SlotNumber = slotNumber;
 
         // Set game state references for enemies
         foreach (var enemy in GameState.Enemies)
@@ -124,7 +128,7 @@ public class Gameloop
         }
     }
 
-    private void ProcessEnemyDeath() 
+    private void ProcessEnemyDeath()
     {
         List<Enemy> enemyDeaths = new List<Enemy>();
         foreach (var enemy in GameState.Enemies)
@@ -134,7 +138,7 @@ public class Gameloop
                 enemyDeaths.Add(enemy);
 
             }
-        }    
+        }
         foreach (var deadEnemy in enemyDeaths)
         {
             GameState.AllElements.Remove(deadEnemy);
@@ -159,21 +163,22 @@ public class Gameloop
                     Console.SetCursorPosition(DebugTextXPos, DebugTextYPos + 2);
                     Console.WriteLine("DEBUG ON!");
                     Dictionary<Position, LevelElement> freshEntityDict = new();
-                    foreach (var entity in GameState.AllElements) 
+                    foreach (var entity in GameState.AllElements)
                     {
                         freshEntityDict[entity.Position] = entity;
                     }
-                        
+
                     Debugger = new DebugAssistant(new Position(0, 2), freshEntityDict);
                     while (true)
                     {
                         cki = Console.ReadKey(true);
-                        if (cki.Key == ConsoleKey.Escape){
+                        if (cki.Key == ConsoleKey.Escape)
+                        {
                             break;
                         }
                         ProcessDebuggerMovement(cki);
                         Console.SetCursorPosition(DebugTextXPos, DebugTextYPos + 3);
-                        if (Debugger.IsObjectOnPosition()) 
+                        if (Debugger.IsObjectOnPosition())
                         {
                             var objectOnPos = Debugger.GetObjectDataWhereStanding();
                             Renderer.DrawDebugValues(GameState.Debug, DebugTextXPos, DebugTextYPos, objectOnPos);
@@ -192,7 +197,7 @@ public class Gameloop
             ProcessEnemyMovement();
             Renderer.RenderUIStats(character: Player, turn: GameState.Turn, height: UIHeight, width: UIWidth, startX: UIXStartPos, startY: UIYStartPos);
             Renderer.DrawInstructions(InstructionsXPos, InstructionsYPos);
-            
+
             if (GameState.FightHappened)
             {
                 Renderer.RenderLevel(GameState.AllElements);
@@ -207,8 +212,8 @@ public class Gameloop
             }
             if (GameState.Turn % 20 == 0)
             {
-                await _gameService.SaveGameAsync(GameState, 1);
-                
+                await _gameService.SaveGameAsync(GameState, GameState.SlotNumber);
+
             }
 
         }

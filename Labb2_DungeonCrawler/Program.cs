@@ -25,13 +25,11 @@ var enemyRepository = new MongoEnemyRepository(mongoDatabase);
 ILevelTemplateRepository templateRepo = new MongoLevelTemplateRepository(mongoDatabase);
 ISaveGameRepository saveGameRepository = new SaveGameRepository(mongoDatabase);
 
-IEnumerable<SaveGame> savedGames = await saveGameRepository.GetAllAsync();
-List<SaveGame> savedGamesList = savedGames.ToList() ?? new List<SaveGame>();
+SaveSlot[] saveSlots = await BuildSaveSlots(saveGameRepository);
 
 var levelImporter = new LevelImporter(templateRepo);
 string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
 string path = Path.Combine(baseDirectory, "Levels", $"Level1.txt");
-//await levelImporter.ImportFromFileAsync(path, 1);
 
 Console.ForegroundColor = ConsoleColor.DarkRed;
 renderer.DrawABox(Console.WindowHeight, Console.WindowWidth, 0, 0, '═', '║', '╔', '╗', '╚', '╝');
@@ -58,19 +56,17 @@ while (true)
                 Console.ForegroundColor = ConsoleColor.DarkRed;
                 renderer.DrawABox(Console.WindowHeight, Console.WindowWidth, 0, 0, '═', '║', '╔', '╗', '╚', '╝');
 
-                var saveGamesList = savedGames?.ToList() ?? new List<SaveGame>();
+                var (selectedSave, slotNumber) = await SelectSaveGame(renderer, saveSlots);
 
-                SaveGame selectedSave = await SelectSaveGame(renderer, saveGamesList);
-
-                if (selectedSave != null)
+                if (slotNumber > 0) // User selected a valid slot
                 {
                     Console.Clear();
                     Gameloop gameLoop = new Gameloop(enemyRepository, templateRepo, saveGameRepository);
 
-                    await gameLoop.InitializeAsync(selectedSave);
+                    await gameLoop.InitializeAsync(selectedSave, slotNumber);
                     await gameLoop.PlayGame();
-
                 }
+                // If slotNumber is 0, user went back, so continue the outer loop
             }
             else
             {
@@ -81,17 +77,14 @@ while (true)
     }
 
 }
-static async Task<SaveGame> SelectSaveGame(Renderer renderer, IList<SaveGame> savedGames)
+static async Task<(SaveGame selectedSave, int slotNumber)> SelectSaveGame(Renderer renderer, SaveSlot[] saveSlots)
 {
-    if (savedGames == null || savedGames.Count == 0)
-        return null;
-
-    int selectedSaveIndex = 0;
+    int selectedSlotIndex = 0;
     Renderer.LoadSavesScreenOption loadSelectedOption = Renderer.LoadSavesScreenOption.Saves;
 
     while (true)
     {
-        renderer.DisplayLoadSaveScreen(loadSelectedOption, savedGames, selectedSaveIndex);
+        renderer.DisplayLoadSaveScreen(loadSelectedOption, saveSlots, selectedSlotIndex);
         var input = Console.ReadKey();
 
         switch (input.Key)
@@ -107,33 +100,55 @@ static async Task<SaveGame> SelectSaveGame(Renderer renderer, IList<SaveGame> sa
                 break;
 
             case ConsoleKey.LeftArrow:
-                if (loadSelectedOption == Renderer.LoadSavesScreenOption.Saves && savedGames.Count > 1)
+                if (loadSelectedOption == Renderer.LoadSavesScreenOption.Saves)
                 {
-                    selectedSaveIndex = (selectedSaveIndex - 1 + savedGames.Count) % savedGames.Count;
+                    selectedSlotIndex = (selectedSlotIndex - 1 + saveSlots.Length) % saveSlots.Length;
                 }
                 break;
 
             case ConsoleKey.RightArrow:
-                if (loadSelectedOption == Renderer.LoadSavesScreenOption.Saves && savedGames.Count > 1)
+                if (loadSelectedOption == Renderer.LoadSavesScreenOption.Saves)
                 {
-                    selectedSaveIndex = (selectedSaveIndex + 1) % savedGames.Count;
+                    selectedSlotIndex = (selectedSlotIndex + 1) % saveSlots.Length;
                 }
                 break;
 
             case ConsoleKey.Enter:
                 if (loadSelectedOption == Renderer.LoadSavesScreenOption.Saves)
                 {
-                    return savedGames[selectedSaveIndex];                 }
-
+                    var selectedSlot = saveSlots[selectedSlotIndex];
+                    return (selectedSlot.SaveGame, selectedSlot.SlotNumber); // Return both save and slot number
+                }
                 else
                 {
-                    return null; // User chose "Back"
+                    return (null, 0); // User chose "Back"
                 }
 
             case ConsoleKey.Escape:
-                return null; // User cancelled
+                return (null, 0); // User cancelled
         }
     }
+}
+
+static async Task<SaveSlot[]> BuildSaveSlots(ISaveGameRepository saveGameRepository)
+{
+    var saveSlots = new SaveSlot[3];
+
+    for (int i = 0; i < 3; i++)
+    {
+        saveSlots[i] = new SaveSlot { SlotNumber = i + 1, SaveGame = null };
+    }
+
+    var existingSaves = await saveGameRepository.GetAllAsync();
+    foreach (var save in existingSaves)
+    {
+        if (save.SlotNumber >= 1 && save.SlotNumber <= 3)
+        {
+            saveSlots[save.SlotNumber - 1].SaveGame = save;
+        }
+    }
+
+    return saveSlots;
 }
 
 

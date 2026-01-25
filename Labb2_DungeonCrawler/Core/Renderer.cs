@@ -175,41 +175,21 @@ public class Renderer
             }
         }
     }
-    public void DisplayLoadSaveScreen(LoadSavesScreenOption selection, IList<SaveGame> savedGames, int selectedSaveIndex)
+
+    public void DisplayLoadSaveScreen(LoadSavesScreenOption selection, SaveSlot[] saveSlots, int selectedSlotIndex)
     {
-
-        SaveGame? selectedSave = (savedGames?.Count > 0 && selectedSaveIndex < savedGames.Count)
-                ? savedGames[selectedSaveIndex]
-                : null;
-
-        string[] saveGameInfo = new string[4];
-        if (savedGames is not null)
-        {
-            saveGameInfo[0] = $"Player: {selectedSave.PlayerName}";
-            saveGameInfo[1] = $"Turn: {selectedSave.Turn}";
-            saveGameInfo[2] = $"Last played: {selectedSave.LastPlayedAt}";
-            saveGameInfo[3] = $"Class: Not yet impl.";
-        }
-        else
-        {
-            saveGameInfo[0] = "- NO SAVE DATA -";
-            saveGameInfo[1] = "- NO SAVE DATA -";
-            saveGameInfo[2] = "- NO SAVE DATA -";
-            saveGameInfo[3] = "- NO SAVE DATA -";
-        }
-
+        SaveSlot selectedSlot = saveSlots[selectedSlotIndex];
+        string[] saveGameInfo = selectedSlot.GetDisplayInfo();
 
         int height = Console.WindowHeight;
         int width = Console.WindowWidth;
         int startX = 0;
         int startY = 0;
 
-        string titleText = "CREATE/LOAD SAVE";
+        string titleText = "SELECT SAVE SLOT";
         string goBackText = "Back";
 
-
         Console.ForegroundColor = ConsoleColor.DarkRed;
-
 
         int titleYOffset = 3;
         int titleX = startX + (width - titleText.Length) / 2;
@@ -224,22 +204,20 @@ public class Renderer
         int savedGamesWindowX = (startX + (width - savedGamesWindowWidth) - 1) / 2;
         int savedGamesWindowY = startY + height / 2;
 
-        if (savedGames?.Count > 1)
-        {
-            string navigationInfo = $"Save {selectedSaveIndex + 1} of {savedGames.Count} (Use ←→ to switch)";
-            int navX = savedGamesWindowX + (savedGamesWindowWidth - navigationInfo.Length) / 2;
-            int navY = savedGamesWindowY - 1;
-            Console.SetCursorPosition(navX, navY);
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write(navigationInfo);
-        }
         int backToPreviousMenuX = (startX + (width - goBackText.Length) - 1) / 2;
         int backToPreviousMenuY = savedGamesWindowY + savedGamesWindowHeight + 2;
         Console.SetCursorPosition(backToPreviousMenuX, backToPreviousMenuY);
         Console.ForegroundColor = ConsoleColor.White;
         Console.Write(goBackText);
 
-
+        // Show slot navigation info
+        string navigationInfo = $"{selectedSlot.GetDisplayName()} (Use ←→ to switch)";
+        int navX = savedGamesWindowX + (savedGamesWindowWidth - navigationInfo.Length) / 2;
+        int navY = savedGamesWindowY - 1;
+        if (navX < 0) navX = savedGamesWindowX;
+        Console.SetCursorPosition(navX, navY);
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.Write(navigationInfo);
 
         if (selection == LoadSavesScreenOption.Saves)
         {
@@ -248,12 +226,12 @@ public class Renderer
             Console.SetCursorPosition(backToPreviousMenuX - 2, backToPreviousMenuY);
             Console.Write(' ');
 
-            DrawABox(savedGamesWindowHeight, savedGamesWindowWidth, savedGamesWindowX, savedGamesWindowY, '-', '|', '+', '+', '+', '+', ConsoleColor.White);
+            ConsoleColor boxColor = selectedSlot.IsEmpty ? ConsoleColor.Gray : ConsoleColor.White;
+            DrawABox(savedGamesWindowHeight, savedGamesWindowWidth, savedGamesWindowX, savedGamesWindowY, '-', '|', '+', '+', '+', '+', boxColor);
             FillTextInsideBox(' ', savedGamesWindowHeight, savedGamesWindowWidth, savedGamesWindowX, savedGamesWindowY);
 
-            WriteTextCenteredInBox(saveGameInfo, savedGamesWindowHeight, savedGamesWindowWidth, savedGamesWindowX, savedGamesWindowY);
-
-
+            ConsoleColor textColor = selectedSlot.IsEmpty ? ConsoleColor.Gray : ConsoleColor.White;
+            WriteTextCenteredInBox(saveGameInfo, savedGamesWindowHeight, savedGamesWindowWidth, savedGamesWindowX, savedGamesWindowY, textColor);
         }
         else
         {
@@ -261,16 +239,13 @@ public class Renderer
             Console.Write('=');
             Console.SetCursorPosition(backToPreviousMenuX - 2, backToPreviousMenuY);
             Console.Write('>');
-            DrawABox(savedGamesWindowHeight, savedGamesWindowWidth, savedGamesWindowX, savedGamesWindowY, ' ', ' ', ' ', ' ', ' ', ' ', ConsoleColor.Gray);
-            FillTextInsideBox(' ', savedGamesWindowHeight, savedGamesWindowWidth, savedGamesWindowX, savedGamesWindowY);
 
-            WriteTextCenteredInBox(saveGameInfo, savedGamesWindowHeight, savedGamesWindowWidth, savedGamesWindowX, savedGamesWindowY, ConsoleColor.Gray);
+            DrawABox(savedGamesWindowHeight, savedGamesWindowWidth, savedGamesWindowX, savedGamesWindowY, ' ', ' ', ' ', ' ', ' ', ' ', ConsoleColor.DarkGray);
+            FillTextInsideBox(' ', savedGamesWindowHeight, savedGamesWindowWidth, savedGamesWindowX, savedGamesWindowY);
+            WriteTextCenteredInBox(saveGameInfo, savedGamesWindowHeight, savedGamesWindowWidth, savedGamesWindowX, savedGamesWindowY, ConsoleColor.DarkGray);
         }
 
         Console.ResetColor();
-
-
-
     }
     public void WriteTextCenteredInBox(string[] textLines, int boxHeight, int boxWidth, int boxXpos, int boxYpos, ConsoleColor consoleColor = ConsoleColor.White)
     {

@@ -14,6 +14,7 @@ public class GameState
     public Player? Player { get; set; } = null;
     public int Turn { get; set; }
     public int LevelNumber { get; set; } = 1; // defaulting to first level.
+    public int SlotNumber { get; set; }
 
     public bool FightIsHappening { get; set; } = false;
     public bool FightHappened { get; set; } = false;
