@@ -1,10 +1,12 @@
-﻿using DungeonCrawler.Domain.ValueObjects;
-using DungeonCrawler.Domain.Utilities;
+﻿using DungeonCrawler.Domain.Utilities;
+using DungeonCrawler.Domain.ValueObjects;
 
 namespace DungeonCrawler.Domain.Entities;
 
 public class Player : Character
 {
+    public PlayerClass? Class { get; set; } // Reference to the class
+
     public Player(string name, Position pos, char representation, ConsoleColor color) : base(pos, representation, color)
     {
         Name = name;
@@ -15,6 +17,32 @@ public class Player : Character
         DefenceDiceCount = 2;
         AttackModifier = 3;
         DefenceModifier = 3;
+        AttackDice = new List<Dice>();
+        DefenceDice = new List<Dice>();
+
+        InitializeDice();    
+    }
+
+    // Constructor that uses the new PlayerClass
+    public Player(string name, Position pos, char representation, PlayerClass playerClass)
+        : base(pos, representation, playerClass.ClassColor)
+    {
+        Name = name;
+        IsPlayer = true;
+        Class = playerClass;
+
+        VisionRange = playerClass.BaseVisionRange;
+        HitPoints = playerClass.BaseHitPoints;
+        AttackDiceCount = playerClass.BaseAttackDiceCount;
+        DefenceDiceCount = playerClass.BaseDefenceDiceCount;
+        AttackModifier = playerClass.BaseAttackModifier;
+        DefenceModifier = playerClass.BaseDefenceModifier;
+
+        InitializeDice();
+    }
+
+    private void InitializeDice()
+    {
         AttackDice = new List<Dice>();
         DefenceDice = new List<Dice>();
 
