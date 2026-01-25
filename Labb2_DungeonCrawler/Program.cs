@@ -67,6 +67,7 @@ while (true)
                     await gameLoop.PlayGame();
                 }
                 // If slotNumber is 0, user went back, so continue the outer loop
+                renderer.FillTextInsideBox(' ', Console.WindowHeight, Console.WindowWidth, 0, 0);
             }
             else
             {
