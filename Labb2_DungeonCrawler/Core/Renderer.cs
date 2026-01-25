@@ -348,9 +348,16 @@ public class Renderer
         Console.Write(lowerRightCorner);
 
         Console.ResetColor();
+    }
 
-
-
+    public void SelectNameScreen()
+    {
+        FillTextInsideBox(' ', Console.WindowHeight, Console.WindowWidth, 0, 0);
+        string messagePromptText = "What will you be known as: ";
+        int messagePromptXpos = ( + (Console.WindowWidth - messagePromptText.Length) - 1) / 2;
+        int messagePrompYPos =  + Console.WindowHeight / 2;
+        Console.SetCursorPosition(messagePromptXpos, messagePrompYPos);
+        Console.Write(messagePromptText);
     }
     public enum StartScreenOption
     {

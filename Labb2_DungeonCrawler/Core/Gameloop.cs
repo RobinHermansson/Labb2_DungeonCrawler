@@ -45,12 +45,12 @@ public class Gameloop
         //InitializeGame();
     }
 
-    public async Task InitializeAsync(SaveGame selectedSave, int slotNumber)
+    public async Task InitializeAsync(SaveGame selectedSave, int slotNumber, string? wantedPlayerName)
     {
-        await InitializeGame(selectedSave, slotNumber);
+        await InitializeGame(selectedSave, slotNumber, wantedPlayerName);
     }
 
-    private async Task InitializeGame(SaveGame selectedSave, int slotNumber)
+    private async Task InitializeGame(SaveGame selectedSave, int slotNumber, string? wantedPlayerName)
     {
         Console.CursorVisible = false;
 
@@ -60,6 +60,7 @@ public class Gameloop
         if (selectedSave == null) // Empty slot - create new game
         {
             GameState = await _gameService.CreateNewGameAsync();
+            GameState.PlayerName = wantedPlayerName;
             await _gameService.SaveGameAsync(GameState, slotNumber);
         }
         else // Existing save - load it

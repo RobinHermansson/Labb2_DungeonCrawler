@@ -60,10 +60,16 @@ while (true)
 
                 if (slotNumber > 0) // User selected a valid slot
                 {
+                    string? nameInput = "";
+                    if (selectedSave == null)
+                    {
+                        renderer.SelectNameScreen();
+                        nameInput = Console.ReadLine();
+                    }
                     Console.Clear();
                     Gameloop gameLoop = new Gameloop(enemyRepository, templateRepo, saveGameRepository);
 
-                    await gameLoop.InitializeAsync(selectedSave, slotNumber);
+                    await gameLoop.InitializeAsync(selectedSave, slotNumber, nameInput);
                     await gameLoop.PlayGame();
                 }
                 // If slotNumber is 0, user went back, so continue the outer loop

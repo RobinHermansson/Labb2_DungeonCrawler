@@ -17,13 +17,13 @@ public class SaveGame : IHasId<Guid>
 
     public List<LevelElement> AllElements { get; set; } = new List<LevelElement>();
 
-    public static SaveGame FromGameState(GameState gameState, int slotNumber,  string playerName)
+    public static SaveGame FromGameState(GameState gameState, int slotNumber)
     {
         return new SaveGame
         {
             SlotNumber = slotNumber,
             LevelNumber = gameState.LevelNumber,
-            PlayerName = playerName,
+            PlayerName = gameState.PlayerName,
             CreatedAt = DateTime.UtcNow,
             LastPlayedAt = DateTime.UtcNow,
             Turn = gameState.Turn,
@@ -40,6 +40,7 @@ public class SaveGame : IHasId<Guid>
         };
 
         gameState.Turn = Turn;
+        gameState.PlayerName = PlayerName;
         
         foreach (var element in AllElements)
         {

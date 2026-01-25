@@ -43,7 +43,7 @@ public class GameService
             return;
         }
         
-        var updatedSave = SaveGame.FromGameState(gameState, slotNumber, existingSave.PlayerName);
+        var updatedSave = SaveGame.FromGameState(gameState, slotNumber);
         updatedSave.Id = existingSave.Id;
         updatedSave.CreatedAt = existingSave.CreatedAt;        
         updatedSave.LastPlayedAt = DateTime.UtcNow;        

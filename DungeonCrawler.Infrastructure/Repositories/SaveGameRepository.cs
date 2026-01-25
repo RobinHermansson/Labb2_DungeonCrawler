@@ -13,7 +13,7 @@ public class SaveGameRepository : MongoRepository<SaveGame, Guid>, ISaveGameRepo
 
     public async Task CreateSaveGameAsync(GameState gameState, int slotNumber)
     {
-        var saveGame = SaveGame.FromGameState(gameState, slotNumber, gameState.Player?.Name ?? "Player");
+        var saveGame = SaveGame.FromGameState(gameState, slotNumber);
         await _collection.InsertOneAsync(saveGame);
     }
 
