@@ -6,7 +6,7 @@ namespace DungeonCrawler.Domain.Entities;
 public class Rat : Enemy
 {
     private static Random _random = new Random();
-    private int _maxMoveAttempts = 10;
+    public int MaxMoveAttempts = 10;
     public Rat(Position pos, char representation, ConsoleColor color) : base(pos, representation, color)
     {
         Name = "Ratty";
@@ -46,7 +46,7 @@ public class Rat : Enemy
     {
         Random ratRandom = new Random();
 
-        for (int attempts = 0; attempts < _maxMoveAttempts; attempts++)
+        for (int attempts = 0; attempts < MaxMoveAttempts; attempts++)
         {
             int stepInCardinalDirection = _random.Next(0, 4);
             Position attempt = DirectionTransformer.GetPositionDelta((Direction)stepInCardinalDirection) + Position;
