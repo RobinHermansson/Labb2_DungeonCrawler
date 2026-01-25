@@ -281,6 +281,8 @@ public class Renderer
             Console.SetCursorPosition(boxXpos + 1 + startCol, boxYpos + 1 + startRow + i);
             Console.Write(line);
         }
+        Console.ResetColor();
+
     }
 
     public void RenderUIStats(Character character, int turn, int height, int width, int startX, int startY)
@@ -295,6 +297,8 @@ public class Renderer
         Console.Write($"HP: {character.HitPoints}/100");
         Console.SetCursorPosition(startX + 1, startY + 3);
         Console.Write($"Turn: {turn}");
+        Console.ResetColor();
+
 
     }
 
@@ -303,6 +307,8 @@ public class Renderer
         Console.ForegroundColor = ConsoleColor.DarkRed;
         Console.SetCursorPosition(xCoord, yCoord);
         Console.WriteLine("Use ASDW or the Arrow keys to move. Any other input will skip your turn.");
+        Console.ResetColor();
+
     }
 
     public void DrawDebugValues(bool debug, int xCoord, int yCoord, object Object)
@@ -340,6 +346,8 @@ public class Renderer
         for (int i = 1; i < width - 1; i++)
             Console.Write(horizontalLine);
         Console.Write(lowerRightCorner);
+
+        Console.ResetColor();
 
 
 
