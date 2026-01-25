@@ -53,6 +53,18 @@ public class Player : Character
         // Reinitialize dice with new counts
         InitializeDice();
     }
+    public void ApplyPlayerClassStatsPreserveHP(PlayerClass playerClass)
+    {
+        Class = playerClass;
+        VisionRange = playerClass.BaseVisionRange;
+        // Don't overwrite HitPoints - it's already loaded from save
+        AttackDiceCount = playerClass.BaseAttackDiceCount;
+        DefenceDiceCount = playerClass.BaseDefenceDiceCount;
+        AttackModifier = playerClass.BaseAttackModifier;
+        DefenceModifier = playerClass.BaseDefenceModifier;
+        
+        InitializeDice();
+    }
 
     private void InitializeDice()
     {
