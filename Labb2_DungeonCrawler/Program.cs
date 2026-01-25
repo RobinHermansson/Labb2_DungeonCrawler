@@ -85,6 +85,9 @@ while (true)
 
                     await gameLoop.InitializeAsync(selectedSave, slotNumber, nameInput, availableClassesList[playerClassSelected]);
                     await gameLoop.PlayGame();
+
+                    // If the user saves and returns to this title screen, rebuild save slots after game ends to show updated information
+                    saveSlots = await BuildSaveSlots(saveGameRepository);
                 }
                 // If slotNumber is 0, user went back, so continue the outer loop
                 renderer.FillTextInsideBox(' ', Console.WindowHeight, Console.WindowWidth, 0, 0);
