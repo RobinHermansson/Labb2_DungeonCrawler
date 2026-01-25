@@ -97,7 +97,7 @@ public class Gameloop
         Renderer.WriteMessageLog(MessageLogXPos, MessageLogYPos);
     }
 
-    private bool ProcessPlayerMovement()
+    private bool ProcessPlayerAction()
     {
         ConsoleKeyInfo input = Console.ReadKey(true);
         if (input.Key == ConsoleKey.Escape)
@@ -210,7 +210,7 @@ public class Gameloop
             }
 
             GameState.Turn++;
-            bool pauseRequested = ProcessPlayerMovement();
+            bool pauseRequested = ProcessPlayerAction();
 
 
             if (pauseRequested)
