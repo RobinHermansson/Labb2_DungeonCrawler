@@ -3,6 +3,7 @@ public class SaveSlot
 {
     public int SlotNumber { get; set; }
     public SaveGame? SaveGame { get; set; } // Null if empty
+    public string? PlayerClassName {get; set;}
     public bool IsEmpty => SaveGame == null;
     
     public string GetDisplayName()
@@ -32,7 +33,7 @@ public class SaveSlot
                 $"Player: {SaveGame?.PlayerName}",
                 $"Turn: {SaveGame?.Turn}",
                 $"Last save: {SaveGame?.LastPlayedAt:yyyy-MM-dd HH:mm}",
-                $"Class: not yet impl."
+                $"Class: {PlayerClassName ?? "Unknown"}"
             };
         }
     }

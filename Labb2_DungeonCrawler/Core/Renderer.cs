@@ -319,7 +319,7 @@ public class Renderer
     {
         Console.ForegroundColor = ConsoleColor.DarkRed;
         Console.SetCursorPosition(xCoord, yCoord);
-        Console.WriteLine("ASDW or Arrow keys to move. Esc to Pause, Save and Quit. 'L' for History log. Any other input will skip your turn.");
+        Console.WriteLine("ASDW or Arrow keys to move. Esc to Pause, Save and Quit. 'L' for History log.\nAny other input will skip your turn.");
         Console.ResetColor();
 
     }

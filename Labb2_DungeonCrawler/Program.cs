@@ -33,7 +33,7 @@ var enemyRepository = new MongoEnemyRepository(mongoDatabase);
 ILevelTemplateRepository templateRepo = new MongoLevelTemplateRepository(mongoDatabase);
 ISaveGameRepository saveGameRepository = new SaveGameRepository(mongoDatabase);
 
-SaveSlot[] saveSlots = await BuildSaveSlots(saveGameRepository);
+SaveSlot[] saveSlots = await BuildSaveSlots(saveGameRepository, pcRepo);
 
 var levelImporter = new LevelImporter(templateRepo);
 string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
@@ -92,7 +92,7 @@ while (true)
                         await saveGameRepository.RemoveAsync(saveToDelete);
                     }
                     // If the user saves and returns to this title screen, rebuild save slots after game ends to show updated information
-                    saveSlots = await BuildSaveSlots(saveGameRepository);
+                    saveSlots = await BuildSaveSlots(saveGameRepository, pcRepo);
                 }
                 // If slotNumber is 0, user went back, so continue the outer loop
                 renderer.FillTextInsideBox(' ', Console.WindowHeight, Console.WindowWidth, 0, 0);
@@ -159,8 +159,10 @@ static async Task<(SaveGame selectedSave, int slotNumber)> SelectSaveGame(Render
     }
 }
 
-static async Task<SaveSlot[]> BuildSaveSlots(ISaveGameRepository saveGameRepository)
+static async Task<SaveSlot[]> BuildSaveSlots(ISaveGameRepository saveGameRepository, IPlayerClassRepository playerClassRepository)
 {
+    var allClasses = await playerClassRepository.GetAllAsync();
+    var classLookup = allClasses.ToDictionary(pc => pc.Id, pc => pc.Name);
     var saveSlots = new SaveSlot[3];
 
     for (int i = 0; i < 3; i++)
@@ -174,6 +176,10 @@ static async Task<SaveSlot[]> BuildSaveSlots(ISaveGameRepository saveGameReposit
         if (save.SlotNumber >= 1 && save.SlotNumber <= 3)
         {
             saveSlots[save.SlotNumber - 1].SaveGame = save;
+            if (save.PlayerClassId.HasValue && classLookup.TryGetValue(save.PlayerClassId.Value, out var className))
+            {
+                saveSlots[save.SlotNumber - 1].PlayerClassName = className;
+            }
         }
     }
 
