@@ -105,6 +105,17 @@ public class Gameloop
             return true; //  pause was requested
         }
 
+        if (input.Key == ConsoleKey.L)
+        {
+            Renderer.DrawHistoryLogScreen();
+            Renderer.RenderLevel(GameState.AllElements);
+            Renderer.RenderUIStats(character: Player, turn: GameState.Turn, height: UIHeight, width: UIWidth, startX: UIXStartPos, startY: UIYStartPos);
+            Renderer.DrawInstructions(InstructionsXPos, InstructionsYPos);
+            Renderer.WriteMessageLog(MessageLogXPos, MessageLogYPos);
+            return false; // Return early, don't process as movement
+        }
+
+
         Position? selectedMove = Player.MovementHandler(input);
         if (selectedMove is Position attempt)
         {

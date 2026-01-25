@@ -314,7 +314,7 @@ public class Renderer
     {
         Console.ForegroundColor = ConsoleColor.DarkRed;
         Console.SetCursorPosition(xCoord, yCoord);
-        Console.WriteLine("Use ASDW or the Arrow keys to move. Esc to Pause, Save and Quit. Any other input will skip your turn.");
+        Console.WriteLine("ASDW or Arrow keys to move. Esc to Pause, Save and Quit. 'L' for History log. Any other input will skip your turn.");
         Console.ResetColor();
 
     }
@@ -383,7 +383,7 @@ public class Renderer
             Console.Write($"{i}. {availableClasses[i].Name}");
         }
         Console.SetCursorPosition(messagePromptXpos + messagePromptText.Length, messagePrompYPos);
-        
+
     }
 
 
@@ -409,94 +409,108 @@ public class Renderer
     }
 
     public void DrawPauseScreen(PauseScreenOption selection)
-{
-    int height = Console.WindowHeight;
-    int width = Console.WindowWidth;
-    int startX = 0;
-    int startY = 0;
-
-    string titleText = "==== PAUSED ====";
-    string resumeText = "Resume";
-    string saveAndQuitText = "Save and Quit";
-    string quitText = "Quit";
-
-    Console.ForegroundColor = ConsoleColor.DarkRed;
-
-
-    int titleYOffset = 4;
-    int titleX = startX + (width - titleText.Length) / 2;
-    int titleY = startY + height / 2 - titleYOffset;
-    Console.SetCursorPosition(titleX, titleY);
-    Console.ForegroundColor = ConsoleColor.DarkRed;
-    Console.Write(titleText);
-
-    int resumeX = startX + (width - resumeText.Length) / 2;
-    int resumeY = startY + height / 2 - 1;
-    Console.SetCursorPosition(resumeX, resumeY);
-    Console.ForegroundColor = ConsoleColor.White;
-    Console.Write(resumeText);
-
-    int saveAndQuitX = startX + (width - saveAndQuitText.Length) / 2;
-    int saveAndQuitY = startY + height / 2;
-    Console.SetCursorPosition(saveAndQuitX, saveAndQuitY);
-    Console.ForegroundColor = ConsoleColor.White;
-    Console.Write(saveAndQuitText);
-
-    int quitX = startX + (width - quitText.Length) / 2;
-    int quitY = startY + height / 2 + 1;
-    Console.SetCursorPosition(quitX, quitY);
-    Console.ForegroundColor = ConsoleColor.White;
-    Console.Write(quitText);
-    Console.ResetColor();
-
-    // Draw selection indicators
-    if (selection == PauseScreenOption.Resume)
     {
-        Console.SetCursorPosition(resumeX - 3, resumeY);
-        Console.Write('=');
-        Console.SetCursorPosition(resumeX - 2, resumeY);
-        Console.Write('>');
-        Console.SetCursorPosition(saveAndQuitX - 3, saveAndQuitY);
-        Console.Write(' ');
-        Console.SetCursorPosition(saveAndQuitX - 2, saveAndQuitY);
-        Console.Write(' ');
-        Console.SetCursorPosition(quitX - 3, quitY);
-        Console.Write(' ');
-        Console.SetCursorPosition(quitX - 2, quitY);
-        Console.Write(' ');
+        int height = Console.WindowHeight;
+        int width = Console.WindowWidth;
+        int startX = 0;
+        int startY = 0;
+
+        string titleText = "==== PAUSED ====";
+        string resumeText = "Resume";
+        string saveAndQuitText = "Save and Quit";
+        string quitText = "Quit";
+
+        Console.ForegroundColor = ConsoleColor.DarkRed;
+
+
+        int titleYOffset = 4;
+        int titleX = startX + (width - titleText.Length) / 2;
+        int titleY = startY + height / 2 - titleYOffset;
+        Console.SetCursorPosition(titleX, titleY);
+        Console.ForegroundColor = ConsoleColor.DarkRed;
+        Console.Write(titleText);
+
+        int resumeX = startX + (width - resumeText.Length) / 2;
+        int resumeY = startY + height / 2 - 1;
+        Console.SetCursorPosition(resumeX, resumeY);
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.Write(resumeText);
+
+        int saveAndQuitX = startX + (width - saveAndQuitText.Length) / 2;
+        int saveAndQuitY = startY + height / 2;
+        Console.SetCursorPosition(saveAndQuitX, saveAndQuitY);
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.Write(saveAndQuitText);
+
+        int quitX = startX + (width - quitText.Length) / 2;
+        int quitY = startY + height / 2 + 1;
+        Console.SetCursorPosition(quitX, quitY);
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.Write(quitText);
+        Console.ResetColor();
+
+        // Draw selection indicators
+        if (selection == PauseScreenOption.Resume)
+        {
+            Console.SetCursorPosition(resumeX - 3, resumeY);
+            Console.Write('=');
+            Console.SetCursorPosition(resumeX - 2, resumeY);
+            Console.Write('>');
+            Console.SetCursorPosition(saveAndQuitX - 3, saveAndQuitY);
+            Console.Write(' ');
+            Console.SetCursorPosition(saveAndQuitX - 2, saveAndQuitY);
+            Console.Write(' ');
+            Console.SetCursorPosition(quitX - 3, quitY);
+            Console.Write(' ');
+            Console.SetCursorPosition(quitX - 2, quitY);
+            Console.Write(' ');
+        }
+        else if (selection == PauseScreenOption.SaveAndQuit)
+        {
+            Console.SetCursorPosition(resumeX - 3, resumeY);
+            Console.Write(' ');
+            Console.SetCursorPosition(resumeX - 2, resumeY);
+            Console.Write(' ');
+            Console.SetCursorPosition(saveAndQuitX - 3, saveAndQuitY);
+            Console.Write('=');
+            Console.SetCursorPosition(saveAndQuitX - 2, saveAndQuitY);
+            Console.Write('>');
+            Console.SetCursorPosition(quitX - 3, quitY);
+            Console.Write(' ');
+            Console.SetCursorPosition(quitX - 2, quitY);
+            Console.Write(' ');
+        }
+        else // Quit
+        {
+            Console.SetCursorPosition(resumeX - 3, resumeY);
+            Console.Write(' ');
+            Console.SetCursorPosition(resumeX - 2, resumeY);
+            Console.Write(' ');
+            Console.SetCursorPosition(saveAndQuitX - 3, saveAndQuitY);
+            Console.Write(' ');
+            Console.SetCursorPosition(saveAndQuitX - 2, saveAndQuitY);
+            Console.Write(' ');
+            Console.SetCursorPosition(quitX - 3, quitY);
+            Console.Write('=');
+            Console.SetCursorPosition(quitX - 2, quitY);
+            Console.Write('>');
+        }
+
     }
-    else if (selection == PauseScreenOption.SaveAndQuit)
+    public void DrawHistoryLogScreen()
     {
-        Console.SetCursorPosition(resumeX - 3, resumeY);
-        Console.Write(' ');
-        Console.SetCursorPosition(resumeX - 2, resumeY);
-        Console.Write(' ');
-        Console.SetCursorPosition(saveAndQuitX - 3, saveAndQuitY);
-        Console.Write('=');
-        Console.SetCursorPosition(saveAndQuitX - 2, saveAndQuitY);
-        Console.Write('>');
-        Console.SetCursorPosition(quitX - 3, quitY);
-        Console.Write(' ');
-        Console.SetCursorPosition(quitX - 2, quitY);
-        Console.Write(' ');
+        Console.Clear();
+        Console.SetCursorPosition(0, 0);
+        Console.WriteLine("ALL MESSAGE HISTORY");
+        foreach (var message in _messageLog.Messages)
+        {
+            Console.WriteLine(message);
+        }
+        Console.WriteLine("Press any key to go back.");
+        var input = Console.ReadKey();
+        Console.Clear();
+        return; 
     }
-    else // Quit
-    {
-        Console.SetCursorPosition(resumeX - 3, resumeY);
-        Console.Write(' ');
-        Console.SetCursorPosition(resumeX - 2, resumeY);
-        Console.Write(' ');
-        Console.SetCursorPosition(saveAndQuitX - 3, saveAndQuitY);
-        Console.Write(' ');
-        Console.SetCursorPosition(saveAndQuitX - 2, saveAndQuitY);
-        Console.Write(' ');
-        Console.SetCursorPosition(quitX - 3, quitY);
-        Console.Write('=');
-        Console.SetCursorPosition(quitX - 2, quitY);
-        Console.Write('>');
-    }
-}
-    
     public enum StartScreenOption
     {
         Start,
