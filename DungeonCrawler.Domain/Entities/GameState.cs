@@ -19,6 +19,7 @@ public class GameState
 
     public bool FightIsHappening { get; set; } = false;
     public bool FightHappened { get; set; } = false;
+    public MessageLog MessageLog { get; set; } = new();
 
 
     public GameState()

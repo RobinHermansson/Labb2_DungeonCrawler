@@ -11,6 +11,7 @@ public class SaveGame : IHasId<Guid>
     public string PlayerName { get; set; } = string.Empty;
     public DateTime LastPlayedAt { get; set; }
     public DateTime CreatedAt { get; set; }
+    public MessageLog MessageLog { get; set; }
 
     public bool Debug { get; set; }
     
@@ -28,7 +29,8 @@ public class SaveGame : IHasId<Guid>
             LastPlayedAt = DateTime.UtcNow,
             Turn = gameState.Turn,
             Debug = gameState.Debug,
-            AllElements = new List<LevelElement>(gameState.AllElements)
+            AllElements = new List<LevelElement>(gameState.AllElements),
+            MessageLog = gameState.MessageLog
         };
     }
     
@@ -41,6 +43,7 @@ public class SaveGame : IHasId<Guid>
 
         gameState.Turn = Turn;
         gameState.PlayerName = PlayerName;
+        gameState.MessageLog = MessageLog;
         
         foreach (var element in AllElements)
         {
