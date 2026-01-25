@@ -211,12 +211,14 @@ public class Renderer
         Console.Write(goBackText);
 
         // Show slot navigation info
-        string navigationInfo = $"{selectedSlot.GetDisplayName()} (Use ←→ to switch)";
+        string navigationInfo = $"{selectedSlot.GetDisplayName()} (Use <- -> to switch)";
         int navX = savedGamesWindowX + (savedGamesWindowWidth - navigationInfo.Length) / 2;
         int navY = savedGamesWindowY - 1;
         if (navX < 0) navX = savedGamesWindowX;
-        Console.SetCursorPosition(navX, navY);
+        Console.SetCursorPosition(navX -5, navY);
+        Console.Write("                                                                        "); // Ugly way to clear text
         Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.SetCursorPosition(navX, navY);
         Console.Write(navigationInfo);
 
         if (selection == LoadSavesScreenOption.Saves)
