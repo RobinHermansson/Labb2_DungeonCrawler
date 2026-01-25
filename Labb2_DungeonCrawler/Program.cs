@@ -13,6 +13,7 @@ Console.CursorVisible = false;
 
 MongoMappings.Register();
 
+
 MessageLog messageLog = new(); // need to rethink this.
 Renderer renderer = new Renderer(messageLog); // need to rethink this.
 Renderer.StartScreenOption selectedOption = Renderer.StartScreenOption.Start;
@@ -21,6 +22,12 @@ Renderer.LoadSavesScreenOption loadSelectedOption = Renderer.LoadSavesScreenOpti
 var client = new MongoClient("mongodb://localhost:27017/");
 var mongoDatabase = client.GetDatabase("DungeonCrawler");
 
+IPlayerClassRepository pcRepo = new MongoPlayerClassRepository(mongoDatabase);
+PlayerClassSeeder pcSeeder = new PlayerClassSeeder(pcRepo);
+await pcSeeder.SeedDefaultClassesAsync();
+
+var availableClasses = await pcRepo.GetAllAsync();
+var availableClassesList = availableClasses.ToList();
 var enemyRepository = new MongoEnemyRepository(mongoDatabase);
 
 ILevelTemplateRepository templateRepo = new MongoLevelTemplateRepository(mongoDatabase);
@@ -62,15 +69,21 @@ while (true)
                 if (slotNumber > 0) // User selected a valid slot
                 {
                     string? nameInput = "";
+                    string? classInput = "";
+                    int playerClassSelected = 0;
                     if (selectedSave == null)
                     {
                         renderer.SelectNameScreen();
                         nameInput = Console.ReadLine();
+                        renderer.SelectClassScreen(availableClassesList);
+                        classInput = Console.ReadLine();
+                        _ = int.TryParse(classInput, out playerClassSelected);
+                        
                     }
                     Console.Clear();
-                    Gameloop gameLoop = new Gameloop(enemyRepository, templateRepo, saveGameRepository);
+                    Gameloop gameLoop = new Gameloop(enemyRepository, templateRepo, saveGameRepository, pcRepo);
 
-                    await gameLoop.InitializeAsync(selectedSave, slotNumber, nameInput);
+                    await gameLoop.InitializeAsync(selectedSave, slotNumber, nameInput, availableClassesList[playerClassSelected]);
                     await gameLoop.PlayGame();
                 }
                 // If slotNumber is 0, user went back, so continue the outer loop

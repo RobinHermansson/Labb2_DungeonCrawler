@@ -13,6 +13,8 @@ public class GameState
 
     public Player? Player { get; set; } = null;
     public string PlayerName { get; set; }
+    public string PlayerClassName { get; set; }
+    public Guid PlayerClassId { get; set; }
     public int Turn { get; set; }
     public int LevelNumber { get; set; } = 1; // defaulting to first level.
     public int SlotNumber { get; set; }

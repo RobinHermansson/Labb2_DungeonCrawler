@@ -17,7 +17,7 @@ public class GameService
         _saveGameRepository = saveGameRepository;
     }
     
-    public async Task<GameState> CreateNewGameAsync()
+    public async Task<GameState> CreateNewGameAsync(string playerName, PlayerClass playerClass)
     {
         
         var levelElements = await _discRepository.LoadLevelElementsAsync(1);
@@ -25,7 +25,10 @@ public class GameService
         var levelTemplate = await _levelTemplateRepository.GetByLevelNumberAsync(1);
 
         var gameState = levelTemplate.CreateInitialGameState();
-
+        
+        gameState.Player.Class = playerClass;
+        gameState.Player.Name = playerName;
+        gameState.PlayerName = playerName;
                        
         return gameState;
            

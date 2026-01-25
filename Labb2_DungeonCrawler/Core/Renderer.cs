@@ -368,6 +368,25 @@ public class Renderer
         Console.Write(messagePromptText);
     }
 
+    public void SelectClassScreen(List<PlayerClass> availableClasses)
+    {
+        FillTextInsideBox(' ', Console.WindowHeight, Console.WindowWidth, 0, 0);
+        string messagePromptText = "What class do you want to be (write the number): ";
+        int messagePromptXpos = (+(Console.WindowWidth - messagePromptText.Length) - 1) / 2;
+        int messagePrompYPos = +Console.WindowHeight / 2;
+        Console.SetCursorPosition(messagePromptXpos, messagePrompYPos);
+        Console.Write(messagePromptText);
+
+        for (int i = 0; i < availableClasses.Count; i++)
+        {
+            Console.SetCursorPosition(messagePromptXpos, messagePrompYPos + 1 + i);
+            Console.Write($"{i}. {availableClasses[i].Name}");
+        }
+        Console.SetCursorPosition(messagePromptXpos + messagePromptText.Length, messagePrompYPos);
+        
+    }
+
+
     public void WriteMessageLog(int xCoord, int yCoord)
     {
         int logHeight = 7;

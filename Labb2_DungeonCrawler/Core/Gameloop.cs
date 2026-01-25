@@ -13,6 +13,7 @@ public class Gameloop
     private readonly IEnemyRepository _enemyRepository;
     private readonly ILevelTemplateRepository _levelTemplateRepository;
     private readonly ISaveGameRepository _saveGameRepository;
+    private readonly IPlayerClassRepository _playerClassRepository;
     private GameService _gameService;
     public GameState GameState { get; set; }
     public Player Player { get; set; }
@@ -32,11 +33,12 @@ public class Gameloop
     public int DebugSelectorXPos { get; private set; } = 0;
     public int DebugSelectorYPos { get; set; } = 0;
 
-    public Gameloop(IEnemyRepository enemyRepository, ILevelTemplateRepository levelTemplateRepository, ISaveGameRepository saveGameRepository)
+    public Gameloop(IEnemyRepository enemyRepository, ILevelTemplateRepository levelTemplateRepository, ISaveGameRepository saveGameRepository, IPlayerClassRepository playerClassRepo)
     {
         _levelTemplateRepository = levelTemplateRepository;
         _enemyRepository = enemyRepository;
         _saveGameRepository = saveGameRepository;
+        _playerClassRepository = playerClassRepo;
 
         //GameState = gameState;
         //Player = gameState.Player;
@@ -46,12 +48,12 @@ public class Gameloop
         //InitializeGame();
     }
 
-    public async Task InitializeAsync(SaveGame selectedSave, int slotNumber, string? wantedPlayerName)
+    public async Task InitializeAsync(SaveGame selectedSave, int slotNumber, string? wantedPlayerName, PlayerClass playerClass)
     {
-        await InitializeGame(selectedSave, slotNumber, wantedPlayerName);
+        await InitializeGame(selectedSave, slotNumber, wantedPlayerName, playerClass);
     }
 
-    private async Task InitializeGame(SaveGame selectedSave, int slotNumber, string? wantedPlayerName)
+    private async Task InitializeGame(SaveGame selectedSave, int slotNumber, string? wantedPlayerName, PlayerClass playerClass)
     {
         Console.CursorVisible = false;
 
@@ -60,15 +62,19 @@ public class Gameloop
 
         if (selectedSave == null) // Empty slot - create new game
         {
-            GameState = await _gameService.CreateNewGameAsync();
-            GameState.PlayerName = wantedPlayerName;
+            GameState = await _gameService.CreateNewGameAsync(wantedPlayerName, playerClass);
             await _gameService.SaveGameAsync(GameState, slotNumber);
         }
         else // Existing save - load it
         {
             GameState = selectedSave.ToGameState();
-        }
-
+            
+            if (selectedSave.PlayerClassId.HasValue)
+            {
+                var existingPlayerClass = await _playerClassRepository.GetByIdAsync(selectedSave.PlayerClassId.Value);
+                GameState.Player.Class = existingPlayerClass;
+            }
+        } 
         GameState.SlotNumber = slotNumber;
 
         // Set game state references for enemies
@@ -78,6 +84,7 @@ public class Gameloop
         }
         Player = GameState.Player;
         Player.Name = GameState.PlayerName;
+        Player.Class = playerClass;
         if (GameState.MessageLog is null)
         {
             GameState.MessageLog = new MessageLog();
