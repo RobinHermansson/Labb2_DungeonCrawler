@@ -290,7 +290,7 @@ public class Renderer
 
     }
 
-    public void RenderUIStats(Character character, int turn, int height, int width, int startX, int startY)
+    public void RenderUIStats(Player character, int turn, int height, int width, int startX, int startY)
     {
         Console.ForegroundColor = ConsoleColor.DarkRed;
         DrawABox(height, width, startX, startY, '-', '|', '+', '+', '+', '+');
@@ -305,7 +305,7 @@ public class Renderer
         Console.SetCursorPosition(startX + 1, startY + 4);
         Console.Write($"Turn: {turn}");
         Console.SetCursorPosition(startX + 1, startY + 5);
-        Console.Write($"Class: not impl.");
+        Console.Write($"Class: {character.Class.Name}");
         Console.ResetColor();
 
     }
