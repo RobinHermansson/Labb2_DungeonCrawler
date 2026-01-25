@@ -25,6 +25,8 @@ public class Gameloop
     public int UIWidth { get; set; } = 18;
     public int InstructionsXPos { get; private set; } = 0;
     public int InstructionsYPos { get; private set; } = 20;
+    public int MessageLogXPos { get; private set; } = 0;
+    public int MessageLogYPos { get; private set; } = 22;
     public int DebugTextXPos { get; private set; } = 0;
     public int DebugTextYPos { get; private set; } = 21;
     public int DebugSelectorXPos { get; private set; } = 0;
@@ -38,7 +40,6 @@ public class Gameloop
 
         //GameState = gameState;
         //Player = gameState.Player;
-        Renderer = new Renderer();
 
 
 
@@ -77,10 +78,16 @@ public class Gameloop
         }
         Player = GameState.Player;
         Player.Name = GameState.PlayerName;
+        if (GameState.MessageLog is null)
+        {
+            GameState.MessageLog = new MessageLog();
+        }
+        Renderer = new Renderer(GameState.MessageLog);
         Player.CheckSurrounding(GameState.AllElements);
         Renderer.RenderLevel(GameState.AllElements);
         Renderer.RenderUIStats(character: Player, turn: GameState.Turn, height: UIHeight, width: UIWidth, startX: UIXStartPos, startY: UIYStartPos);
         Renderer.DrawInstructions(InstructionsXPos, InstructionsYPos);
+        Renderer.WriteMessageLog(MessageLogXPos, MessageLogYPos);
     }
 
     private void ProcessPlayerMovement()
@@ -97,7 +104,7 @@ public class Gameloop
             if (enemyAtPosition != null)
             {
                 // Found an enemy at this position - initiate combat!
-                Combat combat = new Combat(aggressor: Player, defender: enemyAtPosition);
+                Combat combat = new Combat(aggressor: Player, defender: enemyAtPosition, GameState.MessageLog);
                 combat.StartCombat();
                 GameState.FightHappened = true;
             }
@@ -193,12 +200,16 @@ public class Gameloop
             ProcessPlayerMovement();
             Renderer.RenderUIStats(character: Player, turn: GameState.Turn, height: UIHeight, width: UIWidth, startX: UIXStartPos, startY: UIYStartPos);
             Renderer.DrawInstructions(InstructionsXPos, InstructionsYPos);
+            Renderer.WriteMessageLog(MessageLogXPos, MessageLogYPos);
+
 
 
 
             ProcessEnemyMovement();
             Renderer.RenderUIStats(character: Player, turn: GameState.Turn, height: UIHeight, width: UIWidth, startX: UIXStartPos, startY: UIYStartPos);
             Renderer.DrawInstructions(InstructionsXPos, InstructionsYPos);
+            Renderer.WriteMessageLog(MessageLogXPos, MessageLogYPos);
+
 
             if (GameState.FightHappened)
             {

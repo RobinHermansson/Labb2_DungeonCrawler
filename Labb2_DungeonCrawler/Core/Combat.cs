@@ -7,31 +7,37 @@ public class Combat
     public Character Defender { get; set; }
     private CombatRenderer _renderer = new CombatRenderer();
 
+    private readonly MessageLog _messageLog;
 
-    public Combat(Character aggressor, Character defender)
+    public Combat(Character aggressor, Character defender, MessageLog messageLog)
     {
         Aggressor = aggressor;
         Defender = defender;
+        _messageLog = messageLog;
     }
 
     public bool StartCombat()
     {
         bool combatActive = true;
-        
+
         _renderer.RenderCombatScreen(Aggressor, Defender);
         _renderer.AddLogEntry($"Combat started between {Aggressor.Name} and {Defender.Name}");
-        
+        _messageLog.Messages.Add(new Message($"Combat started between {Aggressor.Name} and {Defender.Name}"));
+
         while (combatActive && Aggressor.IsAlive() && Defender.IsAlive())
         {
             var key = Console.ReadKey(true);
             if (key.Key == ConsoleKey.Escape && Aggressor.IsPlayer)
             {
                 _renderer.AddLogEntry($"{Aggressor.Name} tries to escape...                      ");
+                _messageLog.Messages.Add(new Message($"{Aggressor.Name} tries to escape...                      "));
+
                 _renderer.UpdateStatsAndLog(Aggressor, Defender);
-                
+
                 if (new Random().Next(2) == 0)
                 {
                     _renderer.AddLogEntry("Escape successful!                      ");
+                    _messageLog.Messages.Add(new Message("Escape successful!                      "));
                     _renderer.UpdateStatsAndLog(Aggressor, Defender);
                     Console.ReadKey(true);
                     Console.Clear();
@@ -40,16 +46,18 @@ public class Combat
                 else
                 {
                     _renderer.AddLogEntry("Escape failed!                      ");
+                    _messageLog.Messages.Add(new Message("Escape failed!                      "));
                     _renderer.UpdateStatsAndLog(Aggressor, Defender);
                 }
             }
-            
+
             PerformAttack(Aggressor, Defender);
             _renderer.UpdateStatsAndLog(Aggressor, Defender);
-            
+
             if (!Defender.IsAlive())
             {
                 _renderer.AddLogEntry($"{Defender.Name} has been defeated!");
+                _messageLog.Messages.Add(new Message($"{Defender.Name} has been defeated!"));
                 _renderer.UpdateStatsAndLog(Aggressor, Defender);
                 Console.ReadKey(true);
                 Console.Clear();
@@ -60,11 +68,13 @@ public class Combat
             if (key.Key == ConsoleKey.Escape && Defender.IsPlayer)
             {
                 _renderer.AddLogEntry($"{Defender.Name} tries to escape...");
+                _messageLog.Messages.Add(new Message($"{Defender.Name} tries to escape..."));
                 _renderer.UpdateStatsAndLog(Aggressor, Defender);
-                
+
                 if (new Random().Next(2) == 0)
                 {
                     _renderer.AddLogEntry("Escape successful!                      ");
+                    _messageLog.Messages.Add(new Message("Escape successful!                      "));
                     _renderer.UpdateStatsAndLog(Aggressor, Defender);
                     Console.ReadKey(true);
                     Console.Clear();
@@ -73,32 +83,34 @@ public class Combat
                 else
                 {
                     _renderer.AddLogEntry("Escape failed!                     ");
+                    _messageLog.Messages.Add(new Message($"Escape failed!                     "));
                     _renderer.UpdateStatsAndLog(Aggressor, Defender);
                 }
             }
 
-            
+
             PerformAttack(Defender, Aggressor);
             _renderer.UpdateStatsAndLog(Aggressor, Defender);
-            
+
             if (!Aggressor.IsAlive())
             {
                 _renderer.AddLogEntry($"{Aggressor.Name} has been defeated!                      ");
+                _messageLog.Messages.Add(new Message($"{Aggressor.Name} has been defeated!                      "));
                 _renderer.UpdateStatsAndLog(Aggressor, Defender);
                 Console.ReadKey(true);
                 Console.Clear();
                 return false;
             }
         }
-        
+
         return Aggressor.IsAlive();
     }
-    
+
     private void PerformAttack(Character attacker, Character defender)
     {
         int attackRollTotal = 0;
         int defenceRollTotal = 0;
-        
+
         // Roll attack dice and log results
         string attackRolls = "";
         foreach (Dice dice in attacker.AttackDice)
@@ -107,7 +119,7 @@ public class Combat
             attackRolls += (attackRolls.Length > 0 ? ", " : "") + roll;
             attackRollTotal += roll;
         }
-        
+
         // Roll defense dice and log results
         string defenseRolls = "";
         foreach (Dice dice in defender.DefenceDice)
@@ -116,23 +128,27 @@ public class Combat
             defenseRolls += (defenseRolls.Length > 0 ? ", " : "") + roll;
             defenceRollTotal += roll;
         }
-        
+
         int attackTotal = attackRollTotal + attacker.AttackModifier;
         int defenseTotal = defenceRollTotal + defender.DefenceModifier;
-        
+
         _renderer.AddLogEntry($"{attacker.Name} attacks: [{attackRolls}]+{attacker.AttackModifier} = {attackTotal}");
+        _messageLog.Messages.Add(new Message($"{attacker.Name} attacks: [{attackRolls}]+{attacker.AttackModifier} = {attackTotal}"));
         _renderer.AddLogEntry($"{defender.Name} defends: [{defenseRolls}]+{defender.DefenceModifier} = {defenseTotal}");
-        
+        _messageLog.Messages.Add(new Message($"{defender.Name} defends: [{defenseRolls}]+{defender.DefenceModifier} = {defenseTotal}"));
+
         // Determine hit or miss
         if (attackTotal > defenseTotal)
         {
             int damage = attackTotal - defenseTotal;
             _renderer.AddLogEntry($"{attacker.Name} hits for {damage} damage!", isHit: true);
+            _messageLog.Messages.Add(new Message($"Success! {attacker.Name} hits for {damage} damage!"));
             defender.TakeDamage(damage);
         }
         else
         {
             _renderer.AddLogEntry($"{attacker.Name}'s attack missed!", isMiss: true);
+            _messageLog.Messages.Add(new Message($"Fail! {attacker.Name}'s attack missed!"));
         }
     }
 }

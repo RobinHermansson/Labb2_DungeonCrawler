@@ -6,6 +6,11 @@ namespace Labb2_DungeonCrawler.App.Core;
 
 public class Renderer
 {
+    private readonly MessageLog _messageLog;
+    public Renderer(MessageLog messageLog)
+    {
+        _messageLog = messageLog;
+    }
     public void RegisterElement(LevelElement element)
     {
         element.PositionChanged += HandlePositionChanged;
@@ -215,7 +220,7 @@ public class Renderer
         int navX = savedGamesWindowX + (savedGamesWindowWidth - navigationInfo.Length) / 2;
         int navY = savedGamesWindowY - 1;
         if (navX < 0) navX = savedGamesWindowX;
-        Console.SetCursorPosition(navX -5, navY);
+        Console.SetCursorPosition(navX - 5, navY);
         Console.Write("                                                                        "); // Ugly way to clear text
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.SetCursorPosition(navX, navY);
@@ -357,10 +362,31 @@ public class Renderer
     {
         FillTextInsideBox(' ', Console.WindowHeight, Console.WindowWidth, 0, 0);
         string messagePromptText = "What will you be known as: ";
-        int messagePromptXpos = ( + (Console.WindowWidth - messagePromptText.Length) - 1) / 2;
-        int messagePrompYPos =  + Console.WindowHeight / 2;
+        int messagePromptXpos = (+(Console.WindowWidth - messagePromptText.Length) - 1) / 2;
+        int messagePrompYPos = +Console.WindowHeight / 2;
         Console.SetCursorPosition(messagePromptXpos, messagePrompYPos);
         Console.Write(messagePromptText);
+    }
+
+    public void WriteMessageLog(int xCoord, int yCoord)
+    {
+        int logHeight = 7;
+        Console.SetCursorPosition(xCoord, yCoord);
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine("MESSAGE LOG");
+
+        int messagesToShow = Math.Min(_messageLog.Messages.Count, logHeight - 2);
+
+        for (int i = 0; i < messagesToShow; i++)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.SetCursorPosition(xCoord + 2, yCoord + i + 1);
+
+            int messageIndex = _messageLog.Messages.Count - 1 - i;
+            Console.Write(_messageLog.Messages[messageIndex] + "           ");
+        }
+        Console.ResetColor();
+
     }
     public enum StartScreenOption
     {

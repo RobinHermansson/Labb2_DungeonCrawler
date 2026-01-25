@@ -13,7 +13,8 @@ Console.CursorVisible = false;
 
 MongoMappings.Register();
 
-Renderer renderer = new Renderer();
+MessageLog messageLog = new(); // need to rethink this.
+Renderer renderer = new Renderer(messageLog); // need to rethink this.
 Renderer.StartScreenOption selectedOption = Renderer.StartScreenOption.Start;
 Renderer.LoadSavesScreenOption loadSelectedOption = Renderer.LoadSavesScreenOption.Saves;
 

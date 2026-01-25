@@ -22,6 +22,15 @@ public class MongoMappings
 
         ConventionRegistry.Register("appConventions", pack, _ => true);
 
+        // Message
+        BsonClassMap.RegisterClassMap<Message>(m =>
+        {
+            m.AutoMap();
+        });
+        BsonClassMap.RegisterClassMap<MessageLog>(ml =>
+        {
+            ml.AutoMap();
+        });
         //SaveGame
         BsonClassMap.RegisterClassMap<SaveGame>(lt =>
         {
