@@ -21,6 +21,20 @@ public class MongoMappings
         };
 
         ConventionRegistry.Register("appConventions", pack, _ => true);
+        BsonClassMap.RegisterClassMap<PlayerClass>(pc =>
+        {
+            pc.AutoMap();
+            pc.MapIdMember(x => x.Id)
+                .SetIdGenerator(null)
+                .SetSerializer(new MongoDB.Bson.Serialization.Serializers.GuidSerializer(BsonType.String));
+            pc.MapMember(x => x.Name).SetElementName("name");
+            pc.MapMember(x => x.BaseHitPoints).SetElementName("baseHitpoints");
+            pc.MapMember(x => x.BaseAttackDiceCount).SetElementName("baseAttackDiceCount");
+            pc.MapMember(x => x.BaseDefenceDiceCount).SetElementName("baseDefenceDiceCount");
+            pc.MapMember(x => x.BaseAttackModifier).SetElementName("baseAttackModifier");
+            pc.MapMember(x => x.BaseDefenceModifier).SetElementName("baseDefenceModifier");
+            pc.MapMember(x => x.BaseVisionRange).SetElementName("baseVisionRange");
+        });
 
         // Message
         BsonClassMap.RegisterClassMap<Message>(m =>
@@ -36,10 +50,13 @@ public class MongoMappings
         {
             lt.AutoMap();
             lt.MapIdMember(lt => lt.Id)
-            .SetIdGenerator(null)
-            .SetSerializer(new MongoDB.Bson.Serialization.Serializers.GuidSerializer(BsonType.String));
-        });
-
+                .SetIdGenerator(null)
+                .SetSerializer(new MongoDB.Bson.Serialization.Serializers.GuidSerializer(BsonType.String));
+            
+            lt.MapMember(x => x.PlayerClassId)
+                .SetSerializer(new MongoDB.Bson.Serialization.Serializers.NullableSerializer<Guid>(
+                    new MongoDB.Bson.Serialization.Serializers.GuidSerializer(BsonType.String)));
+        }); 
         //LevelTemplate
         BsonClassMap.RegisterClassMap<LevelTemplate>(lt =>
         {
@@ -83,6 +100,7 @@ public class MongoMappings
         {
             c.AutoMap();
             c.SetDiscriminator("Player");
+            c.UnmapMember(x => x.Class);
         });
 
         BsonClassMap.RegisterClassMap<Enemy>(c =>
