@@ -76,6 +76,7 @@ public class Gameloop
             enemy.GameState = GameState; // TODO: Improve this later
         }
         Player = GameState.Player;
+        Player.Name = GameState.PlayerName;
         Player.CheckSurrounding(GameState.AllElements);
         Renderer.RenderLevel(GameState.AllElements);
         Renderer.RenderUIStats(character: Player, turn: GameState.Turn, height: UIHeight, width: UIWidth, startX: UIXStartPos, startY: UIYStartPos);

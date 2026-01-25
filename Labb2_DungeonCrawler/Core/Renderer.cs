@@ -294,11 +294,14 @@ public class Renderer
         Console.SetCursorPosition(startX + 1, startY + 1);
         Console.Write(UITitle);
         Console.SetCursorPosition(startX + 1, startY + 2);
-        Console.Write($"HP: {character.HitPoints}/100");
+        Console.Write($"{character.Name}");
         Console.SetCursorPosition(startX + 1, startY + 3);
+        Console.Write($"HP: {character.HitPoints}/100");
+        Console.SetCursorPosition(startX + 1, startY + 4);
         Console.Write($"Turn: {turn}");
+        Console.SetCursorPosition(startX + 1, startY + 5);
+        Console.Write($"Class: not impl.");
         Console.ResetColor();
-
 
     }
 
