@@ -37,10 +37,12 @@ SaveGameService saveGameService = new SaveGameService(saveGameRepository, pcRepo
 SaveSlot[] saveSlots = await BuildSaveSlots(saveGameRepository, pcRepo);
 GameService gameService = new GameService(templateRepo, saveGameRepository);
 
+var setupService = new InitialSetupService(pcRepo, templateRepo);
+await setupService.InitializeDatabaseAsync();
 
-var levelImporter = new LevelImporter(templateRepo);
-string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-string path = Path.Combine(baseDirectory, "Levels", $"Level1.txt");
+//var levelImporter = new LevelImporter(templateRepo);
+//tring baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+//string path = Path.Combine(baseDirectory, "Levels", $"Level1.txt");
 
 Console.ForegroundColor = ConsoleColor.DarkRed;
 renderer.DrawABox(Console.WindowHeight, Console.WindowWidth, 0, 0, '═', '║', '╔', '╗', '╚', '╝');
