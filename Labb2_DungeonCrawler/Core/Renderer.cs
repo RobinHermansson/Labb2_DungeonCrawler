@@ -304,7 +304,7 @@ public class Renderer
         Console.SetCursorPosition(startX + 1, startY + 1);
         Console.Write(UITitle);
         Console.SetCursorPosition(startX + 1, startY + 2);
-        Console.Write($"{character.Name}");
+        Console.Write($"Name: {character.Name}");
         Console.SetCursorPosition(startX + 1, startY + 3);
         Console.Write($"HP: {character.HitPoints}/{character.Class.BaseHitPoints}");
         Console.SetCursorPosition(startX + 1, startY + 4);
@@ -363,29 +363,56 @@ public class Renderer
         Console.ResetColor();
     }
 
-    public void SelectNameScreen()
+    public void SelectNameScreen(bool tryAgain)
     {
         FillTextInsideBox(' ', Console.WindowHeight, Console.WindowWidth, 0, 0);
         string messagePromptText = "What will you be known as: ";
         int messagePromptXpos = (+(Console.WindowWidth - messagePromptText.Length) - 1) / 2;
-        int messagePrompYPos = +Console.WindowHeight / 2;
-        Console.SetCursorPosition(messagePromptXpos, messagePrompYPos);
-        Console.Write(messagePromptText);
+        int messagePrompYPos = Console.WindowHeight / 2;
+        if (tryAgain)
+        {
+            string tryAgainMessage = "Not a valid input, try again.";
+            Console.SetCursorPosition((Console.WindowWidth - tryAgainMessage.Length - 1) / 2, messagePrompYPos - 1);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write(tryAgainMessage);
+            Console.ResetColor();
+            Console.SetCursorPosition(messagePromptXpos, messagePrompYPos);
+            Console.Write(messagePromptText);
+        }
+        else
+        {
+            Console.SetCursorPosition(messagePromptXpos, messagePrompYPos);
+            Console.Write(messagePromptText);
+        }
+
     }
 
-    public void SelectClassScreen(List<PlayerClass> availableClasses)
+    public void SelectClassScreen(List<PlayerClass> availableClasses, bool tryAgain)
     {
         FillTextInsideBox(' ', Console.WindowHeight, Console.WindowWidth, 0, 0);
         string messagePromptText = "What class do you want to be (write the number): ";
         int messagePromptXpos = (+(Console.WindowWidth - messagePromptText.Length) - 1) / 2;
         int messagePrompYPos = +Console.WindowHeight / 2;
-        Console.SetCursorPosition(messagePromptXpos, messagePrompYPos);
-        Console.Write(messagePromptText);
+        string tryAgainMessage = $"That was not a valid input, write a number between 1 and {availableClasses.Count}";
+        if (tryAgain)
+        {
+            Console.SetCursorPosition(+(Console.WindowWidth - tryAgainMessage.Length - 1) / 2, messagePrompYPos - 1);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write(tryAgainMessage);
+            Console.ResetColor();
+            Console.SetCursorPosition(messagePromptXpos, messagePrompYPos);
+            Console.Write(messagePromptText);
+        }
+        else
+        {
+            Console.SetCursorPosition(messagePromptXpos, messagePrompYPos);
+            Console.Write(messagePromptText);
+        }
 
         for (int i = 0; i < availableClasses.Count; i++)
         {
             Console.SetCursorPosition(messagePromptXpos, messagePrompYPos + 1 + i);
-            Console.Write($"{i}. {availableClasses[i].Name}");
+            Console.Write($"{i+1}. {availableClasses[i].Name}");
         }
         Console.SetCursorPosition(messagePromptXpos + messagePromptText.Length, messagePrompYPos);
 

@@ -72,11 +72,38 @@ while (true)
                     int playerClassSelected = 0;
                     if (selectedSave == null)
                     {
-                        renderer.SelectNameScreen();
-                        nameInput = Console.ReadLine();
-                        renderer.SelectClassScreen(availableClassesList);
-                        classInput = Console.ReadLine();
-                        _ = int.TryParse(classInput, out playerClassSelected);
+                        bool tryAgain = false;
+                        while (true)
+                        {
+                            renderer.SelectNameScreen(tryAgain);
+                            nameInput = Console.ReadLine();
+
+                            if (nameInput.Length <= 0)
+                            {
+                                tryAgain = true;
+                            }
+                            else
+                            {
+                                tryAgain = false;
+                                break;
+                            }
+                        }
+                        while (true)
+                        {
+                            renderer.SelectClassScreen(availableClassesList, tryAgain);
+                            classInput = Console.ReadLine();
+                            _ = int.TryParse(classInput, out playerClassSelected);
+                            if (playerClassSelected <= 0 || playerClassSelected > availableClasses?.Count())
+                            {
+                                tryAgain = true;
+                            }
+                            else
+                            {
+                                playerClassSelected--; // Selection is between 1 to .Count, and the index starts at 0...
+                                tryAgain = false;
+                                break;
+                            }
+                        }
                         
                     }
                     Console.Clear();
