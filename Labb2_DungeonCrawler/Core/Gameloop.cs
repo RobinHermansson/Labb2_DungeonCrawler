@@ -3,7 +3,6 @@ using DungeonCrawler.App.Services;
 using DungeonCrawler.Domain.Entities;
 using DungeonCrawler.Domain.Interfaces;
 using DungeonCrawler.Domain.ValueObjects;
-using DungeonCrawler.Infrastructure.Disc;
 using Labb2_DungeonCrawler.App.Utilities;
 using static Labb2_DungeonCrawler.App.Core.Renderer;
 
@@ -33,12 +32,12 @@ public class Gameloop
     public int DebugSelectorXPos { get; private set; } = 0;
     public int DebugSelectorYPos { get; set; } = 0;
 
-    public Gameloop(ILevelTemplateRepository levelTemplateRepository, ISaveGameRepository saveGameRepository, IPlayerClassRepository playerClassRepo)
+    public Gameloop(GameService gameService, ILevelTemplateRepository levelTemplateRepository, ISaveGameRepository saveGameRepository, IPlayerClassRepository playerClassRepo)
     {
         _levelTemplateRepository = levelTemplateRepository;
         _saveGameRepository = saveGameRepository;
         _playerClassRepository = playerClassRepo;
-
+        _gameService = gameService;
     }
 
     public async Task InitializeAsync(SaveGame selectedSave, int slotNumber, string? wantedPlayerName, PlayerClass playerClass)
@@ -50,8 +49,7 @@ public class Gameloop
     {
         Console.CursorVisible = false;
 
-        DiscRepository discRepository = new DiscRepository();
-        _gameService = new GameService(discRepository, _levelTemplateRepository, _saveGameRepository);
+        
 
         if (selectedSave == null) // Empty slot - create new game
         {

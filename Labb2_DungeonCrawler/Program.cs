@@ -1,4 +1,5 @@
-﻿using DungeonCrawler.Domain.Entities;
+﻿using DungeonCrawler.App.Services;
+using DungeonCrawler.Domain.Entities;
 using DungeonCrawler.Domain.Interfaces;
 using DungeonCrawler.Infrastructure.Repositories;
 using DungeonCrawler.Infrastructure.Repositories.Mongo;
@@ -33,6 +34,8 @@ ILevelTemplateRepository templateRepo = new MongoLevelTemplateRepository(mongoDa
 ISaveGameRepository saveGameRepository = new SaveGameRepository(mongoDatabase);
 
 SaveSlot[] saveSlots = await BuildSaveSlots(saveGameRepository, pcRepo);
+GameService gameService = new GameService(templateRepo, saveGameRepository);
+
 
 var levelImporter = new LevelImporter(templateRepo);
 string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
@@ -107,7 +110,7 @@ while (true)
                         
                     }
                     Console.Clear();
-                    Gameloop gameLoop = new Gameloop(templateRepo, saveGameRepository, pcRepo);
+                    Gameloop gameLoop = new Gameloop(gameService, templateRepo, saveGameRepository, pcRepo);
 
                     await gameLoop.InitializeAsync(selectedSave, slotNumber, nameInput, availableClassesList[playerClassSelected]);
                     await gameLoop.PlayGame();
