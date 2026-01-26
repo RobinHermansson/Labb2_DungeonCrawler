@@ -11,8 +11,8 @@ namespace Labb2_DungeonCrawler.App.Core;
 public class Gameloop
 {
     private readonly ILevelTemplateRepository _levelTemplateRepository;
-    private readonly ISaveGameRepository _saveGameRepository;
     private readonly IPlayerClassRepository _playerClassRepository;
+    private readonly SaveGameService _saveGameService;
     private GameService _gameService;
     public GameState GameState { get; set; }
     public Player Player { get; set; }
@@ -32,12 +32,12 @@ public class Gameloop
     public int DebugSelectorXPos { get; private set; } = 0;
     public int DebugSelectorYPos { get; set; } = 0;
 
-    public Gameloop(GameService gameService, ILevelTemplateRepository levelTemplateRepository, ISaveGameRepository saveGameRepository, IPlayerClassRepository playerClassRepo)
+    public Gameloop(SaveGameService saveGameService, GameService gameService, ILevelTemplateRepository levelTemplateRepository, IPlayerClassRepository playerClassRepo)
     {
         _levelTemplateRepository = levelTemplateRepository;
-        _saveGameRepository = saveGameRepository;
         _playerClassRepository = playerClassRepo;
         _gameService = gameService;
+        _saveGameService = saveGameService;
     }
 
     public async Task InitializeAsync(SaveGame selectedSave, int slotNumber, string? wantedPlayerName, PlayerClass playerClass)
@@ -54,7 +54,7 @@ public class Gameloop
         if (selectedSave == null) // Empty slot - create new game
         {
             GameState = await _gameService.CreateNewGameAsync(wantedPlayerName, playerClass);
-            await _gameService.SaveGameAsync(GameState, slotNumber);
+            await _saveGameService.SaveGameAsync(GameState, slotNumber);
         }
         else // Existing save - load it
         {
@@ -228,7 +228,7 @@ public class Gameloop
                         continue; 
 
                     case PauseScreenOption.SaveAndQuit:
-                        await _gameService.SaveGameAsync(GameState, GameState.SlotNumber);
+                        await _saveGameService.SaveGameAsync(GameState, GameState.SlotNumber);
                         isGameRunning = false;
                         break;
 
@@ -268,7 +268,7 @@ public class Gameloop
             }
             if (GameState.Turn % 20 == 0)
             {
-                await _gameService.SaveGameAsync(GameState, GameState.SlotNumber);
+                await _saveGameService.SaveGameAsync(GameState, GameState.SlotNumber);
 
             }
 

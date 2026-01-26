@@ -32,6 +32,7 @@ var availableClassesList = availableClasses.ToList();
 
 ILevelTemplateRepository templateRepo = new MongoLevelTemplateRepository(mongoDatabase);
 ISaveGameRepository saveGameRepository = new SaveGameRepository(mongoDatabase);
+SaveGameService saveGameService = new SaveGameService(saveGameRepository, pcRepo);
 
 SaveSlot[] saveSlots = await BuildSaveSlots(saveGameRepository, pcRepo);
 GameService gameService = new GameService(templateRepo, saveGameRepository);
@@ -110,7 +111,7 @@ while (true)
                         
                     }
                     Console.Clear();
-                    Gameloop gameLoop = new Gameloop(gameService, templateRepo, saveGameRepository, pcRepo);
+                    Gameloop gameLoop = new Gameloop(saveGameService, gameService, templateRepo, pcRepo);
 
                     await gameLoop.InitializeAsync(selectedSave, slotNumber, nameInput, availableClassesList[playerClassSelected]);
                     await gameLoop.PlayGame();
