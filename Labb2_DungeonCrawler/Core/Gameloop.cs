@@ -11,7 +11,6 @@ namespace Labb2_DungeonCrawler.App.Core;
 
 public class Gameloop
 {
-    private readonly IEnemyRepository _enemyRepository;
     private readonly ILevelTemplateRepository _levelTemplateRepository;
     private readonly ISaveGameRepository _saveGameRepository;
     private readonly IPlayerClassRepository _playerClassRepository;
@@ -34,19 +33,12 @@ public class Gameloop
     public int DebugSelectorXPos { get; private set; } = 0;
     public int DebugSelectorYPos { get; set; } = 0;
 
-    public Gameloop(IEnemyRepository enemyRepository, ILevelTemplateRepository levelTemplateRepository, ISaveGameRepository saveGameRepository, IPlayerClassRepository playerClassRepo)
+    public Gameloop(ILevelTemplateRepository levelTemplateRepository, ISaveGameRepository saveGameRepository, IPlayerClassRepository playerClassRepo)
     {
         _levelTemplateRepository = levelTemplateRepository;
-        _enemyRepository = enemyRepository;
         _saveGameRepository = saveGameRepository;
         _playerClassRepository = playerClassRepo;
 
-        //GameState = gameState;
-        //Player = gameState.Player;
-
-
-
-        //InitializeGame();
     }
 
     public async Task InitializeAsync(SaveGame selectedSave, int slotNumber, string? wantedPlayerName, PlayerClass playerClass)
@@ -59,7 +51,7 @@ public class Gameloop
         Console.CursorVisible = false;
 
         DiscRepository discRepository = new DiscRepository();
-        _gameService = new GameService(discRepository, _enemyRepository, _levelTemplateRepository, _saveGameRepository);
+        _gameService = new GameService(discRepository, _levelTemplateRepository, _saveGameRepository);
 
         if (selectedSave == null) // Empty slot - create new game
         {

@@ -28,7 +28,6 @@ await pcSeeder.SeedDefaultClassesAsync();
 
 var availableClasses = await pcRepo.GetAllAsync();
 var availableClassesList = availableClasses.ToList();
-var enemyRepository = new MongoEnemyRepository(mongoDatabase);
 
 ILevelTemplateRepository templateRepo = new MongoLevelTemplateRepository(mongoDatabase);
 ISaveGameRepository saveGameRepository = new SaveGameRepository(mongoDatabase);
@@ -81,7 +80,7 @@ while (true)
                         
                     }
                     Console.Clear();
-                    Gameloop gameLoop = new Gameloop(enemyRepository, templateRepo, saveGameRepository, pcRepo);
+                    Gameloop gameLoop = new Gameloop(templateRepo, saveGameRepository, pcRepo);
 
                     await gameLoop.InitializeAsync(selectedSave, slotNumber, nameInput, availableClassesList[playerClassSelected]);
                     await gameLoop.PlayGame();

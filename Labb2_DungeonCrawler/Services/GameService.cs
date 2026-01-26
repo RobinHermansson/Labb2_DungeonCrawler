@@ -8,11 +8,9 @@ public class GameService
     private readonly DiscRepository _discRepository;
     private readonly ILevelTemplateRepository _levelTemplateRepository;
     private ISaveGameRepository _saveGameRepository;
-    private readonly IEnemyRepository _enemyRepository;    
-    public GameService(DiscRepository diskRepository, IEnemyRepository enemyRepository, ILevelTemplateRepository levelTemplateRepo, ISaveGameRepository saveGameRepository)
+    public GameService(DiscRepository diskRepository, ILevelTemplateRepository levelTemplateRepo, ISaveGameRepository saveGameRepository)
     {
         _discRepository = diskRepository;
-        _enemyRepository = enemyRepository;
         _levelTemplateRepository = levelTemplateRepo;
         _saveGameRepository = saveGameRepository;
     }
