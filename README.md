@@ -25,6 +25,9 @@ Create a roguelike dungeon crawler game built in C# that runs entirely in the co
 
 * **Movement Patterns**: The player moves based on input, rats move randomly, and snakes move away from the player if within a certain range.
 * **Game State Management**: Full game loop with title screen, gameplay, and game over states
+* **Event-based rendering**: Instead of redrawing the whole level each turn, the renderer subscribes to each level element’s `PositionChanged` and `VisibilityChanged` events and only redraws that element (and clears its previous cell) when those events fire.
+* **Player classes**: Composition-based classes (e.g. Warrior, Mage) stored in MongoDB and applied to the player
+* **Persistent storage & save system**: Game state is stored in MongoDB. You can save and load the game, choose from multiple save slots, and delete saves. Level templates and player classes are also persisted in MongoDB.
 
 ## Architecture Decisions
 
@@ -47,24 +50,47 @@ And to not do the distance calculation against all elements in the world, an opt
 <img src="GitImages/CheckSurrounding.jpg" alt="Apply the distance calculation." >
 
 ### Separate Renderers
-The general game is rendered by a dedicated Renderer tasked with removing and drawing all the objects in the world, and then the Combat has its own renderer and logic.
+The general game is rendered by a dedicated Renderer that subscribes to each level element’s `PositionChanged` and `VisibilityChanged` events and only redraws the affected element when something changes, instead of redrawing the whole level every turn. Combat has its own renderer and logic.
 
+## Technical highlights 
+
+- **Clean Architecture**: Solution is split into Domain (entities, interfaces, no dependencies), Infrastructure (MongoDB repositories, file import), and App (UI, game loop, services). Domain has no reference to Infrastructure or App.
+- **Repository pattern**: Persistence is abstracted behind interfaces (`ILevelTemplateRepository`, `ISaveGameRepository`, `IPlayerClassRepository`, etc.) in the Domain layer; concrete MongoDB implementations live in Infrastructure.
+- **Persistence**: MongoDB is used for level templates, player classes, and save games (multiple save slots). Async/await is used for all database operations.
+- **Event-driven design**: Level elements raise `PositionChanged` and `VisibilityChanged` events; the renderer subscribes and redraws only what changed instead of redrawing the whole level each turn.
+- **Composition**: Player classes (e.g. Warrior, Mage) are applied via composition and stored in MongoDB rather than hard-coded inheritance.
+- **Tech stack**: C#, .NET 8, MongoDB Driver. Console-based UI with a structured game loop, menus, and pause/save flows.
 
 ## Future Improvements
 
--   Event-driven rendering system to further optimize display updates
 -   Additional enemy types with more complex behaviors
 -   Procedural level generation
 -   Inventory system and collectible items
--   A class system for the player: Warrior, mage etc. (Composition-based implementation)
--   Dictionary storage for all elements for an 0(1) lookup of object positions.
+-   Dictionary storage for all elements for O(1) lookup of object positions
+
+*Already implemented: event-based rendering (per-element redraw on `PositionChanged` / `VisibilityChanged`); composition-based player class system (e.g. Warrior, Mage) with classes stored in MongoDB.*
 
 ## Getting Started
 
 ### Prerequisites
 
--   .NET 6.0 or higher
+-   .NET 6.0 or higher (or .NET 8.0 to match the project)
 -   Windows, macOS, or Linux terminal with Unicode support
+-   **MongoDB** — a running MongoDB instance (local or remote). The game uses MongoDB for level templates, player classes, and save games.
+
+### How to run (after cloning the repo)
+
+1. **Start MongoDB** on your system (e.g. start the MongoDB service or run `mongod`).
+2. **Run the game** — open `Labb2_DungeonCrawler.sln` in Visual Studio and run (F5 or the Run button).
+
+   If you prefer the terminal instead:
+   ```bash
+   dotnet restore
+   dotnet build
+   dotnet run --project Labb2_DungeonCrawler
+   ```
+
+The level file `Level1.txt` lives in `DungeonCrawler.Infrastructure\Data\Levels\Level1.txt` and is copied to the application output when you build, so no manual copy is needed. If Level 1 is not yet in the database, the game imports it from that file on first run.
 
 ## Controls
 
