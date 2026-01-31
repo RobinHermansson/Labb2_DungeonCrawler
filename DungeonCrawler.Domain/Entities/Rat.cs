@@ -1,12 +1,12 @@
-﻿using Labb2_DungeonCrawler.Core;
-using Labb2_DungeonCrawler.Utilities;
-using Labb2_DungeonCrawler.Features;
-namespace Labb2_DungeonCrawler.LevelElements;
+﻿using DungeonCrawler.Domain.Utilities;
+using DungeonCrawler.Domain.ValueObjects;
+
+namespace DungeonCrawler.Domain.Entities;
 
 public class Rat : Enemy
 {
     private static Random _random = new Random();
-    private int _maxMoveAttempts = 10;
+    public int MaxMoveAttempts = 10;
     public Rat(Position pos, char representation, ConsoleColor color) : base(pos, representation, color)
     {
         Name = "Ratty";
@@ -46,26 +46,41 @@ public class Rat : Enemy
     {
         Random ratRandom = new Random();
 
-        for (int attempts = 0; attempts < _maxMoveAttempts; attempts++)
+        for (int attempts = 0; attempts < MaxMoveAttempts; attempts++)
         {
             int stepInCardinalDirection = _random.Next(0, 4);
             Position attempt = DirectionTransformer.GetPositionDelta((Direction)stepInCardinalDirection) + Position;
-            
-            if (attempt.XPos == GameState.Player.Position.XPos && 
+
+            if (attempt.XPos == GameState.Player.Position.XPos &&
                 attempt.YPos == GameState.Player.Position.YPos)
             {
-                Combat combat = new Combat(this, GameState.Player);
-                combat.StartCombat();
-                return;             
+                GameState.FightHappened = true;
+                return;
             }
             else if (AttemptMove(attempt, GameState))
             {
                 MoveTo(attempt);
-                return;            
+                return;
             }
         }
         // Rat stays in place if none of the above were possible.
 
     }
+    public override void UpdateColor()
+    {
+        if (IsVisible)
+        {
+            Color = ConsoleColor.Magenta;
+        }
+        else if (HasBeenSeen && !IsVisible)
+        {
+            Color = ConsoleColor.Black;
+        }
+        else
+        {
+            Color = ConsoleColor.Black;
+        }
+    }
+
 
 }

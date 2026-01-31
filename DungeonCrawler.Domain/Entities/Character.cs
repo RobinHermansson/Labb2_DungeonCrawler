@@ -1,7 +1,7 @@
-﻿using Labb2_DungeonCrawler.Core;
-using Labb2_DungeonCrawler.Features;
-using Labb2_DungeonCrawler.Utilities;
-namespace Labb2_DungeonCrawler.LevelElements;
+﻿using DungeonCrawler.Domain.ValueObjects;
+using DungeonCrawler.Domain.Utilities;
+
+namespace DungeonCrawler.Domain.Entities;
 
 public abstract class Character : LevelElement
 {
@@ -14,20 +14,21 @@ public abstract class Character : LevelElement
     public int DefenceModifier { get; set; }
     public List<Dice> AttackDice { get; set; }
     public List<Dice> DefenceDice { get; set; }
+    
     public GameState GameState { get; set; }
     public Character(Position pos, char representation, ConsoleColor color) : base(pos, representation, color)
     {
 
     }
-
+    
     public bool AttemptMove(Position attempt, GameState gameState)
     {
         return gameState.IsPositionWalkable(attempt) ? true : false;
     }
     public void MoveTo(Position position)
     {
-        this.PreviousPosition = new Position(Position.XPos, Position.YPos);
-        this.Position = position;
+        PreviousPosition = new Position(Position.XPos, Position.YPos);
+        Position = position;
     }
     public void MoveMe(Direction direction)
     {
@@ -59,26 +60,58 @@ public abstract class Character : LevelElement
     public virtual void CheckSurrounding(List<LevelElement> allElements)
     {
         var nearbyElements = allElements.Where(element => 
-            Math.Abs(element.Position.XPos - this.Position.XPos) <= VisionRange &&
-            Math.Abs(element.Position.YPos - this.Position.YPos) <= VisionRange
+            Math.Abs(element.Position.XPos - Position.XPos) <= VisionRange &&
+            Math.Abs(element.Position.YPos - Position.YPos) <= VisionRange
         );
-
+        /*
         foreach (var element in allElements)
         {
-            element.isVisible = false;   
+            element.IsVisible = false;   
         }
-  
+        */
+        List<LevelElement> visibleElements = new List<LevelElement>();
         foreach (LevelElement element in nearbyElements)
         {
-            var distance = CalculateDistance.Between(this.Position, element.Position);
-            if (distance < this.VisionRange)
+            var distance = CalculateDistance.Between(Position, element.Position);
+            if (distance < VisionRange)
             {
                 if (element is Wall)
                 {
-                    element.hasBeenSeen = true;
+                    element.HasBeenSeen = true;
                 }
-                element.isVisible = true;
+                element.IsVisible = true;
+                if (!visibleElements.Contains(element))
+                {
+                    visibleElements.Add(element);
+                }
             }
+        }
+
+        foreach (var element in allElements)
+        {
+            if (!visibleElements.Contains(element))
+            {
+                element.IsVisible = false;
+            }
+        }
+    }
+    public override void UpdateColor()
+    {
+        if (IsVisible)
+        {
+            // Wall is currently visible - show in dark yellow
+            Color = ConsoleColor.Yellow;
+        }
+        else if (HasBeenSeen && !IsVisible)
+        {
+            // Wall has been seen before but not currently visible - show in gray
+            Color = ConsoleColor.Yellow;
+            //Console.WriteLine("Is now visible and color is gray");
+        }
+        else
+        {
+            // Wall has never been seen - could be invisible or a specific color
+            Color = ConsoleColor.Black; // Or whatever color for unseen walls
         }
     }
 }

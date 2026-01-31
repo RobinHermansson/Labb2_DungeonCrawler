@@ -1,8 +1,7 @@
-﻿using Labb2_DungeonCrawler.Core;
-using Labb2_DungeonCrawler.Utilities;
-using Labb2_DungeonCrawler.Features;
+﻿using DungeonCrawler.Domain.ValueObjects;
+using DungeonCrawler.Domain.Utilities;
 
-namespace Labb2_DungeonCrawler.LevelElements;
+namespace DungeonCrawler.Domain.Entities;
 
 public class Snake : Enemy
 {
@@ -47,14 +46,14 @@ public class Snake : Enemy
     public override void CheckSurrounding(List<LevelElement> surroundingElements)
     {
         var nearbyElements = surroundingElements.Where(element => 
-            Math.Abs(element.Position.XPos - this.Position.XPos) <= VisionRange &&
-            Math.Abs(element.Position.YPos - this.Position.YPos) <= VisionRange
+            Math.Abs(element.Position.XPos - Position.XPos) <= VisionRange &&
+            Math.Abs(element.Position.YPos - Position.YPos) <= VisionRange
         );
 
         foreach (LevelElement element in nearbyElements)
         {
-            var distance = CalculateDistance.Between(this.Position, element.Position);
-            if (distance < this.VisionRange)
+            var distance = CalculateDistance.Between(Position, element.Position);
+            if (distance < VisionRange)
             {
                 if (element is Player)
                 {
@@ -69,23 +68,36 @@ public class Snake : Enemy
         }
     }
 
+    public override void UpdateColor()
+    {
+        if (IsVisible)
+        {
+            Color = ConsoleColor.Green;
+        }
+        else
+        {
+            Color = ConsoleColor.Black;
+        }
+    }
+
 
     public override void Update()
     {
-        CheckSurrounding(GameState.LevelData.LevelElementsList);
+        CheckSurrounding(GameState.AllElements);
         if (IsScared)
         {
             Position[] possibleMoves = new Position[4] {
-                (DirectionTransformer.GetPositionDelta(Direction.Up) + Position ),
-                (DirectionTransformer.GetPositionDelta(Direction.Left) + Position ),
-                (DirectionTransformer.GetPositionDelta(Direction.Right) + Position ),
-                (DirectionTransformer.GetPositionDelta(Direction.Down) + Position )
+                DirectionTransformer.GetPositionDelta(Direction.Up) + Position ,
+                DirectionTransformer.GetPositionDelta(Direction.Left) + Position ,
+                DirectionTransformer.GetPositionDelta(Direction.Right) + Position ,
+                DirectionTransformer.GetPositionDelta(Direction.Down) + Position 
             };
 
             Position bestMove = new Position();
             double highestDistance = 0;
             foreach (var possibleMove in possibleMoves)
             {
+
                 double currentCheck = CalculateDistance.Between(possibleMove, GameState.Player.Position);
                 if ( currentCheck > highestDistance )
                 {

@@ -1,93 +1,95 @@
-﻿using Labb2_DungeonCrawler.LevelElements;
-namespace Labb2_DungeonCrawler.Core;
+﻿using DungeonCrawler.Domain.Entities;
+using DungeonCrawler.Domain.ValueObjects;
+using Labb2_DungeonCrawler.App.Utilities;
+
+namespace Labb2_DungeonCrawler.App.Core;
 
 public class Renderer
 {
+    private readonly MessageLog _messageLog;
+    public Renderer(MessageLog messageLog)
+    {
+        _messageLog = messageLog;
+    }
+    public void RegisterElement(LevelElement element)
+    {
+        element.PositionChanged += HandlePositionChanged;
+        element.VisibilityChanged += HandleVisiblityChanged;
+        // Make the initial draw of the element upon registration.
+        Draw(element);
+    }
+
+    public void UnsubscribeElement(LevelElement element)
+    {
+        element.PositionChanged -= HandlePositionChanged;
+        element.VisibilityChanged -= HandleVisiblityChanged;
+        ClearPosition(element.Position);
+    }
+
+    public void HandlePositionChanged(object sender, Position position)
+    {
+        LevelElement element = (LevelElement)sender;
+
+        Draw(element);
+    }
+
+    public void HandleVisiblityChanged(object sender, bool newState)
+    {
+        LevelElement element = (LevelElement)sender;
+        ClearPosition(element.Position);
+        Draw(element);
+    }
+
     public void RenderLevel(List<LevelElement> elements)
     {
-        ProcessCharacterRendering(elements);
-        ProcessWallRendering(elements);
-        Console.ResetColor();
+        foreach (LevelElement element in elements)
+        {
+            RegisterElement(element);
+        }
     }
-    private void Draw(LevelElement element, ConsoleColor color)
+    private void Draw(LevelElement element)
     {
-        Console.ForegroundColor = color;
+
+        Console.ForegroundColor = element.Color;
         Console.SetCursorPosition(element.Position.XPos, element.Position.YPos);
         Console.Write(element.RepresentationAsChar);
+        ClearPosition(element.PreviousPosition);
+        Console.ResetColor();
+
+    }
+    public void DebugDraw(DebugAssistant debugger)
+    {
+        Console.ForegroundColor = debugger.Color;
+        Console.SetCursorPosition(debugger.Position.XPos, debugger.Position.YPos);
+        Console.Write(debugger.CurrentRepresentation);
+        Console.SetCursorPosition(debugger.PreviousObjectPosition.XPos, debugger.PreviousObjectPosition.YPos);
+        Console.ForegroundColor = debugger.PreviousObjectPositionColor;
+        if (debugger.PreviousObjectPositionRepresentation == 'O')
+        {
+            Console.Write(' ');
+        }
+        else
+        {
+            Console.Write(debugger.PreviousObjectPositionRepresentation);
+        }
+        Console.ResetColor();
+
     }
     public void ClearPosition(Position position)
     {
         Console.SetCursorPosition(position.XPos, position.YPos);
         Console.Write(' ');
-    } 
-    
-    private void ProcessCharacterRendering(List<LevelElement> element)
-    {
-        foreach (var character in element.OfType<Character>())
-        {
-            if (character.isVisible)
-            {
-                LevelElement? charOnPosition = element.FirstOrDefault(element => element.Position == character.PreviousPosition);
-                {
-                    if (charOnPosition is null)
-                    {
-                        ClearPosition(character.PreviousPosition);
-                    }
-                }
-                Draw(character, character.Color);
-            }
-            else if (!character.isVisible)
-            {
-                ClearPosition(character.Position);
-                ClearPosition(character.PreviousPosition);
-            }
-        }
     }
-    private void ProcessWallRendering(List<LevelElement> elements)
-    {
-        foreach (var wall in elements.OfType<Wall>())
-        {
 
-            if (wall.isVisible)
-            {
-                Draw(wall, ConsoleColor.DarkYellow);
-            }
-            else if(wall.hasBeenSeen && !wall.isVisible)
-            {
-                Draw(wall, ConsoleColor.DarkGray);
-            }
-        }
-    }
     public void DisplayGameOver()
     {
-        int height = 10;
-        int width = 20;
+        int height = Console.WindowHeight;
+        int width = Console.WindowWidth;
         int startX = 0;
         int startY = 0;
         Console.Clear();
 
-        // Draw the top border
-        Console.SetCursorPosition(startX, startY);
-        Console.Write("╔");
-        for (int i = 1; i < width - 1; i++)
-            Console.Write("═");
-        Console.Write("╗");
-
-        // Draw the sides
-        for (int i = 1; i < height - 1; i++)
-        {
-            Console.SetCursorPosition(startX, startY + i);
-            Console.Write("║");
-            Console.SetCursorPosition(startX + width - 1, startY + i);
-            Console.Write("║");
-        }
-
-        // Draw the bottom border
-        Console.SetCursorPosition(startX, startY + height - 1);
-        Console.Write("╚");
-        for (int i = 1; i < width - 1; i++)
-            Console.Write("═");
-        Console.Write("╝");
+        DrawABox(height, width, startX, startY, '═', '║', '╔', '╗', '╚', '╝');
 
         // Write the centered text
         string gameOverText = "Game Over!";
@@ -97,13 +99,20 @@ public class Renderer
         Console.BackgroundColor = ConsoleColor.DarkRed;
         Console.Write(gameOverText);
         Console.ResetColor();
-        Console.SetCursorPosition(0, 10);
         Console.WriteLine();
+        string pressAnyKeyText = "Press any key to accept your fate. (Save will be deleted.)";
+        int pressAnyKeyTextXPos = startX + (width - pressAnyKeyText.Length) / 2;
+        Console.SetCursorPosition(pressAnyKeyTextXPos, textY + 1 );
+        Console.WriteLine(pressAnyKeyText);
+        Console.ReadKey();
+        Console.Clear();
     }
     public void DisplayTitleScreen(StartScreenOption selection)
     {
-        int height = 16;
-        int width = 32;
+
+        //Console.Clear();
+        int height = Console.WindowHeight;
+        int width = Console.WindowWidth;
         int startX = 0;
         int startY = 0;
 
@@ -114,33 +123,9 @@ public class Renderer
 
         Console.ForegroundColor = ConsoleColor.DarkRed;
 
-        // Draw the top border
-        Console.SetCursorPosition(startX, startY);
-        Console.Write("╔");
-        for (int i = 1; i < width - 1; i++)
-            Console.Write("═");
-        Console.Write("╗");
-
-        // Draw the sides
-        for (int i = 1; i < height - 1; i++)
-        {
-            Console.SetCursorPosition(startX, startY + i);
-            Console.Write("║");
-            Console.SetCursorPosition(startX + width - 1, startY + i);
-            Console.Write("║");
-        }
-
-        // Draw the bottom border
-        Console.SetCursorPosition(startX, startY + height - 1);
-        Console.Write("╚");
-        for (int i = 1; i < width - 1; i++)
-            Console.Write("═");
-        Console.Write("╝");
-
-        // Write all text centered but with some offets 
         int titleYOffset = 3;
         int titleX = startX + (width - titleText.Length) / 2;
-        int titleY = (startY + height / 2) - titleYOffset;
+        int titleY = startY + height / 2 - titleYOffset;
         Console.SetCursorPosition(titleX, titleY);
         Console.ForegroundColor = ConsoleColor.DarkRed;
         Console.Write(titleText);
@@ -185,27 +170,158 @@ public class Renderer
             Console.Write('>');
         }
 
-        Console.SetCursorPosition(0, height);
+        Console.SetCursorPosition(0, 0);
         Console.WriteLine();
     }
 
-    public void RenderUIStats(Character character, int turn, int height, int width, int startX, int startY)
+    public void FillTextInsideBox(char charToWrite, int origboxHeight, int origBoxWidth, int origBoxXpos, int origBoxYpos)
     {
-        DrawUIBox(height, width, startX, startY);
+        for (int row = 1; row < origboxHeight - 1; row++)
+        {
+            for (int col = 1; col < origBoxWidth - 1; col++)
+            {
+                Console.SetCursorPosition(origBoxXpos + col, origBoxYpos + row);
+                Console.Write(charToWrite);
+            }
+        }
+    }
+
+    public void DisplayLoadSaveScreen(LoadSavesScreenOption selection, SaveSlot[] saveSlots, int selectedSlotIndex)
+    {
+        SaveSlot selectedSlot = saveSlots[selectedSlotIndex];
+        string[] saveGameInfo = selectedSlot.GetDisplayInfo();
+
+        int height = Console.WindowHeight;
+        int width = Console.WindowWidth;
+        int startX = 0;
+        int startY = 0;
+
+        string titleText = "SELECT SAVE SLOT";
+        string goBackText = "Back";
+
+        Console.ForegroundColor = ConsoleColor.DarkRed;
+
+        int titleYOffset = 3;
+        int titleX = startX + (width - titleText.Length) / 2;
+        int titleY = startY + height / 2 - titleYOffset;
+        Console.SetCursorPosition(titleX, titleY);
+        Console.ForegroundColor = ConsoleColor.DarkRed;
+        Console.Write(titleText);
+
+        int savedGamesWindowHeight = 10;
+        int savedGamesWindowWidth = 32;
+
+        int savedGamesWindowX = (startX + (width - savedGamesWindowWidth) - 1) / 2;
+        int savedGamesWindowY = startY + height / 2;
+
+        int backToPreviousMenuX = (startX + (width - goBackText.Length) - 1) / 2;
+        int backToPreviousMenuY = savedGamesWindowY + savedGamesWindowHeight + 2;
+        Console.SetCursorPosition(backToPreviousMenuX, backToPreviousMenuY);
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.Write(goBackText);
+
+        // Show slot navigation info
+        string navigationInfo = $"{selectedSlot.GetDisplayName()} (Use <- -> to switch)";
+        int navX = savedGamesWindowX + (savedGamesWindowWidth - navigationInfo.Length) / 2;
+        int navY = savedGamesWindowY - 1;
+        if (navX < 0) navX = savedGamesWindowX;
+        Console.SetCursorPosition(navX - 5, navY);
+        Console.Write("                                                                        "); // Ugly way to clear text
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.SetCursorPosition(navX, navY);
+        Console.Write(navigationInfo);
+
+        if (selection == LoadSavesScreenOption.Saves)
+        {
+            Console.SetCursorPosition(backToPreviousMenuX - 3, backToPreviousMenuY);
+            Console.Write(' ');
+            Console.SetCursorPosition(backToPreviousMenuX - 2, backToPreviousMenuY);
+            Console.Write(' ');
+
+            ConsoleColor boxColor = selectedSlot.IsEmpty ? ConsoleColor.Gray : ConsoleColor.White;
+            DrawABox(savedGamesWindowHeight, savedGamesWindowWidth, savedGamesWindowX, savedGamesWindowY, '-', '|', '+', '+', '+', '+', boxColor);
+            FillTextInsideBox(' ', savedGamesWindowHeight, savedGamesWindowWidth, savedGamesWindowX, savedGamesWindowY);
+
+            ConsoleColor textColor = selectedSlot.IsEmpty ? ConsoleColor.Gray : ConsoleColor.White;
+            WriteTextCenteredInBox(saveGameInfo, savedGamesWindowHeight, savedGamesWindowWidth, savedGamesWindowX, savedGamesWindowY, textColor);
+        }
+        else
+        {
+            Console.SetCursorPosition(backToPreviousMenuX - 3, backToPreviousMenuY);
+            Console.Write('=');
+            Console.SetCursorPosition(backToPreviousMenuX - 2, backToPreviousMenuY);
+            Console.Write('>');
+
+            DrawABox(savedGamesWindowHeight, savedGamesWindowWidth, savedGamesWindowX, savedGamesWindowY, ' ', ' ', ' ', ' ', ' ', ' ', ConsoleColor.DarkGray);
+            FillTextInsideBox(' ', savedGamesWindowHeight, savedGamesWindowWidth, savedGamesWindowX, savedGamesWindowY);
+            WriteTextCenteredInBox(saveGameInfo, savedGamesWindowHeight, savedGamesWindowWidth, savedGamesWindowX, savedGamesWindowY, ConsoleColor.DarkGray);
+        }
+
+        Console.ResetColor();
+    }
+    public void WriteTextCenteredInBox(string[] textLines, int boxHeight, int boxWidth, int boxXpos, int boxYpos, ConsoleColor consoleColor = ConsoleColor.White)
+    {
+        Console.ForegroundColor = consoleColor;
+        // Calculate the interior dimensions (excluding border)
+        int interiorHeight = boxHeight - 2;
+        int interiorWidth = boxWidth - 2;
+
+        // Calculate starting position to center the text block vertically
+        int textBlockHeight = textLines.Length;
+        int startRow = (interiorHeight - textBlockHeight) / 2;
+
+        // Make sure we don't go outside the box
+        if (startRow < 0) startRow = 0;
+
+        for (int i = 0; i < textLines.Length && i < interiorHeight; i++)
+        {
+            string line = textLines[i];
+
+            // Truncate line if it's too long for the box
+            if (line.Length > interiorWidth)
+            {
+                line = line.Substring(0, interiorWidth);
+            }
+
+            // Calculate horizontal center position
+            int startCol = (interiorWidth - line.Length) / 2;
+            if (startCol < 0) startCol = 0;
+
+            // Set cursor position (adding 1 to account for border)
+            Console.SetCursorPosition(boxXpos + 1 + startCol, boxYpos + 1 + startRow + i);
+            Console.Write(line);
+        }
+        Console.ResetColor();
+
+    }
+
+    public void RenderUIStats(Player character, int turn, int height, int width, int startX, int startY)
+    {
+        Console.ForegroundColor = ConsoleColor.DarkRed;
+        DrawABox(height, width, startX, startY, '-', '|', '+', '+', '+', '+');
+
         string UITitle = "STATS";
-        Console.SetCursorPosition(startX+1, startY+1);
+        Console.SetCursorPosition(startX + 1, startY + 1);
         Console.Write(UITitle);
-        Console.SetCursorPosition(startX+1, startY+2);
-        Console.Write($"HP: {character.HitPoints}/100");
-        Console.SetCursorPosition(startX+1, startY+3);
+        Console.SetCursorPosition(startX + 1, startY + 2);
+        Console.Write($"Name: {character.Name}");
+        Console.SetCursorPosition(startX + 1, startY + 3);
+        Console.Write($"HP: {character.HitPoints}/{character.Class.BaseHitPoints}");
+        Console.SetCursorPosition(startX + 1, startY + 4);
         Console.Write($"Turn: {turn}");
+        Console.SetCursorPosition(startX + 1, startY + 5);
+        Console.Write($"Class: {character.Class.Name}");
+        Console.ResetColor();
 
     }
 
     public void DrawInstructions(int xCoord, int yCoord)
     {
+        Console.ForegroundColor = ConsoleColor.DarkRed;
         Console.SetCursorPosition(xCoord, yCoord);
-        Console.WriteLine("Use ASDW or the Arrow keys to move. Any other input will skip your turn.");
+        Console.WriteLine("ASDW or Arrow keys to move. Esc to Pause, Save and Quit. 'L' for History log.\nAny other input will skip your turn.");
+        Console.ResetColor();
+
     }
 
     public void DrawDebugValues(bool debug, int xCoord, int yCoord, object Object)
@@ -217,34 +333,230 @@ public class Renderer
         }
     }
 
-    public void DrawUIBox(int height, int width, int startX, int startY)
+    public void DrawABox(int height, int width, int startX, int startY, char horizontalLine, char verticalLine, char upperLeftCorner, char upperRightCorner, char lowerLeftCorner, char lowerRightCorner, ConsoleColor consoleColor = ConsoleColor.White)
     {
+        Console.ForegroundColor = consoleColor;
+
         // TOP
         Console.SetCursorPosition(startX, startY);
-        Console.Write("+");
+        Console.Write(upperLeftCorner);
         for (int i = 1; i < width - 1; i++)
-            Console.Write("-");
-        Console.Write("+");
+            Console.Write(horizontalLine);
+        Console.Write(upperRightCorner);
 
         // BOTH SIDES
         for (int i = 1; i < height - 1; i++)
         {
             Console.SetCursorPosition(startX, startY + i);
-            Console.Write("|");
+            Console.Write(verticalLine);
             Console.SetCursorPosition(startX + width - 1, startY + i);
-            Console.Write("|");
+            Console.Write(verticalLine);
         }
 
         // BOTTOM
         Console.SetCursorPosition(startX, startY + height - 1);
-        Console.Write("+");
+        Console.Write(lowerLeftCorner);
         for (int i = 1; i < width - 1; i++)
-            Console.Write("-");
-        Console.Write("+");
+            Console.Write(horizontalLine);
+        Console.Write(lowerRightCorner);
+
+        Console.ResetColor();
+    }
+
+    public void SelectNameScreen(bool tryAgain)
+    {
+        FillTextInsideBox(' ', Console.WindowHeight, Console.WindowWidth, 0, 0);
+        string messagePromptText = "What will you be known as: ";
+        int messagePromptXpos = (+(Console.WindowWidth - messagePromptText.Length) - 1) / 2;
+        int messagePrompYPos = Console.WindowHeight / 2;
+        if (tryAgain)
+        {
+            string tryAgainMessage = "Not a valid input, try again.";
+            Console.SetCursorPosition((Console.WindowWidth - tryAgainMessage.Length - 1) / 2, messagePrompYPos - 1);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write(tryAgainMessage);
+            Console.ResetColor();
+            Console.SetCursorPosition(messagePromptXpos, messagePrompYPos);
+            Console.Write(messagePromptText);
+        }
+        else
+        {
+            Console.SetCursorPosition(messagePromptXpos, messagePrompYPos);
+            Console.Write(messagePromptText);
+        }
+
+    }
+
+    public void SelectClassScreen(List<PlayerClass> availableClasses, bool tryAgain)
+    {
+        FillTextInsideBox(' ', Console.WindowHeight, Console.WindowWidth, 0, 0);
+        string messagePromptText = "What class do you want to be (write the number): ";
+        int messagePromptXpos = (+(Console.WindowWidth - messagePromptText.Length) - 1) / 2;
+        int messagePrompYPos = +Console.WindowHeight / 2;
+        string tryAgainMessage = $"That was not a valid input, write a number between 1 and {availableClasses.Count}";
+        if (tryAgain)
+        {
+            Console.SetCursorPosition(+(Console.WindowWidth - tryAgainMessage.Length - 1) / 2, messagePrompYPos - 1);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write(tryAgainMessage);
+            Console.ResetColor();
+            Console.SetCursorPosition(messagePromptXpos, messagePrompYPos);
+            Console.Write(messagePromptText);
+        }
+        else
+        {
+            Console.SetCursorPosition(messagePromptXpos, messagePrompYPos);
+            Console.Write(messagePromptText);
+        }
+
+        for (int i = 0; i < availableClasses.Count; i++)
+        {
+            Console.SetCursorPosition(messagePromptXpos, messagePrompYPos + 1 + i);
+            Console.Write($"{i+1}. {availableClasses[i].Name}");
+        }
+        Console.SetCursorPosition(messagePromptXpos + messagePromptText.Length, messagePrompYPos);
+
+    }
+
+
+    public void WriteMessageLog(int xCoord, int yCoord)
+    {
+        int logHeight = 7;
+        Console.SetCursorPosition(xCoord, yCoord);
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine("MESSAGE LOG");
+
+        int messagesToShow = Math.Min(_messageLog.Messages.Count, logHeight - 2);
+
+        for (int i = 0; i < messagesToShow; i++)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.SetCursorPosition(xCoord + 2, yCoord + i + 1);
+
+            int messageIndex = _messageLog.Messages.Count - 1 - i;
+            Console.Write(_messageLog.Messages[messageIndex] + "           ");
+        }
+        Console.ResetColor();
+
+    }
+
+    public void DrawPauseScreen(PauseScreenOption selection)
+    {
+        int height = Console.WindowHeight;
+        int width = Console.WindowWidth;
+        int startX = 0;
+        int startY = 0;
+
+        string titleText = "==== PAUSED ====";
+        string resumeText = "Resume";
+        string saveAndQuitText = "Save and Quit";
+        string quitText = "Quit";
+
+        Console.ForegroundColor = ConsoleColor.DarkRed;
+
+
+        int titleYOffset = 4;
+        int titleX = startX + (width - titleText.Length) / 2;
+        int titleY = startY + height / 2 - titleYOffset;
+        Console.SetCursorPosition(titleX, titleY);
+        Console.ForegroundColor = ConsoleColor.DarkRed;
+        Console.Write(titleText);
+
+        int resumeX = startX + (width - resumeText.Length) / 2;
+        int resumeY = startY + height / 2 - 1;
+        Console.SetCursorPosition(resumeX, resumeY);
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.Write(resumeText);
+
+        int saveAndQuitX = startX + (width - saveAndQuitText.Length) / 2;
+        int saveAndQuitY = startY + height / 2;
+        Console.SetCursorPosition(saveAndQuitX, saveAndQuitY);
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.Write(saveAndQuitText);
+
+        int quitX = startX + (width - quitText.Length) / 2;
+        int quitY = startY + height / 2 + 1;
+        Console.SetCursorPosition(quitX, quitY);
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.Write(quitText);
+        Console.ResetColor();
+
+        // Draw selection indicators
+        if (selection == PauseScreenOption.Resume)
+        {
+            Console.SetCursorPosition(resumeX - 3, resumeY);
+            Console.Write('=');
+            Console.SetCursorPosition(resumeX - 2, resumeY);
+            Console.Write('>');
+            Console.SetCursorPosition(saveAndQuitX - 3, saveAndQuitY);
+            Console.Write(' ');
+            Console.SetCursorPosition(saveAndQuitX - 2, saveAndQuitY);
+            Console.Write(' ');
+            Console.SetCursorPosition(quitX - 3, quitY);
+            Console.Write(' ');
+            Console.SetCursorPosition(quitX - 2, quitY);
+            Console.Write(' ');
+        }
+        else if (selection == PauseScreenOption.SaveAndQuit)
+        {
+            Console.SetCursorPosition(resumeX - 3, resumeY);
+            Console.Write(' ');
+            Console.SetCursorPosition(resumeX - 2, resumeY);
+            Console.Write(' ');
+            Console.SetCursorPosition(saveAndQuitX - 3, saveAndQuitY);
+            Console.Write('=');
+            Console.SetCursorPosition(saveAndQuitX - 2, saveAndQuitY);
+            Console.Write('>');
+            Console.SetCursorPosition(quitX - 3, quitY);
+            Console.Write(' ');
+            Console.SetCursorPosition(quitX - 2, quitY);
+            Console.Write(' ');
+        }
+        else // Quit
+        {
+            Console.SetCursorPosition(resumeX - 3, resumeY);
+            Console.Write(' ');
+            Console.SetCursorPosition(resumeX - 2, resumeY);
+            Console.Write(' ');
+            Console.SetCursorPosition(saveAndQuitX - 3, saveAndQuitY);
+            Console.Write(' ');
+            Console.SetCursorPosition(saveAndQuitX - 2, saveAndQuitY);
+            Console.Write(' ');
+            Console.SetCursorPosition(quitX - 3, quitY);
+            Console.Write('=');
+            Console.SetCursorPosition(quitX - 2, quitY);
+            Console.Write('>');
+        }
+
+    }
+    public void DrawHistoryLogScreen()
+    {
+        Console.Clear();
+        Console.SetCursorPosition(0, 0);
+        Console.WriteLine("ALL MESSAGE HISTORY");
+        foreach (var message in _messageLog.Messages)
+        {
+            Console.WriteLine(message);
+        }
+        Console.WriteLine("Press any key to go back.");
+        var input = Console.ReadKey();
+        Console.Clear();
+        return; 
     }
     public enum StartScreenOption
     {
         Start,
+        Quit
+    }
+    public enum LoadSavesScreenOption
+    {
+        Back,
+        Saves
+    }
+    public enum PauseScreenOption
+    {
+        Resume,
+        SaveAndQuit,
         Quit
     }
 }

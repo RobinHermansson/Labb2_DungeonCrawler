@@ -1,0 +1,97 @@
+﻿using DungeonCrawler.Domain.Interfaces;
+using DungeonCrawler.Domain.ValueObjects;
+
+namespace DungeonCrawler.Domain.Entities;
+
+public abstract class LevelElement : IHasId<Guid>
+{
+
+    public Guid Id { get; set; } = Guid.NewGuid();
+
+    private Position _position;
+    public Position Position 
+    { 
+        get => _position;
+        set 
+        {
+            PreviousPosition = _position; 
+            _position = value;
+            // Raise event when position changes
+            OnPositionChange(_position);
+        }
+    }
+    public Position PreviousPosition { get; set; } 
+    public char RepresentationAsChar { get; set; }
+    public int VisionRange { get; set; }
+
+    public bool PreviouslyVisible { get; set; }
+    private bool _isVisible = false;
+    public bool IsVisible
+    {
+        get => _isVisible;
+        set
+        {
+            PreviouslyVisible = _isVisible;
+            _isVisible = value;
+            if (PreviouslyVisible != _isVisible)
+            {
+                OnVisibilityChange(_isVisible);
+            }
+        }
+    }
+
+
+    public bool PreviouslyHasBeenSeen { get; set; }
+    private bool _hasBeenSeen = false;
+    public bool HasBeenSeen
+    {
+        get => _hasBeenSeen;
+        set 
+        {
+            PreviouslyHasBeenSeen = _hasBeenSeen;
+            _hasBeenSeen = value;
+            if (PreviouslyHasBeenSeen != _hasBeenSeen)
+            {
+                OnHasBeenSeenChange(_hasBeenSeen);
+            }
+        }
+    }
+    public ConsoleColor Color { get; set; } = ConsoleColor.Black;
+
+    public EventHandler<Position> PositionChanged;
+    public EventHandler<bool> VisibilityChanged;
+    public EventHandler<bool> HasBeenSeenChanged;
+    
+    public virtual void OnVisibilityChange(bool newState)
+    {
+
+        UpdateColor();
+        VisibilityChanged?.Invoke(this, newState);
+    }
+
+    public virtual void OnHasBeenSeenChange(bool newState)
+    {
+
+        UpdateColor();
+        HasBeenSeenChanged?.Invoke(this, newState);
+    }
+    public virtual void OnPositionChange(Position newPosition)
+    {
+        PositionChanged?.Invoke(this, newPosition);
+    }
+
+    public LevelElement(Position pos, char representation, ConsoleColor color)
+    {
+        Position = pos;
+        RepresentationAsChar = representation;
+        Color = color;
+    }
+
+    public abstract void UpdateColor();
+        
+
+    public override string ToString()
+    {
+        return $"Representation: {RepresentationAsChar}, PreviousPosition: X:{PreviousPosition.XPos}, Y:{PreviousPosition.YPos}\nPosition: X:{Position.XPos},Y:{Position.YPos}, IsVisible: {IsVisible}, HasBeenSeen: {HasBeenSeen}                                                       ";
+    }
+}
