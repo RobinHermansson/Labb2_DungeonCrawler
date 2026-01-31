@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -7,6 +7,11 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Include="..\DungeonCrawler.Infrastructure\Data\Levels\Level1.txt" Link="Levels\Level1.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DungeonCrawler.Domain\DungeonCrawler.Domain.csproj" />
     <ProjectReference Include="..\DungeonCrawler.Infrastructure\DungeonCrawler.Infrastructure.csproj" />
