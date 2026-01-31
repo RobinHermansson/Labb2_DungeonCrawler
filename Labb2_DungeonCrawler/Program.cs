@@ -21,7 +21,7 @@ Renderer.StartScreenOption selectedOption = Renderer.StartScreenOption.Start;
 Renderer.LoadSavesScreenOption loadSelectedOption = Renderer.LoadSavesScreenOption.Saves;
 
 var client = new MongoClient("mongodb://localhost:27017/");
-var mongoDatabase = client.GetDatabase("DungeonCrawler");
+var mongoDatabase = client.GetDatabase("RobinHermansson");
 
 IPlayerClassRepository pcRepo = new MongoPlayerClassRepository(mongoDatabase);
 PlayerClassSeeder pcSeeder = new PlayerClassSeeder(pcRepo);
